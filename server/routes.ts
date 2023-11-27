@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { Friend, Post, User, WebSession } from "./app";
+import { Post, RadiusResource, User, WebSession } from "./app";
 import { PostDoc, PostOptions } from "./concepts/post";
 import { UserDoc } from "./concepts/user";
 import { WebSessionDoc } from "./concepts/websession";
@@ -90,51 +90,73 @@ class Routes {
     return Post.delete(_id);
   }
 
-  @Router.get("/friends")
-  async getFriends(session: WebSessionDoc) {
-    const user = WebSession.getUser(session);
-    return await User.idsToUsernames(await Friend.getFriends(user));
+  @Router.post("/radiusResources")
+  async createRadiusResource(
+    session: WebSessionDoc,
+    longitude: string,
+    latitude: string,
+    radius: string,
+    name: string,
+    status: string,
+    content: string,
+    criticalDates: [{ info: string; time: string }],
+  ) {
+    await RadiusResource.validNums(longitude, latitude, radius);
+    const long = parseFloat(longitude);
+    const lat = parseFloat(latitude);
+    const rad = parseFloat(radius);
+    return await RadiusResource.createRadiusBasedResource(long, lat, rad, name, status, content, criticalDates);
   }
 
-  @Router.delete("/friends/:friend")
-  async removeFriend(session: WebSessionDoc, friend: string) {
-    const user = WebSession.getUser(session);
-    const friendId = (await User.getUserByUsername(friend))._id;
-    return await Friend.removeFriend(user, friendId);
+  @Router.get("/radiusResources")
+  async getRadiusResources(session: WebSessionDoc, longitude: string, latitude: string) {
+    const long = parseFloat(longitude);
+    const lat = parseFloat(latitude);
+    const location = { longitude: long, latitude: lat };
+    const resources = await RadiusResource.getAllResourceAtLocation(location);
+    return resources;
   }
 
-  @Router.get("/friend/requests")
-  async getRequests(session: WebSessionDoc) {
-    const user = WebSession.getUser(session);
-    return await Responses.friendRequests(await Friend.getRequests(user));
+  @Router.get("/radiusResources/:_id")
+  async getRadiusResourceById(_id: ObjectId) {
+    return await RadiusResource.getRadiusResourceById(_id);
   }
 
-  @Router.post("/friend/requests/:to")
-  async sendFriendRequest(session: WebSessionDoc, to: string) {
-    const user = WebSession.getUser(session);
-    const toId = (await User.getUserByUsername(to))._id;
-    return await Friend.sendRequest(user, toId);
+  @Router.delete("/radiusResources/:_id")
+  async deleteRadiusResourceById(_id: ObjectId) {
+    return await RadiusResource.deleteRadiusResourceById(_id);
   }
 
-  @Router.delete("/friend/requests/:to")
-  async removeFriendRequest(session: WebSessionDoc, to: string) {
-    const user = WebSession.getUser(session);
-    const toId = (await User.getUserByUsername(to))._id;
-    return await Friend.removeRequest(user, toId);
+  @Router.patch("/radiusResources/:_id/location")
+  async changeLocation(_id: ObjectId, longitude: string, latitude: string) {
+    await RadiusResource.validNums(longitude, latitude, "0");
+    const long = parseFloat(longitude);
+    const lat = parseFloat(latitude);
+    const location = { longitude: long, latitude: lat };
+    return await RadiusResource.changeLocation(_id, location);
   }
 
-  @Router.put("/friend/accept/:from")
-  async acceptFriendRequest(session: WebSessionDoc, from: string) {
-    const user = WebSession.getUser(session);
-    const fromId = (await User.getUserByUsername(from))._id;
-    return await Friend.acceptRequest(fromId, user);
+  @Router.patch("/radiusResources/:_id/status")
+  async changeStatus(_id: ObjectId, status: string) {
+    return await RadiusResource.changeStatus(_id, status);
   }
 
-  @Router.put("/friend/reject/:from")
-  async rejectFriendRequest(session: WebSessionDoc, from: string) {
-    const user = WebSession.getUser(session);
-    const fromId = (await User.getUserByUsername(from))._id;
-    return await Friend.rejectRequest(fromId, user);
+  @Router.patch("/radiusResources/:_id/description")
+  async changeDescription(_id: ObjectId, content: string) {
+    return await RadiusResource.changeDescription(_id, content);
+  }
+
+  @Router.patch("/radiusResources/:_id/criticalDates")
+  async changeCriticalDate(_id: ObjectId, criticalDates: [{ info: string; time: string }]) {
+    // do a little check on the critical dates to see if there are no invalid things
+    await RadiusResource.validCriticalDates(criticalDates);
+
+    // convert the time to an actual datetime object
+    const _criticalDates = criticalDates.map((criticalDates) => {
+      return { info: criticalDates.info, time: new Date(criticalDates.time) };
+    });
+
+    return await RadiusResource.changeCriticalDate(_id, _criticalDates);
   }
 }
 
