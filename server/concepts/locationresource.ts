@@ -1,7 +1,7 @@
 import { Filter, ObjectId } from "mongodb";
 
 import DocCollection, { BaseDoc } from "../framework/doc";
-import { NotAllowedError, NotFoundError } from "./errors";
+// import { NotAllowedError, NotFoundError } from "./errors";
 
 export interface LocationResourceDoc extends BaseDoc {
   name: string;
@@ -57,5 +57,4 @@ export default class LocationResourceConcept {
     await this.locationResources.updateOne({ _id }, update);
     return { msg: "Location Resource successfully updated!" };
   }
-
 }

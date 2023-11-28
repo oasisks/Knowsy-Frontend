@@ -17,6 +17,7 @@ export interface PostDoc extends BaseDoc {
 export default class PostConcept {
   public readonly posts = new DocCollection<PostDoc>("posts");
 
+  // TODO: should we change project to target (or smth else generic) instead?
   async create(author: ObjectId, project: ObjectId, content: string, options?: PostOptions) {
     const _id = await this.posts.createOne({ author, project, content, options });
     return { msg: "Post successfully created!", post: await this.posts.readOne({ _id }) };
