@@ -162,7 +162,7 @@ class Routes {
   @Router.post("/locationResources")
   async createLocationResource(name: string, description: string, start: Date, status: string, longitude: number, latitude: number) {
     const locationResource = await LocationResource.create(name, description, start, status, longitude, latitude);
-    
+
     return;
   }
 
@@ -186,24 +186,21 @@ class Routes {
 
   @Router.patch("/locationResources/:_id/location")
   async updateLocationResourceLocation(_id: ObjectId, longitude: number, latitude: number) {
-    const msg = await LocationResource.update(_id, {location: { type: "Point", coordinates: [longitude, latitude] }});
+    const msg = await LocationResource.update(_id, { location: { type: "Point", coordinates: [longitude, latitude] } });
     return msg;
   }
 
   @Router.patch("/locationResources/:_id/status")
   async updateLocationResourceStatus(_id: ObjectId, status: string) {
-    const msg = await LocationResource.update(_id, {status});
+    const msg = await LocationResource.update(_id, { status });
     return msg;
   }
 
   @Router.patch("/locationResources/:_id/description")
   async updateLocationResourceDescription(_id: ObjectId, description: string) {
-    const msg = await LocationResource.update(_id, {description});
+    const msg = await LocationResource.update(_id, { description });
     return msg;
   }
-
-
-
 
   @Router.post("/posts/:_id/opinions")
   async createOpinion(author: ObjectId, content: string, feeling: Number, root: ObjectId) {
