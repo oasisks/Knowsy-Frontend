@@ -1,6 +1,7 @@
 import "@/assets/main.css";
 import "purecss";
 
+import VueGoogleMaps from "@fawmi/vue-google-maps";
 import { createPinia } from "pinia";
 import piniaPluginPersistedState from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
@@ -14,5 +15,10 @@ pinia.use(piniaPluginPersistedState);
 
 app.use(pinia);
 app.use(router);
+app.use(VueGoogleMaps, {
+  load: {
+    key: process.env.GOOGLE_API,
+  },
+});
 
 app.mount("#app");
