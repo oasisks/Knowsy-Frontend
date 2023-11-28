@@ -126,12 +126,19 @@ export default class RadiusBasedResourceConcept {
     return c;
   }
 
-  async canCreateRadiusBasedResource(name: string) {
+  async canCreateRadiusBasedResource(name: string, longitude: number, latitude: number) {
     const resource = await this.radiusResources.readOne({ name });
 
     if (resource !== null) {
       throw new BadValuesError("Radius resource with the same name already exist");
     }
+    const maxLat = 90;
+    const maxLong = 180;
+
+    if (-maxLat <= latitude && latitude <= maxLat && -maxLong <= longitude && longitude <= maxLong) {
+      return;
+    }
+    throw new BadValuesError("Bad values for longitude and/or latitude: -90 <= latitude <= 90 && -180 <= longitude <= 180");
   }
 
   async validNums(longitude: string, latitude: string, radius: string) {
