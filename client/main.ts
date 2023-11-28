@@ -17,7 +17,7 @@ app.use(pinia);
 app.use(router);
 app.use(VueGoogleMaps, {
   load: {
-    key: "YOUR_API_KEY_COMES_HERE",
+    key: process.env.GOOGLE_API,
   },
 });
 

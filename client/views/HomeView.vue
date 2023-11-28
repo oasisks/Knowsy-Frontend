@@ -1,23 +1,30 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
 const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
+
+const center = ref({lat: 51.093048, lng: 6.842120});
+const markers = ref([
+        {
+          position: {
+            lat: 51.093048, lng: 6.842120
+          },
+        }
+        , // Along list of clusters
+      ]);
+
 </script>
 
 <template>
-  <main>
-    <h1>Home Page</h1>
-    <section>
-      <h1 v-if="isLoggedIn">Welcome {{ currentUsername }}!</h1>
-      <h1 v-else>Please login!</h1>
-    </section>
-    <!-- <PostListComponent /> -->
-  </main>
+  <GMapMap
+        :center="{lat: 51.093048, lng: 6.842120}"
+        :zoom="7"
+        style="height: 100vw;"
+    />
 </template>
 
 <style scoped>
-h1 {
-  text-align: center;
-}
+
 </style>
