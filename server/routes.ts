@@ -215,7 +215,7 @@ class Routes {
     } else if (root) {
       opinions = await Opinion.getOpinions(root);
     } else {
-      opinions = await Post.getPosts({});
+      opinions = await Opinion.getOpinions({});
     }
     return opinions;
   }
