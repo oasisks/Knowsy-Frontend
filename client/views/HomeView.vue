@@ -1,28 +1,37 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 
 const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
+const center = ref({lat: 0, lng: 0});
+const options = ref({
+  styles: [
+    // this is for specific styles we might want to have on the map
+    // TODO: https://console.cloud.google.com/google/maps-apis/studio/styles?project=knowsy-406521
+    // Use the above link to create styles for our map
+  ]
+});
 
-const center = ref({lat: 51.093048, lng: 6.842120});
-const markers = ref([
-        {
-          position: {
-            lat: 51.093048, lng: 6.842120
-          },
-        }
-        , // Along list of clusters
-      ]);
+const ready = ref(false);
 
+
+onBeforeMount(() => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    center.value.lat = position.coords.latitude;
+    center.value.lng = position.coords.longitude;
+  })
+
+  ready.value = true;
+})
 </script>
 
 <template>
   <GMapMap
-        :center="{lat: 51.093048, lng: 6.842120}"
-        :zoom="7"
-        style="height: 100vw;"
-    />
+      :center="center"
+      :zoom="14"
+      style="height: 89vh; width: 100%; display: flex;"
+  />
 </template>
 
 <style scoped>
