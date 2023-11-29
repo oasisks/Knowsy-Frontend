@@ -202,8 +202,9 @@ class Routes {
     return msg;
   }
 
-  @Router.post("/posts/:_id/opinions")
-  async createOpinion(author: ObjectId, content: string, feeling: Number, root: ObjectId) {
+  @Router.post("/opinions")
+  async createOpinion(session: WebSessionDoc, content: string, feeling: number, root: ObjectId) {
+    const author = WebSession.getUser(session);
     return await Opinion.createOpinion(author, content, feeling, root);
   }
 

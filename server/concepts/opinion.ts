@@ -6,14 +6,14 @@ import { NotAllowedError, NotFoundError } from "./errors";
 export interface OpinionDoc extends BaseDoc {
   author: ObjectId;
   content: string;
-  feeling: Number;
+  feeling: number;
   root: ObjectId;
 }
 
 export default class OpinionConcept {
   public readonly opinions = new DocCollection<OpinionDoc>("opinions");
 
-  async createOpinion(author: ObjectId, content: string, feeling: Number, root: ObjectId) {
+  async createOpinion(author: ObjectId, content: string, feeling: number, root: ObjectId) {
     const _id = await this.opinions.createOne({ author, content, feeling, root });
     return { msg: "Opinion successfully created!", opinion: await this.opinions.readOne({ _id }) };
   }
