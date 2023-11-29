@@ -1,4 +1,5 @@
-import "@/assets/main.css";
+// import "@/assets/main.css";
+import "@/assets/index.css";
 import "purecss";
 
 import { createPinia } from "pinia";
