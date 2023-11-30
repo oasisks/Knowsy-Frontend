@@ -19,7 +19,7 @@ const options = ref({
   // ]
 });
 
-const MITPOS = {lat: 42.3601, lng: 71.0942};
+const MITPOS = {lat: 42.3601, lng: -71.0942};
 // first thing we need is to define the center location
 // we either get it from the user or we set the default location to be MIT
 console.log(userCoords.value);
