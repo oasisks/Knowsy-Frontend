@@ -84,9 +84,6 @@ onMounted(async () => {
         @set-marker="openMarker"/>
     </GMapMarker>
   </GMapMap>
-  <p>{{ center }}</p>
-  <p>{{ currentMarkerId }}</p>
-  <p>{{ projects }}</p>
 </template>
 
 <style scoped> 
