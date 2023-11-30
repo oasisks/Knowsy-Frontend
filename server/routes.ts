@@ -160,15 +160,20 @@ class Routes {
   }
 
   @Router.post("/locationResources")
-  async createLocationResource(name: string, description: string, start: Date, status: string, longitude: number, latitude: number) {
-    const locationResource = await LocationResource.create(name, description, start, status, longitude, latitude);
+  async createLocationResource(name: string, description: string, start: Date, status: string, longitude: string, latitude: string) {
+    const lng = parseFloat(longitude);
+    const lat = parseFloat(latitude);
+    const locationResource = await LocationResource.create(name, description, start, status, lng, lat);
 
     return;
   }
 
   @Router.get("/locationResources")
-  async getLocationResource(longitude: number, latitude: number, radius: number) {
-    const locationResources = await LocationResource.getWithinRadius(longitude, latitude, radius);
+  async getLocationResource(longitude: string, latitude: string, radius: string) {
+    const lng = parseFloat(longitude);
+    const lat = parseFloat(latitude);
+    const rad = parseFloat(radius);
+    const locationResources = await LocationResource.getWithinRadius(lng, lat, rad);
     return locationResources;
   }
 
@@ -185,8 +190,10 @@ class Routes {
   }
 
   @Router.patch("/locationResources/:_id/location")
-  async updateLocationResourceLocation(_id: ObjectId, longitude: number, latitude: number) {
-    const msg = await LocationResource.update(_id, { location: { type: "Point", coordinates: [longitude, latitude] } });
+  async updateLocationResourceLocation(_id: ObjectId, longitude: string, latitude: string) {
+    const lng = parseFloat(longitude);
+    const lat = parseFloat(latitude);
+    const msg = await LocationResource.update(_id, { location: { type: "Point", coordinates: [lng, lat] } });
     return msg;
   }
 
@@ -203,8 +210,9 @@ class Routes {
   }
 
   @Router.post("/posts/:_id/opinions")
-  async createOpinion(author: ObjectId, content: string, feeling: Number, root: ObjectId) {
-    return await Opinion.createOpinion(author, content, feeling, root);
+  async createOpinion(author: ObjectId, content: string, feeling: string, root: ObjectId) {
+    const feels = parseFloat(feeling);
+    return await Opinion.createOpinion(author, content, feels, root);
   }
 
   @Router.get("/opinions")

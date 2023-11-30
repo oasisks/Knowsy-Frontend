@@ -4,8 +4,9 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
+import LocationPanel from "./LocationPanel.vue";
 
-const { currentUsername, isLoggedIn, radius, userCoords } = storeToRefs(useUserStore());
+const { currentUsername, isLoggedIn, userCoords } = storeToRefs(useUserStore());
 const center = ref({lat: 0, lng: 0});
 const ready = ref(false);
 const options = ref({
@@ -21,16 +22,29 @@ const MITPOS = {lat: 42.3601, lng: 71.0942};
 // we either get it from the user or we set the default location to be MIT
 center.value = isNaN(userCoords.value.position.lat) || isNaN(userCoords.value.position.lng) ? MITPOS : userCoords.value.position;
 
-const markers = ref([{position: {}}])
+const projects = ref([{position: center.value, title: "Home Location", status: "NAN", description: "It is my home :)"}]);
+const markers = ref([{position: center.value}]);
 
 // populate the map with markers
 async function populateMarkers() {
-  const longitude = center.value.lat.toString();
-  const latitude = center.value.lng.toString();
-  const query = {longitude, latitude};
+  const longitude = center.value.lng.toString();
+  const latitude = center.value.lat.toString();
+  const radius = "2";
+  const query = {longitude, latitude, radius};
+  // add in the markers
   try {
-    const locationResources = await fetchy('/api/radiusResources', "GET", {query});
+    const locationResources = await fetchy('/api/locationResources', "GET", {query});
     console.log(locationResources);
+    locationResources.forEach((locationResource: any) => {
+      console.log(locationResource);
+      // for each project, add in the project title, content, and critical dates
+      const position = locationResource.location.coordinates;
+      const description = locationResource.description;
+      const title = locationResource.title;
+      const status = locationResource.status;
+      projects.value.push({position: {lng: position[0], lat: position[1]}, title, status, description});
+      markers.value.push({position: { lng: position[0], lat: position[1]}})
+    })
   } catch {
 
   }
@@ -49,9 +63,16 @@ onMounted(async () => {
       >
       <GMapMarker
       :key="index"
-      v-for="(m, index) in markers"
-      :position="m.position"
-      />
+      v-for="(project, index) in projects"
+      :position="project.position"
+      >
+      <GMapInfoWindow>
+        <div>
+          <p>dasd</p>
+          <LocationPanel />
+        </div>
+      </GMapInfoWindow>
+    </GMapMarker>
   </GMapMap>
   <p>{{ center }}</p>
 </template>
