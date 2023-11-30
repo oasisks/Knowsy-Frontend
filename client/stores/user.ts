@@ -10,7 +10,7 @@ export const useUserStore = defineStore(
 
     const isLoggedIn = computed(() => currentUsername.value !== "");
 
-    const userCoords = ref({ position: { lat: NaN, lng: NaN } });
+    const userCoords = ref({ position: { lat: 42.3601, lng: -71.0942 } });
 
     const radius = ref(0);
 

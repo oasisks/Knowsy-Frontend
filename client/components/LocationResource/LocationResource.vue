@@ -7,7 +7,6 @@ import { fetchy } from "../../utils/fetchy";
 import LocationPanel from "./LocationPanel.vue";
 
 const { currentUsername, isLoggedIn, userCoords } = storeToRefs(useUserStore());
-const center = ref({lat: 0, lng: 0});
 const ready = ref(false);
 const currentMarkerId = ref(-1);
 const options = ref({
@@ -18,19 +17,16 @@ const options = ref({
   //   // Use the above link to create styles for our map
   // ]
 });
-
-const MITPOS = {lat: 42.3601, lng: -71.0942};
 // first thing we need is to define the center location
 // we either get it from the user or we set the default location to be MIT
 console.log(userCoords.value);
-center.value = isNaN(userCoords.value.position.lat) || isNaN(userCoords.value.position.lng) ? MITPOS : userCoords.value.position;
 
-const projects = ref([{id: -1, position: center.value, title: "Home Location", status: "NAN", description: "It is my home :)", home: true}]);
+const projects = ref([{id: -1, position: userCoords.value.position, title: "Home Location", status: "NAN", description: "It is my home :)", home: true}]);
 
 // populate the map with markers
 async function populateMarkers() {
-  const longitude = center.value.lng.toString();
-  const latitude = center.value.lat.toString();
+  const longitude = userCoords.value.position.lng.toString();
+  const latitude = userCoords.value.position.lat.toString();
   const radius = "2";
   const query = {longitude, latitude, radius};
   // add in the markers
@@ -65,7 +61,7 @@ onMounted(async () => {
 
 <template>
   <GMapMap
-      :center="center"
+      :center="userCoords.position"
       :zoom="14"
       :options="options"
       style="height: 89vh; width: 100%; display: flex;"
