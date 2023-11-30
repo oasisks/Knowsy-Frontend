@@ -105,7 +105,7 @@ class Routes {
     const long = parseFloat(longitude);
     const lat = parseFloat(latitude);
     const rad = parseFloat(radius);
-    return await RadiusResource.createRadiusBasedResource(long, lat, rad, name, status, content, criticalDates);
+    return await RadiusResource.createRadiusResource(long, lat, rad, name, status, content, criticalDates);
   }
 
   @Router.get("/radiusResources")
@@ -223,7 +223,7 @@ class Routes {
     } else if (root) {
       opinions = await Opinion.getOpinions(root);
     } else {
-      opinions = await Post.getPosts({});
+      opinions = await Opinion.getOpinions({});
     }
     return opinions;
   }
