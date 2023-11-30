@@ -22,6 +22,7 @@ const options = ref({
 const MITPOS = {lat: 42.3601, lng: 71.0942};
 // first thing we need is to define the center location
 // we either get it from the user or we set the default location to be MIT
+console.log(userCoords.value);
 center.value = isNaN(userCoords.value.position.lat) || isNaN(userCoords.value.position.lng) ? MITPOS : userCoords.value.position;
 
 const projects = ref([{id: -1, position: center.value, title: "Home Location", status: "NAN", description: "It is my home :)", home: true}]);
