@@ -20,9 +20,15 @@ class Routes {
     return await User.getUsers();
   }
 
+
   @Router.get("/users/:username")
   async getUser(username: string) {
     return await User.getUserByUsername(username);
+  }
+
+  @Router.get("/users/:userId")
+  async getUserById(userId: ObjectId) {
+    return await User.getUserById(userId);
   }
 
   @Router.post("/users")
@@ -220,19 +226,26 @@ class Routes {
   async getOpinions(author?: ObjectId, root?: ObjectId) {
     let opinions;
     let feelings;
-    // console.log(profile, typeof profile);
     if(author) {
-      console.log("in here lol")
       opinions = (await Opinion.getOpinions({author: author})).opinions;
       feelings = (await Opinion.getOpinions({author: author})).feelings;
     } else if (root) {
-      console.log("supposed to be false")
-      // console.log("backend", await Opinion.getOpinions({root: authorOrRoot}))
       opinions = (await Opinion.getOpinions({root: root})).opinions;
       feelings = (await Opinion.getOpinions({root: root})).feelings;
+    } 
+    console.log('opinions', opinions)
+    console.log('feelings', feelings)
+    if (opinions) {
+      const namedOpinions:any = [];
+      for (const opinion of opinions) {
+        const newOpinion = {...opinion, author: (await User.getUserById(opinion.author)).username}
+        namedOpinions.push(newOpinion);
+      }
+      console.log('namedOpinions', namedOpinions)
+      return {opinions: namedOpinions, feelings: feelings};
+    } else {
+      throw new Error("no opinions");
     }
-    console.log("routes", opinions, feelings)
-    return {opinions: opinions, feelings: feelings};
   }
 
   @Router.delete("/opinions/:_id")

@@ -27,9 +27,9 @@ export default class OpinionConcept {
     const opinions = await this.opinions.readMany(query, {
       sort: { dateUpdated: -1 },
     });
-    const feelings = Array<number>(5);
+    const feelings = [0, 0, 0, 0, 0, 0];
     for (const opinion of opinions) {
-      feelings[opinion.feeling-1] += 1
+      feelings[opinion.feeling] += 1
     }
     return {opinions: opinions, feelings: feelings};
   }
