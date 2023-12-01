@@ -14,12 +14,12 @@ export interface RadiusResourceDoc extends BaseDoc {
   criticalDates: Array<{ info: string; time: Date }>;
 }
 
-export default class RadiusBasedResourceConcept {
+export default class RadiusResourceConcept {
   public readonly radiusResources = new DocCollection<RadiusResourceDoc>("radiusResources");
 
-  async createRadiusBasedResource(longitude: number, latitude: number, radius: number, name: string, status: string, content: string, criticalDates_: [{ info: string; time: string }]) {
+  async createRadiusResource(longitude: number, latitude: number, radius: number, name: string, status: string, content: string, criticalDates_: [{ info: string; time: string }]) {
     await this.validCriticalDates(criticalDates_);
-    await this.canCreateRadiusBasedResource(name, longitude, latitude);
+    await this.canCreateRadiusResource(name, longitude, latitude);
     const criticalDates = criticalDates_.map((criticalDate) => {
       return { info: criticalDate.info, time: new Date(criticalDate.time) };
     });
@@ -126,7 +126,7 @@ export default class RadiusBasedResourceConcept {
     return c;
   }
 
-  async canCreateRadiusBasedResource(name: string, longitude: number, latitude: number) {
+  async canCreateRadiusResource(name: string, longitude: number, latitude: number) {
     const resource = await this.radiusResources.readOne({ name });
 
     if (resource !== null) {

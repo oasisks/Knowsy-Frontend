@@ -1,7 +1,7 @@
 import LocationResourceConcept from "./concepts/locationresource";
 import OpinionConcept from "./concepts/opinion";
 import PostConcept from "./concepts/post";
-import RadiusBasedResourceConcept from "./concepts/radiusBasedResource";
+import RadiusResourceConcept from "./concepts/radiusResource";
 import UserConcept from "./concepts/user";
 import WebSessionConcept from "./concepts/websession";
 
@@ -10,5 +10,5 @@ export const WebSession = new WebSessionConcept();
 export const User = new UserConcept();
 export const Post = new PostConcept();
 export const LocationResource = new LocationResourceConcept();
-export const RadiusResource = new RadiusBasedResourceConcept();
+export const RadiusResource = new RadiusResourceConcept();
 export const Opinion = new OpinionConcept();
