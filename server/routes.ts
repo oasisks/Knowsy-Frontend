@@ -211,14 +211,17 @@ class Routes {
   @Router.get("/opinions")
   async getOpinions(author?: ObjectId, root?: ObjectId) {
     let opinions;
+    let feelings;
     if (author) {
-      opinions = await Opinion.getOpinions(author);
+      opinions = (await Opinion.getOpinions(author)).opinions;
+      feelings = (await Opinion.getOpinions(author)).feelings;
     } else if (root) {
-      opinions = await Opinion.getOpinions(root);
+      opinions = (await Opinion.getOpinions(root)).opinions;
+      feelings = (await Opinion.getOpinions(root)).feelings;
     } else {
-      opinions = await Opinion.getOpinions({});
+      throw new Error('need to have author or root');
     }
-    return opinions;
+    return {opinions: opinions, feelings: feelings};
   }
 
   @Router.delete("/opinions/:_id")

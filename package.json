@@ -57,6 +57,7 @@
     "morgan": "^1.10.0",
     "pinia": "^2.1.6",
     "pinia-plugin-persistedstate": "^3.2.0",
+    "primevue": "^3.42.0",
     "purecss": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "vue": "^3.3.4",

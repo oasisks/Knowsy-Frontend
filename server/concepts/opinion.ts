@@ -6,7 +6,7 @@ import { NotAllowedError, NotFoundError } from "./errors";
 export interface OpinionDoc extends BaseDoc {
   author: ObjectId;
   content: string;
-  feeling: number;
+  feeling: number; // should be a number 1 to 5
   root: ObjectId;
 }
 
@@ -24,10 +24,14 @@ export default class OpinionConcept {
   }
 
   async getOpinions(query: Filter<OpinionDoc>) {
-    const opinion = await this.opinions.readMany(query, {
+    const opinions = await this.opinions.readMany(query, {
       sort: { dateUpdated: -1 },
     });
-    return opinion;
+    const feelings = Array<number>(5);
+    for (const opinion of opinions) {
+      feelings[opinion.feeling-1] += 1
+    }
+    return {opinions: opinions, feelings: feelings};
   }
 
   // covered in above function:
