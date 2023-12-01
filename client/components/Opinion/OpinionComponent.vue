@@ -1,4 +1,4 @@
-<!-- <script setup lang="ts">
+<script setup lang="ts">
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { formatDate } from "@/utils/formatDate";
@@ -45,4 +45,4 @@ async function deleteOpinion() {
       <p v-else>Created on: {{ formatDate(props.post.dateCreated) }}</p>
     </article>
   </div>
-</template> -->
+</template>

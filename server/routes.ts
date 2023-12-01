@@ -209,7 +209,7 @@ class Routes {
     return msg;
   }
 
-  @Router.post("/posts/:_id/opinions")
+  @Router.post("/opinions")
   async createOpinion(session: WebSessionDoc, content: string, feeling: string, root: ObjectId) {
     const feels = parseFloat(feeling);
     const author = WebSession.getUser(session);
@@ -217,18 +217,21 @@ class Routes {
   }
 
   @Router.get("/opinions")
-  async getOpinions(author?: ObjectId, root?: ObjectId) {
+  async getOpinions(authorOrRoot: ObjectId, profile: boolean) {
     let opinions;
     let feelings;
-    if (author) {
-      opinions = (await Opinion.getOpinions(author)).opinions;
-      feelings = (await Opinion.getOpinions(author)).feelings;
-    } else if (root) {
-      opinions = (await Opinion.getOpinions(root)).opinions;
-      feelings = (await Opinion.getOpinions(root)).feelings;
+    console.log(profile);
+    if(profile) {
+      console.log("in here lol")
+      opinions = (await Opinion.getOpinions({author: authorOrRoot})).opinions;
+      feelings = (await Opinion.getOpinions({author: authorOrRoot})).feelings;
     } else {
-      throw new Error('need to have author or root');
+      console.log("supposed to be false")
+      console.log("backend", await Opinion.getOpinions({root: authorOrRoot}))
+      opinions = (await Opinion.getOpinions({root: authorOrRoot})).opinions;
+      feelings = (await Opinion.getOpinions({root: authorOrRoot})).feelings;
     }
+    console.log("routes", opinions, feelings)
     return {opinions: opinions, feelings: feelings};
   }
 
