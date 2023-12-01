@@ -217,19 +217,19 @@ class Routes {
   }
 
   @Router.get("/opinions")
-  async getOpinions(authorOrRoot: ObjectId, profile: boolean) {
+  async getOpinions(author?: ObjectId, root?: ObjectId) {
     let opinions;
     let feelings;
-    console.log(profile);
-    if(profile) {
+    // console.log(profile, typeof profile);
+    if(author) {
       console.log("in here lol")
-      opinions = (await Opinion.getOpinions({author: authorOrRoot})).opinions;
-      feelings = (await Opinion.getOpinions({author: authorOrRoot})).feelings;
-    } else {
+      opinions = (await Opinion.getOpinions({author: author})).opinions;
+      feelings = (await Opinion.getOpinions({author: author})).feelings;
+    } else if (root) {
       console.log("supposed to be false")
-      console.log("backend", await Opinion.getOpinions({root: authorOrRoot}))
-      opinions = (await Opinion.getOpinions({root: authorOrRoot})).opinions;
-      feelings = (await Opinion.getOpinions({root: authorOrRoot})).feelings;
+      // console.log("backend", await Opinion.getOpinions({root: authorOrRoot}))
+      opinions = (await Opinion.getOpinions({root: root})).opinions;
+      feelings = (await Opinion.getOpinions({root: root})).feelings;
     }
     console.log("routes", opinions, feelings)
     return {opinions: opinions, feelings: feelings};

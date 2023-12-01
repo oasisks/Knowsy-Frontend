@@ -7,6 +7,10 @@ import { fetchy } from "../../utils/fetchy";
 
 const loaded = ref(false);
 const props = defineProps(["rootId", "profile"]);
+// const props = defineProps({
+//   rootId: String,
+//   profile: Boolean
+// })
 const emit = defineEmits(["editPost", "refreshPosts"]);
 
 let opinions = ref<Array<Record<string, string>>>([]);
@@ -27,9 +31,15 @@ async function createOpinion(content: string, feeling: number) {
 };
 
 async function getOpinions() {
-    let query = { authorOrRoot: props.rootId, profile: props.profile };
+    let query;
     let response;
-    console.log("hello here", props.rootId);
+
+    if (props.profile) {
+      query = { author: props.rootId };
+    } else {
+      query = { root: props.rootId }
+    }
+    console.log("hello here", props.rootId, typeof props.profile);
     try {
         response = await fetchy(`/api/opinions`, "GET", { query });
     } catch {
@@ -64,7 +74,7 @@ onBeforeMount(async () => {
     <fieldset>
       <legend>Add Opinion</legend>
 
-      <input id="opinion" type="text" v-model="contentInput" placeholder="comment" />
+      <input id="opinion" type="text" v-model="contentInput" placeholder="comment" required/>
       <div class="card flex justify-content-center">
         <SelectButton v-model="selectedOption" :options="options" aria-labelledby="basic" 
         @click="feelingInput = options.indexOf(selectedOption) + 1"/>
@@ -76,7 +86,6 @@ onBeforeMount(async () => {
   </form>
   </div>
   <p> hello </p>
-  <p> {{ opinions }}</p>
   <div class="opinions">
     <article v-for="opinion in opinions" :key="opinion._id">
       <p>{{ opinion.author }}</p>
