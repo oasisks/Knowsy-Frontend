@@ -31,9 +31,16 @@ onBeforeMount(async () => {
 <template>
   <section v-if="loaded && resource !== null">
     <h1>Announcement:</h1>
-    <p>{{ resource?.name }}</p>
-    <!-- <p class="author">{{ props.post.name }}</p> -->
+    <h2>{{ resource?.name }}</h2>
     <p>{{ resource?.content }}</p>
+    <p>Critical dates:</p>
+    <article v-for="date in resource?.criticalDates" :key="date">
+      <p>{{ date }}</p>
+    </article>
+    <p>[Insert Actionables here]</p>
+    <p>[Insert Opinions here]</p>
+    <p>[Insert Map here]</p>
+    <p>[Insert Poll here]</p>
   </section>
 </template>
 
