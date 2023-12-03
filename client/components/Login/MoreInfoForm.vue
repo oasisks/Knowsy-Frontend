@@ -3,7 +3,9 @@
 import router from "@/router";
 import { ref } from "vue";
 
-const radius = ref(0);
+let radius = ref(0);
+let longitude = ref(0);
+let latitude = ref(0);
 
 async function next() {
     void router.push({ name: "Home" });
