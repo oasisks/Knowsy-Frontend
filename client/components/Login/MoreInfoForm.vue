@@ -3,6 +3,8 @@
 import router from "@/router";
 import { ref } from "vue";
 
+let firstname = ref("");
+let lastname = ref("");
 let radius = ref(0);
 let longitude = ref(0);
 let latitude = ref(0);
@@ -16,6 +18,14 @@ async function next() {
     <form class="pure-form pure-form-aligned" @submit.prevent="next">
         <h3>Tell us more!</h3>
         <fieldset>
+            <div class="pure-control-group">
+                <label for="aligned-firstname">firstname</label>
+                <input v-model.trim="firstname" type="text" id="aligned-name" placeholder="firstname" required />
+            </div>
+            <div class="pure-control-group">
+                <label for="aligned-lastname">lastname</label>
+                <input v-model.trim="lastname" type="text" id="aligned-name" placeholder="lastname" required />
+            </div>
             <div class="pure-control-group">
                 <label for="aligned-longitude">Longitude</label>
                 <input v-model.trim="longitude" type="text" id="aligned-name" placeholder="longitude" required />
