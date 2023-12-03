@@ -19,20 +19,22 @@ const deletePost = async () => {
 </script>
 
 <template>
-  <a :href="`/announcements/${props.post._id}`" class="hover:underline">
-    <h1>Announcement:</h1>
-    <p class="author">{{ props.post.name }}</p>
-    <p>{{ props.post.content }}</p>
-    <div class="base">
-      <article class="timestamp">
-        <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }}</p>
-        <p v-else>Created on: {{ formatDate(props.post.dateCreated) }}</p>
-      </article>
-    </div>
-  </a>
+  <div class="px-8 py-4 bg-slate-50 rounded-lg hover:shadow">
+    <a :href="`/announcements/${props.post._id}`">
+      <h2 class="text-lg font-semibold">Announcement</h2>
+      <h1 class="text-2xl font-bold">{{ props.post.name }}</h1>
+      <p class="mb-6">{{ props.post.content }}</p>
+      <div class="text-sm">
+        <article class="timestamp">
+          <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }}</p>
+          <p v-else>Created on: {{ formatDate(props.post.dateCreated) }}</p>
+        </article>
+      </div>
+    </a>
+  </div>
 </template>
 
-<style scoped>
+<!-- <style scoped>
 p {
   margin: 0em;
 }
@@ -67,4 +69,4 @@ menu {
 .base article:only-child {
   margin-left: auto;
 }
-</style>
+</style> -->

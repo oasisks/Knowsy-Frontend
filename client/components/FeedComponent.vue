@@ -42,26 +42,30 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <section v-if="isLoggedIn">
+  <!-- <section v-if="isLoggedIn">
     <h2>Create a post:</h2>
     <CreatePostForm @refreshPosts="getPosts" />
-  </section>
-  <div class="row">
-    <h2 v-if="!searchAuthor">Updates and announcements:</h2>
-    <h2 v-else>Posts by {{ searchAuthor }}:</h2>
-    <SearchPostForm @getPostsByAuthor="getPosts" />
+  </section> -->
+  <div>
+    <div class="row">
+      <h2 class="text-2xl font-bold mb-8" v-if="!searchAuthor">Updates and announcements:</h2>
+      <h2 v-else>Posts by {{ searchAuthor }}:</h2>
+      <SearchPostForm @getPostsByAuthor="getPosts" />
+    </div>
+    <section class="posts" v-if="loaded && posts.length !== 0">
+      <div class="space-y-6">
+        <article v-for="post in posts" :key="post._id">
+          <RadiusResourceComponent v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
+          <!-- <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" /> -->
+        </article>
+      </div>
+    </section>
+    <p v-else-if="loaded">No posts found</p>
+    <p v-else>Loading...</p>
   </div>
-  <section class="posts" v-if="loaded && posts.length !== 0">
-    <article v-for="post in posts" :key="post._id">
-      <RadiusResourceComponent v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
-      <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
-    </article>
-  </section>
-  <p v-else-if="loaded">No posts found</p>
-  <p v-else>Loading...</p>
 </template>
 
-<style scoped>
+<!-- <style scoped>
 section {
   display: flex;
   flex-direction: column;
@@ -94,4 +98,4 @@ article {
   margin: 0 auto;
   max-width: 60em;
 }
-</style>
+</style> -->
