@@ -2,11 +2,12 @@ import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
-import HomeView from "../views/HomeView.vue";
-import HomeFeedView from "../views/HomeFeedView.vue";
 import AnnouncementView from "../views/AnnouncementView.vue";
+import HomeFeedView from "../views/HomeFeedView.vue";
+import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
+import ProfileView from "../views/ProfileView.vue";
 import SettingView from "../views/SettingView.vue";
 
 const router = createRouter({
@@ -26,6 +27,12 @@ const router = createRouter({
       path: "/announcements/:_id",
       name: "Announcement",
       component: AnnouncementView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/profile",
+      name: "Profile",
+      component: ProfileView,
       meta: { requiresAuth: true },
     },
     {

@@ -16,10 +16,15 @@ async function delete_() {
   await deleteUser();
   void router.push({ name: "Home" });
 }
+
+async function back() {
+  void router.push({ name: "Profile" });
+}
 </script>
 
 <template>
   <main class="column">
+    <button class="button-error pure-button" @click="back">Back</button>
     <h1>Settings for {{ currentUsername }}</h1>
     <button class="pure-button pure-button-primary" @click="logout">Logout</button>
     <button class="button-error pure-button" @click="delete_">Delete User</button>
