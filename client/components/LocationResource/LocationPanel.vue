@@ -3,7 +3,7 @@ import router from "@/router";
 import { defineEmits, defineProps } from 'vue';
 import LocationResourcePage from "./LocationResourcePage.vue";
 
-const props = defineProps(["title", "description", "timeline", "status", "home", "opened", "clickable"])
+const props = defineProps(["title", "description", "timeline", "status", "home", "opened", "clickable", "id"])
 const emit = defineEmits(["setMarker"])
 
 function goToProjectPage() {
@@ -51,6 +51,7 @@ function goToProjectPage() {
         <p v-else>This is your home location</p>
 
     </div>
+    <p>{{ props.id }}</p>
 </GMapInfoWindow>
 
 </template>

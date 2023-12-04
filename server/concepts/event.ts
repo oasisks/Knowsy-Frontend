@@ -45,35 +45,34 @@ export default class EventConcept {
   async registerUser(_id: ObjectId, user: ObjectId) {
     const members = (await this.events.readOne({ _id }))?.attendees;
     if (members) {
-        members.push(user);
-        const update: Partial<EventDoc> = { attendees: members }
-        await this.modifyEvent(_id, update);
-        return { msg: "User successfully registered!"}
+      members.push(user);
+      const update: Partial<EventDoc> = { attendees: members };
+      await this.modifyEvent(_id, update);
+      return { msg: "User successfully registered!" };
     } else {
-        throw new NotFoundError(`Event ${_id} not found!`);
+      throw new NotFoundError(`Event ${_id} not found!`);
     }
   }
 
   async deregisterUser(_id: ObjectId, user: ObjectId) {
     const members = (await this.events.readOne({ _id }))?.attendees;
     if (members) {
-        const newMembers = members.filter((member) => member !== user);
-        // newMembers is a list of people without user
-        const update: Partial<EventDoc> = { attendees: newMembers }
-        await this.modifyEvent(_id, update);
-        return { msg: "User successfully deregistered!"}
+      const newMembers = members.filter((member) => member !== user);
+      // newMembers is a list of people without user
+      const update: Partial<EventDoc> = { attendees: newMembers };
+      await this.modifyEvent(_id, update);
+      return { msg: "User successfully deregistered!" };
     } else {
-        throw new NotFoundError(`Event ${_id} not found!`);
+      throw new NotFoundError(`Event ${_id} not found!`);
     }
   }
 
   async getEvents(query: Filter<EventDoc>) {
     const events = await this.events.readMany(query, {
-        sort: { dateUpdated: -1 },
-      });
+      sort: { dateUpdated: -1 },
+    });
     return events;
   }
-
 }
 
 // export class OpinionAuthorNotMatchError extends NotAllowedError {

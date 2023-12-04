@@ -1,8 +1,10 @@
-import { ObjectId } from "mongodb";
+import { Filter, ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { LocationResource, Opinion, Post, RadiusResource, User, WebSession } from "./app";
+import { Event, LocationResource, Opinion, Post, RadiusResource, User, WebSession } from "./app";
+import { BadValuesError } from "./concepts/errors";
+import { EventDoc } from "./concepts/event";
 import { PostDoc, PostOptions } from "./concepts/post";
 import { UserDoc } from "./concepts/user";
 import { WebSessionDoc } from "./concepts/websession";
@@ -19,7 +21,6 @@ class Routes {
   async getUsers() {
     return await User.getUsers();
   }
-
 
   @Router.get("/users/:username")
   async getUser(username: string) {
@@ -226,23 +227,23 @@ class Routes {
   async getOpinions(author?: ObjectId, root?: ObjectId) {
     let opinions;
     let feelings;
-    if(author) {
-      opinions = (await Opinion.getOpinions({author: author})).opinions;
-      feelings = (await Opinion.getOpinions({author: author})).feelings;
+    if (author) {
+      opinions = (await Opinion.getOpinions({ author: author })).opinions;
+      feelings = (await Opinion.getOpinions({ author: author })).feelings;
     } else if (root) {
-      opinions = (await Opinion.getOpinions({root: root})).opinions;
-      feelings = (await Opinion.getOpinions({root: root})).feelings;
-    } 
-    console.log('opinions', opinions)
-    console.log('feelings', feelings)
+      opinions = (await Opinion.getOpinions({ root: root })).opinions;
+      feelings = (await Opinion.getOpinions({ root: root })).feelings;
+    }
+    console.log("opinions", opinions);
+    console.log("feelings", feelings);
     if (opinions) {
-      const namedOpinions:any = [];
+      const namedOpinions: any = [];
       for (const opinion of opinions) {
-        const newOpinion = {...opinion, author: (await User.getUserById(opinion.author)).username}
+        const newOpinion = { ...opinion, author: (await User.getUserById(opinion.author)).username };
         namedOpinions.push(newOpinion);
       }
-      console.log('namedOpinions', namedOpinions)
-      return {opinions: namedOpinions, feelings: feelings};
+      console.log("namedOpinions", namedOpinions);
+      return { opinions: namedOpinions, feelings: feelings };
     } else {
       throw new Error("no opinions");
     }
@@ -253,6 +254,47 @@ class Routes {
     const user = WebSession.getUser(session);
     await Opinion.isAuthor(user, _id);
     return Opinion.delete(_id);
+  }
+
+  @Router.post("/events")
+  async createEvent(session: WebSessionDoc, name: string, type: string, date: string, root: ObjectId, location?: Array<number>) {
+    const author = WebSession.getUser(session);
+
+    // a small check to see if the date is a valid date
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getDate())) {
+      throw new BadValuesError("The resulting date string is not valid");
+    }
+
+    return await Event.createEvent(name, type, author, dateObj, root, location);
+  }
+
+  @Router.delete("/events/:_id")
+  async deleteEvent(_id: ObjectId) {
+    return await Event.deleteEvent(_id);
+  }
+
+  @Router.patch("/events/:_id")
+  async updateEvent(_id: ObjectId, update: Partial<EventDoc>) {
+    return await Event.modifyEvent(_id, update);
+  }
+
+  @Router.post("/event/:_id")
+  async registerUser(session: WebSessionDoc, _id: ObjectId) {
+    const user = WebSession.getUser(session);
+    return await Event.registerUser(_id, user);
+  }
+
+  @Router.delete("/event/:_id")
+  async deregisterUser(session: WebSessionDoc, _id: ObjectId) {
+    const user = WebSession.getUser(session);
+    return await Event.deregisterUser(_id, user);
+  }
+
+  @Router.get("/events")
+  async getEvents(query: Filter<EventDoc>) {
+    const events = await Event.getEvents(query);
+    return await Event.getEvents(query);
   }
 }
 
