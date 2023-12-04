@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
 import { defineEmits, defineProps } from 'vue';
-import LocationResourcePage from "./LocationResourcePage.vue";
 
 const props = defineProps(["title", "description", "timeline", "status", "home", "opened", "clickable", "id"])
 const emit = defineEmits(["setMarker"])
@@ -9,21 +8,16 @@ const emit = defineEmits(["setMarker"])
 function goToProjectPage() {
     // this is the make shift solution
     // will work on making a large popup window on the same page for better experience
-    if (props.clickable) {
-        router.addRoute({
-        path: `/projects/${props.title.replace(" ", "")}`,
-        component: LocationResourcePage,
-        props: {
-            title: props.title,
-            description: props.description
-        }
-    })
-    void router.push({path: `/projects/${props.title.replace(" ", "")}`});
-    }
-    else {
-        return;
-    }
+    
+    void router.push({path: `/projects/${props.id}`})
+}
 
+function findAllPosts() {
+    try {
+        // const posts = fetchy()
+    } catch {
+
+    }
 }
 
 </script>
@@ -33,11 +27,18 @@ function goToProjectPage() {
 <GMapInfoWindow 
     :opened="props.opened"
     @click="goToProjectPage()"
+    :options="{
+        pixelOffset: {
+                width: 10, height: 0
+              },
+              maxWidth: 320,
+              maxHeight: 320,
+    }"
     >
     <div>
         <h1>{{ props.title }}</h1>
-        <div v-if="props.clickable">
-            <p>{{ props.description }}</p>
+        <div v-if="props.clickable" class="description">
+            <p>Description: {{ props.description }} </p>
             <ol>
                 <li>Post 1</li>
                 <li>Post 2</li>
@@ -57,4 +58,7 @@ function goToProjectPage() {
 </template>
 
 <style scoped>
+.description {
+    overflow-wrap: break-word;
+}
 </style>
