@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 import CreateOpinion from "./CreateOpinion.vue";
+import OpinionComponent from "./OpinionComponent.vue";
 
 const loaded = ref(false);
 const props = defineProps(["rootId", "profile"]);
@@ -59,13 +60,7 @@ onBeforeMount(async () => {
   <h2>All Comments</h2>
   <div class="opinions">
     <article v-for="opinion in opinions" :key="opinion._id" class="opinion">
-    <div class="comment-header">
-      <p class="author">{{ opinion.author }}</p>
-      <div v-if="(parseInt(opinion.feeling) - 1) !== -1" class="feeling-box">
-        {{ options[parseInt(opinion.feeling) - 1] }}
-      </div>
-    </div>
-    <p class="comment-content">{{ opinion.content }}</p>
+      <OpinionComponent v-bind:opinion="opinion" @refreshOpinions="getOpinions"/>
     </article>
   </div>
 
@@ -87,37 +82,9 @@ h2 {
   display: flex;
   flex-direction: row;
   align-items: flex-start; /* Align items at the top */
-  max-width: 75%; /* Adjust width as needed */
+  max-width: 60%; /* Adjust width as needed */
   background-color: rgba(0, 123, 255, 0.1); /* Slightly tinted blue background */
   padding: 20px; /* Add padding for better visualization */
-}
-
-/* Styling for the input text field */
-.addComment {
-  flex: 2; /* Takes more space */
-  padding: 10px;
-  border-radius: 8px; /* Rounded corners */
-  border: 1px solid #ccc; /* Border color */
-  margin-right: 10px; /* Margin between input and buttons */
-  width: 550px;
-}
-
-
-/* Styling for the form and positioning the submit button */
-.createOpinion {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start; /* Align items at the top */
-}
-
-/* Styling for the submit button */
-.pure-button-primary {
-  border-radius: 8px;
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
 }
 
 
@@ -127,35 +94,10 @@ h2 {
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 5px;
+  width: 60%
 }
 
-/* Styling for the comment header containing author and feeling */
-.comment-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
 
-/* Styling for the author's name */
-.author {
-  font-weight: bold;
-  margin: 0;
-}
-
-/* Styling for the feeling box */
-.feeling-box {
-  background-color: #007bff;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 3px;
-}
-
-/* Styling for the comment content */
-.comment-content {
-  margin: 0;
-  line-height: 1.4;
-}
 
 /* Styling for the bar graph section */
 .bar-graph {
@@ -163,7 +105,7 @@ h2 {
   justify-content: space-around;
   align-items: flex-end;
   height: 40vh; /* Adjust as needed to fit the desired vertical space */
-  width: 75%; /* Full horizontal width of the page */
+  width: 60%; /* Full horizontal width of the page */
   background-color: #f0f0f0; /* Bar graph background color */
   padding: 20px; /* Add padding for better spacing */
   box-sizing: border-box; /* Include padding in width calculation */
