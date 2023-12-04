@@ -37,11 +37,8 @@ export default class PollConcept {
     const poll = await this.polls.readOne({ _id });
     if (poll !== null) {
       if (poll.options.includes(option)) {
-        // const newVotes =
-        // this.sanitizeUpdate({ update });
-        // await this.polls.updateOne({ _id }, update);
-        // add vote using $push
-        // await this.polls.updateOne({ _id }, { $push: { votes: { user: user, option: option } } });
+        poll.votes.push({ user, option });
+        await this.polls.updateOne({ _id }, poll);
         return { msg: "Vote successfully added!" };
       } else {
         throw new NotFoundError("Option not found!");
@@ -55,7 +52,10 @@ export default class PollConcept {
     const poll = await this.polls.readOne({ _id });
     if (poll !== null) {
       if (poll.votes.filter((vote) => vote.user === user).length > 0) {
-        // remove vote using $pull?
+        poll.votes = poll.votes.filter(function (obj) {
+          return obj.user !== user;
+        });
+        await this.polls.updateOne({ _id }, poll);
         return { msg: "Vote successfully removed!" };
       } else {
         throw new NotFoundError("Vote not found!");
