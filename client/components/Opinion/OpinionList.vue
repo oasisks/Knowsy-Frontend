@@ -5,31 +5,13 @@ import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 import CreateOpinion from "./CreateOpinion.vue";
 
-
 const loaded = ref(false);
 const props = defineProps(["rootId", "profile"]);
-// const props = defineProps({
-//   rootId: String,
-//   profile: Boolean
-// })
-const emit = defineEmits(["editPost", "refreshPosts"]);
 
 let opinions = ref<Array<Record<string, string>>>([]);
 let feelings = ref([0, 0, 0, 0, 0, 0]);
-const contentInput = ref("");
-const selectedOption = ref("None");
 const options = ref(["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]);
-const feelingInput = ref(options.value.indexOf(selectedOption.value) + 1);
 
-
-async function createOpinion(content: string, feeling: number) {
-    try {
-        await fetchy(`/api/opinions`, "POST", { body: {content: content, feeling: feeling, root: props.rootId} });
-    } catch {
-        return;
-    }
-    emit("refreshPosts");
-};
 
 async function getOpinions() {
     let query;
@@ -50,8 +32,6 @@ async function getOpinions() {
     opinions.value = response.opinions;
     feelings.value = response.feelings;
 };
-
-
 
 onBeforeMount(async () => {
   await getOpinions();
