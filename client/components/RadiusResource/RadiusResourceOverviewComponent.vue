@@ -38,7 +38,8 @@ onBeforeMount(async () => {
       <div class="mb-3">
         <p class="text-lg font-semibold">Critical dates:</p>
         <article v-for="date of resource?.criticalDates" :key="date">
-          <p class="text-lg">{{ date.info }} on {{ formatDate(date.time) }}</p>
+          <!-- <p class="text-lg">{{ date.info }} on {{ formatDate(date.time) }}</p> -->
+          <p class="text-lg">{{ date }}</p>
         </article>
       </div>
       <div>
