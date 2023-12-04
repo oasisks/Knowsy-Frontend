@@ -2,10 +2,11 @@ import { Filter, ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { Event, LocationResource, Opinion, Post, RadiusResource, User, WebSession } from "./app";
+import { Event, LocationResource, Opinion, Poll, Post, RadiusResource, User, WebSession } from "./app";
 import { BadValuesError } from "./concepts/errors";
 import { EventDoc } from "./concepts/event";
 import { PostDoc, PostOptions } from "./concepts/post";
+import { PollDoc } from "./concepts/poll"
 import { UserDoc } from "./concepts/user";
 import { WebSessionDoc } from "./concepts/websession";
 import Responses from "./responses";
@@ -64,8 +65,8 @@ class Routes {
     return { msg: "Logged out!" };
   }
 
-  @Router.get("/posts")
-  async getPosts(author?: string) {
+  @Router.get("/posts/:author")
+  async getPostsByAuthor(author: string) {
     let posts;
     if (author) {
       const id = (await User.getUserByUsername(author))._id;
@@ -74,6 +75,12 @@ class Routes {
       posts = await Post.getPosts({});
     }
     return Responses.posts(posts);
+  }
+
+  @Router.get("/posts/:project") 
+  async getPostsByProject(project: ObjectId) {
+    const posts = await Post.getPosts({project: project});
+    return posts;
   }
 
   @Router.post("/posts")
@@ -171,7 +178,6 @@ class Routes {
     const lng = parseFloat(longitude);
     const lat = parseFloat(latitude);
     const locationResource = await LocationResource.create(name, description, start, status, lng, lat);
-
     return;
   }
 
@@ -296,6 +302,57 @@ class Routes {
     const events = await Event.getEvents(query);
     return await Event.getEvents(query);
   }
+
+  @Router.post("/polls")
+  async createPoll(session: WebSessionDoc, prompt: string, options: string[], root: ObjectId) {
+    const user = WebSession.getUser(session);
+    return await Poll.create(prompt, options, user, root);
+  }
+
+  @Router.patch("/polls/:_id")
+  async updatePoll(session: WebSessionDoc, _id: ObjectId, update: Partial<PollDoc>) {
+    const user = WebSession.getUser(session);
+    await Poll.isAuthor(user, _id);
+    return await Poll.update(_id, update);
+  }
+
+  @Router.delete("/polls/:_id")
+  async deletePoll(session: WebSessionDoc, _id: ObjectId) {
+    const user = WebSession.getUser(session);
+    await Poll.isAuthor(user, _id);
+    return Poll.delete(_id);
+  }
+
+  @Router.get("/polls/:author")
+  async getPollsByAuthor(author: string) {
+    let polls;
+    if (author) {
+      const id = (await User.getUserByUsername(author))._id;
+      polls = await Poll.getPolls({author: id});
+    } else {
+      polls = await Poll.getPolls({});
+    }
+    return polls;
+  }
+
+  @Router.get("/polls/:root") 
+  async getPollsByRoot(root: ObjectId) {
+    const polls = await Poll.getPolls({project: root});
+    return polls;
+  }
+
+  @Router.patch("polls/add/:_id")
+  async addVote(session: WebSessionDoc, _id: ObjectId, choice: string) {
+    const user = WebSession.getUser(session);
+    await Poll.addVote(_id, user, choice);
+  }
+
+  @Router.patch("polls/remove/:_id")
+  async removeVote(session: WebSessionDoc, _id: ObjectId) {
+    const user = WebSession.getUser(session);
+    await Poll.removeVote(_id, user);
+  }
+
 }
 
 export default getExpressRouter(new Routes());
