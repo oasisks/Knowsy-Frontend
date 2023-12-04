@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
-import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 import { ObjectId } from "mongodb";
@@ -31,14 +30,16 @@ onBeforeMount(async () => {
 <template>
   <section v-if="loaded && resource !== null">
     <div class="mb-10">
-      <div class="mb-5">
-        <h1 class="text-xl font-semibold">Announcement:</h1>
+      <div class="mb-5 justify-items-start">
+        <h1 class="text-xl font-semibold text-sky-500">Announcement</h1>
         <h2 class="text-3xl font-bold">{{ resource?.name }}</h2>
       </div>
       <div class="mb-3">
         <p class="text-lg font-semibold">Critical dates:</p>
-        <article v-for="date of resource?.criticalDates" :key="date">
-          <!-- <p class="text-lg">{{ date.info }} on {{ formatDate(date.time) }}</p> -->
+        <article v-for="date in resource?.criticalDates" :key="date">
+          <!-- <p class="text-lg">{{ JSON.parse(date).info }} on {{ JSON.parse(date).time }}</p> -->
+          <!-- <p class="text-lg">{{ JSON.parse(date.toString()) }}</p> -->
+          <!-- TODO: reformat this -->
           <p class="text-lg">{{ date }}</p>
         </article>
       </div>
