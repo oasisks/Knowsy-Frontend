@@ -1,25 +1,31 @@
 <script setup lang="ts">
 import router from "@/router";
-import { defineEmits, defineProps } from 'vue';
+import { defineEmits, defineProps, onMounted, ref } from 'vue';
+import { fetchy } from "../../utils/fetchy";
 
 const props = defineProps(["title", "description", "timeline", "status", "home", "opened", "clickable", "id"])
 const emit = defineEmits(["setMarker"])
 
+const posts = ref([]);
 function goToProjectPage() {
     // this is the make shift solution
     // will work on making a large popup window on the same page for better experience
-    
     void router.push({path: `/projects/${props.id}`})
 }
 
-function findAllPosts() {
+async function findAllPosts() {
     try {
-        // const posts = fetchy()
-    } catch {
-
+        console.log(`/api/posts/projects/${props.id}`);
+        const post = await fetchy(`/api/posts/projects/${props.id}`, "GET");
+        console.log(post);
+} catch(e) {
+        console.error(e);
     }
 }
 
+onMounted(async () => {
+    await findAllPosts();
+})
 </script>
 
 <template>

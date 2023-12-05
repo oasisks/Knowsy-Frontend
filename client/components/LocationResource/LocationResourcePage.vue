@@ -5,13 +5,12 @@ const props = defineProps(["id"]);
 
 const title = ref("Default Title");
 
-// fix this later, updated will change base on if its been updated x minutes ago, x hours ago, x days ago, x weeks ago, and x years ago
+// fix this later, updated will change base on if its been updated x minutes ago, x hours ago, x days ago, x weeks ago, and x years ago 
 const updated = ref(new Date());
 const projectDescription = ref("Default Description");
 const posts = ref(["Default Post Content"]);
 const events = ref([]);
 const polls = ref([]);
-
 
 </script>
 
@@ -21,7 +20,23 @@ const polls = ref([]);
             <Card>
                 <template #title> {{ title }} </template>
                 <template #subtitle> Last Updated: {{ updated }}</template>
-                <template #content> {{ projectDescription }}</template>
+                <template #content>
+                    <p>{{ projectDescription }}</p>
+                    <div v-for="post in posts">
+                        <p>post</p>
+                    </div>
+                    <div class="actionables">
+                        <Card>
+                            <template #title> Current Actionables</template>
+                            <template #content>
+                                <ScrollPanel style="width: 100%;">
+                                    <p>dasdasdsadsadsaddsadasdasdasdasdsadsasadasdasdasdasdsadsadasdasdsadasdadsaddasdsadasdsadadasdsadasdasdsadadasdas</p>
+                                </ScrollPanel>
+                            </template>
+                        </Card>
+                    </div>
+                </template>
+
             </Card>
         </div>
         <div class="col-flex">
@@ -47,5 +62,9 @@ const polls = ref([]);
     overflow-wrap: break-word;
     gap: 1em;
     width: 45%;
+}
+
+.actionables {
+    margin-top: 3.5em;
 }
 </style>
