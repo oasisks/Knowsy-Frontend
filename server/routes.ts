@@ -71,7 +71,7 @@ class Routes {
     return Responses.posts(posts);
   }
 
-  @Router.get("/:author/posts")
+  @Router.get("/users/:author/posts")
   async getPostsByAuthor(author: string) {
     let posts;
     if (author) {
@@ -83,7 +83,7 @@ class Routes {
     return Responses.posts(posts);
   }
 
-  @Router.get("/:project/posts")
+  @Router.get("/projects/:project/posts")
   async getPostsByProject(project: ObjectId) {
     const posts = await Post.getPosts({ project: project });
     return posts;
