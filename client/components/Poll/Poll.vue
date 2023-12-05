@@ -1,34 +1,63 @@
 <script setup lang="ts">
+import InputText from 'primevue/inputtext';
 import { defineProps, onMounted, ref } from 'vue';
 import { fetchy } from '../../utils/fetchy';
 // we want to grab all the polls by the project id
 const props = defineProps(["id"]);
 const polls = ref([]);
-const optionsRef = ref<Array<Record<string, string>>>([]);
 const promptRef = ref("");
+const isCreatingPoll = ref(false);
+const addingOption = ref(false);
+const optionText = ref("");
+const optionCount = ref<Array<string>>([]);
+const isBlank = ref(false);
+// const optionCount = ref(0);
 
 async function getPolls() {
     // given the id, we grab all the polls that exists
     try {
         console.log("Hello");
-        const poll = await fetchy(`/api/madeup/${props.id}`, "GET");
+        const poll = await fetchy(`/api/polls/project/${props.id}`, "GET");
     } catch {
 
     }
 }
 
+async function togglePoll() {
+    isCreatingPoll.value = !isCreatingPoll.value;
+    // when I toggle poll, I also want to reset everything else
+    optionText.value = "";
+    addingOption.value = false;
+    promptRef.value = "";
+    optionCount.value = [];
+}
+
 async function createPoll() {
+    // first we need to check if any of the options are left blank
+    const blank = optionCount.value.filter((value) => value === "");
+    isBlank.value = blank.length !== 0 || promptRef.value.length === 0;
     const root = props.id;
     const prompt = promptRef.value;
-    const options = optionsRef.value;
+    const options = optionCount.value;
     const query = {prompt, root};
     const body = {options};
+    if (isBlank.value) {
+        return;
+    }
     try {
         const poll = await fetchy(`/api/polls`, "POST", {query, body});
         console.log(poll);
     } catch {
 
     }
+    // after we make the poll we will result everything back to the beginning
+    await togglePoll();
+}
+
+async function remove(index: number) {
+    optionCount.value = optionCount.value.filter((elt, i) => {
+        return i !== index
+    })
 }
 
 
@@ -43,9 +72,17 @@ onMounted(async () => {
             <div class="row-flex">
                 <p>Polls</p>
                 <Button 
+                    v-if="!isCreatingPoll"
                     icon="pi pi-plus" 
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    @click="createPoll"
+                    @click="togglePoll"
+                >
+                </Button>
+                <Button 
+                    v-if="isCreatingPoll"
+                    class="bg-red-500 hover:bg-red-700	 text-white py-2 px-4 rounded"
+                    label="cancel"
+                    @click="togglePoll"
                 >
                 </Button>
             </div>
@@ -55,8 +92,55 @@ onMounted(async () => {
             <hr>
             <br>
             <div class="content-flex">
-                <p>{{ props.id }}</p>
+                <div v-if="!isCreatingPoll">
+                    <p>I am not creating a poll</p>
+
+                </div>
+
+                <div v-if="isCreatingPoll" class="poll ">
+                    <InputText
+                        type="text" 
+                        v-model="promptRef" 
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Question Title"
+                    />
+                    <div class="w-full flex flex-row gap-4" v-for="(input, index) in optionCount">
+                        <InputText 
+                            :key="index"
+                            type="text"
+                            :value="input"
+                            @update:model-value="newValue => optionCount[index] = newValue"
+                            class="bg-blue-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Option"
+                        />
+                        <Button
+                            class="hover:bg-red-100 text-red-700 rounded"
+                            icon="pi pi-trash"
+                            @click="remove(index)"
+                        >
+                        </Button>
+                    </div>
+
+                    <Button 
+                        class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded"
+                        label="Add an Option"
+                        @click="addingOption = true; optionCount.push(``);"
+                    >
+                    </Button>
+                    <Button 
+                        class="bg-green-500 hover:bg-green-700 text-white py-3 w-full rounded"
+                        label="Create Poll"
+                        @click="createPoll"
+                    >
+                    </Button>
+                    <div v-if="isBlank" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <strong class="font-bold">Oh Oh! </strong>
+                        <span class="block sm:inline">There are some missing entries</span>
+
+                    </div>
+                </div>
             </div>
+            
         </template>
     </Card>
 </template>
@@ -76,6 +160,14 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.poll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    width: 90%;
 }
 
 </style>

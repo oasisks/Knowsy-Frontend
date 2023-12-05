@@ -11,6 +11,7 @@ import "primeicons/primeicons.css";
 import Button from "primevue/button";
 import Card from "primevue/card";
 import PrimeVue from "primevue/config";
+import InputText from "primevue/inputtext";
 import "primevue/resources/primevue.min.css";
 import "primevue/resources/themes/lara-light-green/theme.css";
 import ScrollPanel from "primevue/scrollpanel";
@@ -38,5 +39,6 @@ app.component("Card", Card);
 app.component("ScrollPanel", ScrollPanel);
 app.component("VirtualScroller", VirtualScroller);
 app.component("Button", Button);
+app.component("InputText", InputText);
 
 app.mount("#app");
