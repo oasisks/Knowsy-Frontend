@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
-import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 import { ObjectId } from "mongodb";
@@ -30,53 +29,28 @@ onBeforeMount(async () => {
 
 <template>
   <section v-if="loaded && resource !== null">
-    <h1>Announcement:</h1>
-    <h2>{{ resource?.name }}</h2>
-    <p>{{ resource?.content }}</p>
-    <p>Critical dates:</p>
-    <article v-for="date in resource?.criticalDates" :key="date">
-      <p>{{ date }}</p>
-    </article>
+    <div class="mb-10">
+      <div class="mb-5 justify-items-start">
+        <h1 class="text-xl font-semibold text-sky-500">Announcement</h1>
+        <h2 class="text-3xl font-bold">{{ resource?.name }}</h2>
+      </div>
+      <div class="mb-3">
+        <p class="text-lg font-semibold">Critical dates:</p>
+        <article v-for="date in resource?.criticalDates" :key="date">
+          <!-- <p class="text-lg">{{ JSON.parse(date).info }} on {{ JSON.parse(date).time }}</p> -->
+          <!-- <p class="text-lg">{{ JSON.parse(date.toString()) }}</p> -->
+          <!-- TODO: reformat this -->
+          <p class="text-lg">{{ date }}</p>
+        </article>
+      </div>
+      <div>
+        <p class="text-lg font-semibold">Description:</p>
+        <p class="text-lg">{{ resource?.content }}</p>
+      </div>
+    </div>
+
     <p>[Insert Actionables here]</p>
-    <p>[Insert Opinions here]</p>
     <p>[Insert Map here]</p>
     <p>[Insert Poll here]</p>
   </section>
 </template>
-
-<style scoped>
-p {
-  margin: 0em;
-}
-
-.author {
-  font-weight: bold;
-  font-size: 1.2em;
-}
-
-menu {
-  list-style-type: none;
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  padding: 0;
-  margin: 0;
-}
-
-.timestamp {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 0.9em;
-  font-style: italic;
-}
-
-.base {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.base article:only-child {
-  margin-left: auto;
-}
-</style>

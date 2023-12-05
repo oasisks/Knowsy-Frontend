@@ -1,6 +1,8 @@
+import EventConcept from "./concepts/event";
 import LocationResourceConcept from "./concepts/locationresource";
 import OpinionConcept from "./concepts/opinion";
 import PostConcept from "./concepts/post";
+import PollConcept from "./concepts/poll";
 import RadiusResourceConcept from "./concepts/radiusResource";
 import UserConcept from "./concepts/user";
 import WebSessionConcept from "./concepts/websession";
@@ -12,3 +14,5 @@ export const Post = new PostConcept();
 export const LocationResource = new LocationResourceConcept();
 export const RadiusResource = new RadiusResourceConcept();
 export const Opinion = new OpinionConcept();
+export const Event = new EventConcept();
+export const Poll = new PollConcept();

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import CreatePostForm from "@/components/Post/CreatePostForm.vue";
-import EditPostForm from "@/components/Post/EditPostForm.vue";
 import RadiusResourceComponent from "@/components/RadiusResource/RadiusResourceComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
@@ -8,23 +6,33 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 // import SearchPostForm from "./SearchPostForm.vue";
 
-const { isLoggedIn } = storeToRefs(useUserStore());
+const { isLoggedIn, radius } = storeToRefs(useUserStore());
 const center = ref({ lat: 0, lng: 0 });
 
 const loaded = ref(false);
-let posts = ref<Array<Record<string, string>>>([]);
+let updatePosts = ref<Array<Record<string, string>>>([]);
+let announcements = ref<Array<Record<string, string>>>([]);
 let editing = ref("");
 let searchAuthor = ref("");
 
 async function getPosts(latitude: string, longitude: string) {
-  let query: Record<string, string> = { latitude: latitude, longitude: longitude };
-  let postResults;
+  // TODO: switch out once user radius is able to be set
+  // let locationResourceQuery: Record<string, string> = { latitude: latitude, longitude: longitude, radius: radius.toString() };
+  let locationResourceQuery: Record<string, string> = { latitude: latitude, longitude: longitude, radius: "50" };
+  let radiusResourcequery: Record<string, string> = { latitude: latitude, longitude: longitude };
+  let projects;
+  let radiusResourceResults;
   try {
-    postResults = await fetchy("/api/radiusResources", "GET", { query });
+    projects = await fetchy("/api/locationResources", "GET", { query: locationResourceQuery });
+    for (let project of projects) {
+      let projectPosts = await fetchy(`/api/projects/${project._id}/posts`, "GET", {});
+      updatePosts.value = updatePosts.value.concat(projectPosts);
+    }
+    radiusResourceResults = await fetchy("/api/radiusResources", "GET", { query: radiusResourcequery });
+    announcements.value = announcements.value.concat(radiusResourceResults);
   } catch (_) {
     return;
   }
-  posts.value = posts.value.concat(postResults);
 }
 
 function updateEditing(id: string) {
@@ -42,26 +50,25 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <section v-if="isLoggedIn">
-    <h2>Create a post:</h2>
-    <CreatePostForm @refreshPosts="getPosts" />
-  </section>
-  <div class="row">
-    <h2 v-if="!searchAuthor">Updates and announcements:</h2>
-    <h2 v-else>Posts by {{ searchAuthor }}:</h2>
-    <SearchPostForm @getPostsByAuthor="getPosts" />
+  <div>
+    <div class="row">
+      <h2 class="text-2xl font-bold mb-8" v-if="!searchAuthor">Updates and announcements:</h2>
+      <h2 v-else>Posts by {{ searchAuthor }}:</h2>
+      <SearchPostForm @getPostsByAuthor="getPosts" />
+    </div>
+    <section class="posts" v-if="loaded && announcements.length !== 0">
+      <div class="space-y-6">
+        <article v-for="announcement in announcements" :key="announcement._id">
+          <RadiusResourceComponent v-if="editing !== announcement._id" :post="announcement" @refreshPosts="getPosts" @editPost="updateEditing" />
+        </article>
+      </div>
+    </section>
+    <p v-else-if="loaded">No posts found</p>
+    <p v-else>Loading...</p>
   </div>
-  <section class="posts" v-if="loaded && posts.length !== 0">
-    <article v-for="post in posts" :key="post._id">
-      <RadiusResourceComponent v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
-      <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
-    </article>
-  </section>
-  <p v-else-if="loaded">No posts found</p>
-  <p v-else>Loading...</p>
 </template>
 
-<style scoped>
+<!-- <style scoped>
 section {
   display: flex;
   flex-direction: column;
@@ -94,4 +101,4 @@ article {
   margin: 0 auto;
   max-width: 60em;
 }
-</style>
+</style> -->

@@ -33,16 +33,16 @@ async function populateMarkers() {
   try {
     const locationResources = await fetchy('/api/locationResources', "GET", {query});
     console.log(locationResources);
-    let id = 0;
+    let id;
     locationResources.forEach((locationResource: any) => {
       console.log(locationResource);
+      id = locationResource._id;
       // for each project, add in the project title, content, and critical dates
       const position = locationResource.location.coordinates;
       const description = locationResource.description;
       const title = locationResource.name;
       const status = locationResource.status;
       projects.value.push({id, position: {lng: position[0], lat: position[1]}, title, status, description, home: false});
-      id++;
     })
   } catch {
 
@@ -51,7 +51,6 @@ async function populateMarkers() {
 
 function openMarker(id: number) {
   currentMarkerId.value = id;
-  console.log(currentMarkerId.value);
 }
 
 onMounted(async () => {
@@ -75,6 +74,7 @@ onMounted(async () => {
       @closeclick="openMarker(-1)"
       >
       <LocationPanel 
+        :id="project.id"
         :title="project.title" 
         :description="project.description" 
         :status="project.status"

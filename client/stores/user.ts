@@ -10,6 +10,7 @@ export const useUserStore = defineStore(
 
     const isLoggedIn = computed(() => currentUsername.value !== "");
 
+    // default is MIT coords
     const userCoords = ref({ position: { lat: 42.3601, lng: -71.0942 } });
 
     const radius = ref(0);

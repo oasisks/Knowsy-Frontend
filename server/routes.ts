@@ -1,8 +1,11 @@
-import { ObjectId } from "mongodb";
+import { Filter, ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { LocationResource, Opinion, Post, RadiusResource, User, WebSession } from "./app";
+import { Event, LocationResource, Opinion, Poll, Post, RadiusResource, User, WebSession } from "./app";
+import { BadValuesError } from "./concepts/errors";
+import { EventDoc } from "./concepts/event";
+import { PollDoc } from "./concepts/poll";
 import { PostDoc, PostOptions } from "./concepts/post";
 import { UserDoc } from "./concepts/user";
 import { WebSessionDoc } from "./concepts/websession";
@@ -19,7 +22,6 @@ class Routes {
   async getUsers() {
     return await User.getUsers();
   }
-
 
   @Router.get("/users/:username")
   async getUser(username: string) {
@@ -64,7 +66,13 @@ class Routes {
   }
 
   @Router.get("/posts")
-  async getPosts(author?: string) {
+  async getPosts() {
+    const posts = await Post.getPosts({});
+    return Responses.posts(posts);
+  }
+
+  @Router.get("/users/:author/posts")
+  async getPostsByAuthor(author: string) {
     let posts;
     if (author) {
       const id = (await User.getUserByUsername(author))._id;
@@ -73,6 +81,12 @@ class Routes {
       posts = await Post.getPosts({});
     }
     return Responses.posts(posts);
+  }
+
+  @Router.get("/projects/:project/posts")
+  async getPostsByProject(project: ObjectId) {
+    const posts = await Post.getByProject(project);
+    return posts;
   }
 
   @Router.post("/posts")
@@ -170,7 +184,6 @@ class Routes {
     const lng = parseFloat(longitude);
     const lat = parseFloat(latitude);
     const locationResource = await LocationResource.create(name, description, start, status, lng, lat);
-
     return;
   }
 
@@ -226,23 +239,23 @@ class Routes {
   async getOpinions(author?: ObjectId, root?: ObjectId) {
     let opinions;
     let feelings;
-    if(author) {
-      opinions = (await Opinion.getOpinions({author: author})).opinions;
-      feelings = (await Opinion.getOpinions({author: author})).feelings;
+    if (author) {
+      opinions = (await Opinion.getOpinions({ author: author })).opinions;
+      feelings = (await Opinion.getOpinions({ author: author })).feelings;
     } else if (root) {
-      opinions = (await Opinion.getOpinions({root: root})).opinions;
-      feelings = (await Opinion.getOpinions({root: root})).feelings;
-    } 
-    console.log('opinions', opinions)
-    console.log('feelings', feelings)
+      opinions = (await Opinion.getOpinions({ root: root })).opinions;
+      feelings = (await Opinion.getOpinions({ root: root })).feelings;
+    }
+    console.log("opinions", opinions);
+    console.log("feelings", feelings);
     if (opinions) {
-      const namedOpinions:any = [];
+      const namedOpinions: any = [];
       for (const opinion of opinions) {
-        const newOpinion = {...opinion, author: (await User.getUserById(opinion.author)).username}
+        const newOpinion = { ...opinion, author: (await User.getUserById(opinion.author)).username };
         namedOpinions.push(newOpinion);
       }
-      console.log('namedOpinions', namedOpinions)
-      return {opinions: namedOpinions, feelings: feelings};
+      console.log("namedOpinions", namedOpinions);
+      return { opinions: namedOpinions, feelings: feelings };
     } else {
       throw new Error("no opinions");
     }
@@ -253,6 +266,97 @@ class Routes {
     const user = WebSession.getUser(session);
     await Opinion.isAuthor(user, _id);
     return Opinion.delete(_id);
+  }
+
+  @Router.post("/events")
+  async createEvent(session: WebSessionDoc, name: string, type: string, date: string, root: ObjectId, location?: Array<number>) {
+    const author = WebSession.getUser(session);
+
+    // a small check to see if the date is a valid date
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getDate())) {
+      throw new BadValuesError("The resulting date string is not valid");
+    }
+
+    return await Event.createEvent(name, type, author, dateObj, root, location);
+  }
+
+  @Router.delete("/events/:_id")
+  async deleteEvent(_id: ObjectId) {
+    return await Event.deleteEvent(_id);
+  }
+
+  @Router.patch("/events/:_id")
+  async updateEvent(_id: ObjectId, update: Partial<EventDoc>) {
+    return await Event.modifyEvent(_id, update);
+  }
+
+  @Router.post("/event/:_id")
+  async registerUser(session: WebSessionDoc, _id: ObjectId) {
+    const user = WebSession.getUser(session);
+    return await Event.registerUser(_id, user);
+  }
+
+  @Router.delete("/event/:_id")
+  async deregisterUser(session: WebSessionDoc, _id: ObjectId) {
+    const user = WebSession.getUser(session);
+    return await Event.deregisterUser(_id, user);
+  }
+
+  @Router.get("/events")
+  async getEvents(query: Filter<EventDoc>) {
+    const events = await Event.getEvents(query);
+    return await Event.getEvents(query);
+  }
+
+  @Router.post("/polls")
+  async createPoll(session: WebSessionDoc, prompt: string, options: string[], root: ObjectId) {
+    const user = WebSession.getUser(session);
+    return await Poll.create(prompt, options, user, root);
+  }
+
+  @Router.patch("/polls/:_id")
+  async updatePoll(session: WebSessionDoc, _id: ObjectId, update: Partial<PollDoc>) {
+    const user = WebSession.getUser(session);
+    await Poll.isAuthor(user, _id);
+    return await Poll.update(_id, update);
+  }
+
+  @Router.delete("/polls/:_id")
+  async deletePoll(session: WebSessionDoc, _id: ObjectId) {
+    const user = WebSession.getUser(session);
+    await Poll.isAuthor(user, _id);
+    return Poll.delete(_id);
+  }
+
+  @Router.get("/polls/:author")
+  async getPollsByAuthor(author: string) {
+    let polls;
+    if (author) {
+      const id = (await User.getUserByUsername(author))._id;
+      polls = await Poll.getPolls({ author: id });
+    } else {
+      polls = await Poll.getPolls({});
+    }
+    return polls;
+  }
+
+  @Router.get("/polls/:root")
+  async getPollsByRoot(root: ObjectId) {
+    const polls = await Poll.getPolls({ project: root });
+    return polls;
+  }
+
+  @Router.patch("polls/add/:_id")
+  async addVote(session: WebSessionDoc, _id: ObjectId, choice: string) {
+    const user = WebSession.getUser(session);
+    await Poll.addVote(_id, user, choice);
+  }
+
+  @Router.patch("polls/remove/:_id")
+  async removeVote(session: WebSessionDoc, _id: ObjectId) {
+    const user = WebSession.getUser(session);
+    await Poll.removeVote(_id, user);
   }
 }
 
