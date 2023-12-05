@@ -11,6 +11,7 @@ import Card from "primevue/card";
 import PrimeVue from "primevue/config";
 import "primevue/resources/primevue.min.css";
 import "primevue/resources/themes/lara-light-teal/theme.css";
+import ScrollPanel from "primevue/scrollpanel";
 import SelectButton from "primevue/selectbutton";
 import Slider from "primevue/slider";
 import App from "./App.vue";
@@ -31,5 +32,6 @@ app.use(PrimeVue);
 app.component("Slider", Slider);
 app.component("SelectButton", SelectButton);
 app.component("Card", Card);
+app.component("ScrollPanel", ScrollPanel);
 
 app.mount("#app");

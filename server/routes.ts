@@ -5,8 +5,8 @@ import { Router, getExpressRouter } from "./framework/router";
 import { Event, LocationResource, Opinion, Poll, Post, RadiusResource, User, WebSession } from "./app";
 import { BadValuesError } from "./concepts/errors";
 import { EventDoc } from "./concepts/event";
+import { PollDoc } from "./concepts/poll";
 import { PostDoc, PostOptions } from "./concepts/post";
-import { PollDoc } from "./concepts/poll"
 import { UserDoc } from "./concepts/user";
 import { WebSessionDoc } from "./concepts/websession";
 import Responses from "./responses";
@@ -77,9 +77,9 @@ class Routes {
     return Responses.posts(posts);
   }
 
-  @Router.get("/posts/:project") 
+  @Router.get("/posts/:project")
   async getPostsByProject(project: ObjectId) {
-    const posts = await Post.getPosts({project: project});
+    const posts = await Post.getPosts({ project: project });
     return posts;
   }
 
@@ -328,16 +328,16 @@ class Routes {
     let polls;
     if (author) {
       const id = (await User.getUserByUsername(author))._id;
-      polls = await Poll.getPolls({author: id});
+      polls = await Poll.getPolls({ author: id });
     } else {
       polls = await Poll.getPolls({});
     }
     return polls;
   }
 
-  @Router.get("/polls/:root") 
+  @Router.get("/polls/:root")
   async getPollsByRoot(root: ObjectId) {
-    const polls = await Poll.getPolls({project: root});
+    const polls = await Poll.getPolls({ project: root });
     return polls;
   }
 
@@ -352,7 +352,6 @@ class Routes {
     const user = WebSession.getUser(session);
     await Poll.removeVote(_id, user);
   }
-
 }
 
 export default getExpressRouter(new Routes());
