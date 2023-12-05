@@ -21,7 +21,7 @@ async function getOpinions() {
   if (props.profile) {
     let user;
     try {
-      user = await fetchy(`/api/users/${props.rootId}`);
+      user = await fetchy(`/api/users/${props.rootId}`, "GET", {});
     } catch {
       return;
     }
@@ -48,7 +48,6 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-
   <h2>All Comments</h2>
   <div class="opinions">
     <article v-for="opinion in opinions" :key="opinion._id" class="opinion">
