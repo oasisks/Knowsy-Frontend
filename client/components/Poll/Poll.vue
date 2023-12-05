@@ -2,9 +2,10 @@
 import InputText from 'primevue/inputtext';
 import { defineProps, onMounted, ref } from 'vue';
 import { fetchy } from '../../utils/fetchy';
+import PollList from './PollList.vue';
 // we want to grab all the polls by the project id
 const props = defineProps(["id"]);
-const polls = ref([]);
+const polls = ref<Array<Record<string, string>>>([]);
 const promptRef = ref("");
 const isCreatingPoll = ref(false);
 const addingOption = ref(false);
@@ -16,8 +17,8 @@ const isBlank = ref(false);
 async function getPolls() {
     // given the id, we grab all the polls that exists
     try {
-        console.log("Hello");
-        const poll = await fetchy(`/api/polls/project/${props.id}`, "GET");
+        polls.value = await fetchy(`/api/polls/project/${props.id}`, "GET");
+        console.log(polls.value);
     } catch {
 
     }
@@ -30,12 +31,13 @@ async function togglePoll() {
     addingOption.value = false;
     promptRef.value = "";
     optionCount.value = [];
+    isBlank.value = false;
 }
 
 async function createPoll() {
     // first we need to check if any of the options are left blank
     const blank = optionCount.value.filter((value) => value === "");
-    isBlank.value = blank.length !== 0 || promptRef.value.length === 0;
+    isBlank.value = blank.length !== 0 || promptRef.value.length === 0 || optionCount.value.length === 0;
     const root = props.id;
     const prompt = promptRef.value;
     const options = optionCount.value;
@@ -46,12 +48,12 @@ async function createPoll() {
     }
     try {
         const poll = await fetchy(`/api/polls`, "POST", {query, body});
-        console.log(poll);
     } catch {
 
     }
     // after we make the poll we will result everything back to the beginning
     await togglePoll();
+    await getPolls();
 }
 
 async function remove(index: number) {
@@ -92,11 +94,10 @@ onMounted(async () => {
             <hr>
             <br>
             <div class="content-flex">
-                <div v-if="!isCreatingPoll">
-                    <p>I am not creating a poll</p>
-
+                <div v-if="!isCreatingPoll" class="w-full">
+                    <p v-if="polls.length === 0">Oopsies, no polls for this project yet.</p>
+                    <PollList v-else :polls="polls"/>
                 </div>
-
                 <div v-if="isCreatingPoll" class="poll ">
                     <InputText
                         type="text" 
