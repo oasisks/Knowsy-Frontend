@@ -65,7 +65,13 @@ class Routes {
     return { msg: "Logged out!" };
   }
 
-  @Router.get("/posts/:author")
+  @Router.get("/posts")
+  async getPosts() {
+    const posts = await Post.getPosts({});
+    return Responses.posts(posts);
+  }
+
+  @Router.get("/:author/posts")
   async getPostsByAuthor(author: string) {
     let posts;
     if (author) {
@@ -77,9 +83,9 @@ class Routes {
     return Responses.posts(posts);
   }
 
-  @Router.get("/posts/:project") 
+  @Router.get("/:project/posts")
   async getPostsByProject(project: ObjectId) {
-    const posts = await Post.getPosts({project: project});
+    const posts = await Post.getPosts({ project: project });
     return posts;
   }
 
