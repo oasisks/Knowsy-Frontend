@@ -341,7 +341,7 @@ class Routes {
     return polls;
   }
 
-  @Router.get("/polls/:root")
+  @Router.get("/polls/project/:root")
   async getPollsByRoot(root: ObjectId) {
     const polls = await Poll.getPolls({ project: root });
     return polls;

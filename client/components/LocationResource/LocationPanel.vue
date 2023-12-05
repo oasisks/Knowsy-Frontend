@@ -10,13 +10,15 @@ const posts = ref([]);
 function goToProjectPage() {
     // this is the make shift solution
     // will work on making a large popup window on the same page for better experience
-    void router.push({path: `/projects/${props.id}`})
+    if (props.clickable) {
+        void router.push({path: `/projects/${props.id}`})
+    }
 }
 
 async function findAllPosts() {
     try {
-        console.log(`/api/posts/projects/${props.id}`);
-        const post = await fetchy(`/api/posts/projects/${props.id}`, "GET");
+        console.log(`/api/projects/${props.id}/posts`);
+        const post = await fetchy(`/api/projects/${props.id}/posts`, "GET");
         console.log(post);
 } catch(e) {
         console.error(e);

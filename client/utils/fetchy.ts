@@ -45,6 +45,7 @@ export async function fetchy(
     fetchOptions.body = JSON.stringify(options.body);
   }
 
+  console.log(fullUrl);
   const response = await fetch(fullUrl, fetchOptions);
   const result = await response.json();
 
