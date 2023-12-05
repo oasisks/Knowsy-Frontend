@@ -2,8 +2,9 @@
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import Posts from "../components/Post/UserPostsComponent.vue";
+import Opinions from "../components/Opinion/UserOpinionsComponent.vue";
 // import opinions, events, saved
 
 const { currentUsername } = storeToRefs(useUserStore());
@@ -15,11 +16,21 @@ async function goToSettings() {
   void router.push({ name: "Settings" });
 }
 
+const currentProperties = computed(() => {
+  if (currentTab.value === "Opinions") {
+    return { rootId: currentUsername.value, profile: true };
+  } else {
+    return {};
+  }
+});
+
 const currentTab = ref("Posts");
 
 const tabs: any = {
   Posts: Posts,
-  Opinions: Posts,
+  Opinions: Opinions,
+  Events: Posts,
+  Saved: Posts,
 };
 </script>
 
@@ -30,12 +41,16 @@ const tabs: any = {
         <h1 class="">{{ currentUsername }}</h1>
         <button class="pure-button pure-button-primary" @click="goToSettings">Settings</button>
       </div>
-      <button class="pure-button pure-button-primary" v-for="(_, tab) in tabs" :key="tab"
+      <button
+        class="pure-button pure-button-primary"
+        v-for="(_, tab) in tabs"
+        :key="tab"
         :class="['tab-button', { active: currentTab === tab.toString() }, { underline: currentTab === tab.toString() }]"
-        @click="currentTab = tab.toString()">
+        @click="currentTab = tab.toString()"
+      >
         {{ tab }}
       </button>
-      <component :is="tabs[currentTab]" class="tab"></component>
+      <component :is="tabs[currentTab]" v-bind="currentProperties" class="tab"></component>
     </div>
   </main>
 </template>

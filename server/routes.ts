@@ -28,10 +28,10 @@ class Routes {
     return await User.getUserByUsername(username);
   }
 
-  @Router.get("/users/:userId")
-  async getUserById(userId: ObjectId) {
-    return await User.getUserById(userId);
-  }
+  // @Router.get("/users/:userId")
+  // async getUserById(userId: ObjectId) {
+  //   return await User.getUserById(userId);
+  // }
 
   @Router.post("/users")
   async createUser(session: WebSessionDoc, username: string, password: string) {
