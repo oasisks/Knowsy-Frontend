@@ -85,7 +85,7 @@ class Routes {
 
   @Router.get("/projects/:project/posts")
   async getPostsByProject(project: ObjectId) {
-    const posts = await Post.getPosts({ project: project });
+    const posts = await Post.getByProject(project);
     return posts;
   }
 
