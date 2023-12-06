@@ -103,5 +103,3 @@ export class PollAuthorNotMatchError extends NotAllowedError {
     super("{0} is not the author of poll {1}!", author, _id);
   }
 }
-
-
