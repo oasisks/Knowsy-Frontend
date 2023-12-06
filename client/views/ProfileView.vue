@@ -20,6 +20,8 @@ const currentTab = ref("Posts");
 const tabs: any = {
   Posts: Posts,
   Opinions: Posts,
+  Events: Posts,
+  Favorites: Posts
 };
 </script>
 
