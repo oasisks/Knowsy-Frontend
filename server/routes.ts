@@ -28,10 +28,10 @@ class Routes {
     return await User.getUserByUsername(username);
   }
 
-  // @Router.get("/users/:userId")
-  // async getUserById(userId: ObjectId) {
-  //   return await User.getUserById(userId);
-  // }
+  @Router.get("/users/:userId")
+  async getUserById(userId: ObjectId) {
+    return await User.getUserById(userId);
+  }
 
   @Router.post("/users")
   async createUser(session: WebSessionDoc, username: string, password: string) {
@@ -359,7 +359,6 @@ class Routes {
     await Poll.removeVote(_id, user);
   }
 
-
   @Router.post("/favorites/:_id")
   async addFavorite(session: WebSessionDoc, _id: ObjectId) {
     const user = WebSession.getUser(session);
@@ -371,7 +370,7 @@ class Routes {
   async removeFavorite(session: WebSessionDoc, target_id: ObjectId) {
     const user = WebSession.getUser(session);
     const id = await Favorite.getFavoriteId(user, target_id);
-    await Favorite.isAuthor(user, id)
+    await Favorite.isAuthor(user, id);
     const msg = await Favorite.removeFavorite(id);
     return msg;
   }
@@ -380,15 +379,15 @@ class Routes {
   async getFavorites(author?: ObjectId, target?: ObjectId) {
     let favorites;
     if (author && target) {
-      favorites = await Favorite.getFavorites({author: author, target: target});
+      favorites = await Favorite.getFavorites({ author: author, target: target });
     } else if (author) {
-      favorites = await Favorite.getFavorites({author: author});
+      favorites = await Favorite.getFavorites({ author: author });
     } else if (target) {
-      favorites = await Favorite.getFavorites({target: target});
+      favorites = await Favorite.getFavorites({ target: target });
     } else {
       favorites = await Favorite.getFavorites({});
     }
-    
+
     return favorites;
   }
 }
