@@ -2,9 +2,9 @@
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { ref, computed } from "vue";
-import Posts from "../components/Post/UserPostsComponent.vue";
+import { computed, ref } from "vue";
 import Opinions from "../components/Opinion/UserOpinionsComponent.vue";
+import Posts from "../components/Post/UserPostsComponent.vue";
 // import opinions, events, saved
 
 const { currentUsername } = storeToRefs(useUserStore());
@@ -41,13 +41,9 @@ const tabs: any = {
         <h1 class="">{{ currentUsername }}</h1>
         <button class="pure-button pure-button-primary" @click="goToSettings">Settings</button>
       </div>
-      <button
-        class="pure-button pure-button-primary"
-        v-for="(_, tab) in tabs"
-        :key="tab"
+      <button class="pure-button pure-button-primary" v-for="(_, tab) in tabs" :key="tab"
         :class="['tab-button', { active: currentTab === tab.toString() }, { underline: currentTab === tab.toString() }]"
-        @click="currentTab = tab.toString()"
-      >
+        @click="currentTab = tab.toString()">
         {{ tab }}
       </button>
       <component :is="tabs[currentTab]" v-bind="currentProperties" class="tab"></component>
