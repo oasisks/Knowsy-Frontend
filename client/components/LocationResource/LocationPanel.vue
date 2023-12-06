@@ -17,9 +17,11 @@ function goToProjectPage() {
 
 async function findAllPosts() {
     try {
-        console.log(`/api/projects/${props.id}/posts`);
-        const post = await fetchy(`/api/projects/${props.id}/posts`, "GET");
-        console.log(post);
+        if (props.clickable) {
+            console.log(`/api/projects/${props.id}/posts`);
+            const post = await fetchy(`/api/projects/${props.id}/posts`, "GET");
+            console.log(post);
+        }
 } catch(e) {
         console.error(e);
     }
