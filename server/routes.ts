@@ -2,7 +2,7 @@ import { Filter, ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { Favorite, Event, LocationResource, Opinion, Poll, Post, RadiusResource, User, WebSession } from "./app";
+import { Event, Favorite, LocationResource, Opinion, Poll, Post, RadiusResource, User, WebSession } from "./app";
 import { BadValuesError } from "./concepts/errors";
 import { EventDoc } from "./concepts/event";
 import { PollDoc } from "./concepts/poll";
@@ -341,7 +341,7 @@ class Routes {
     return polls;
   }
 
-  @Router.get("/polls/:root")
+  @Router.get("/polls/project/:root")
   async getPollsByRoot(root: ObjectId) {
     const polls = await Poll.getPolls({ project: root });
     return polls;
@@ -370,7 +370,7 @@ class Routes {
   async removeFavorite(session: WebSessionDoc, target_id: ObjectId) {
     const user = WebSession.getUser(session);
     const id = await Favorite.getFavoriteId(user, target_id);
-    await Favorite.isAuthor(user, id)
+    await Favorite.isAuthor(user, id);
     const msg = await Favorite.removeFavorite(id);
     return msg;
   }
@@ -379,11 +379,11 @@ class Routes {
   async getFavorites(author?: ObjectId, target?: ObjectId) {
     let favorites;
     if (author && target) {
-      favorites = await Favorite.getFavorites({author: author, target: target});
+      favorites = await Favorite.getFavorites({ author: author, target: target });
     } else if (author) {
-      favorites = await Favorite.getFavorites({author: author});
+      favorites = await Favorite.getFavorites({ author: author });
     } else if (target) {
-      favorites = await Favorite.getFavorites({target: target});
+      favorites = await Favorite.getFavorites({ target: target });
     } else {
       favorites = await Favorite.getFavorites({});
     }
