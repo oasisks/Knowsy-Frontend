@@ -26,7 +26,7 @@ const tabs: any = {
       <!-- <FeedComponent /> -->
       <div class="mb-10">
         <button
-          class="pure-button pure-button-primary"
+          class="bg-slate-400 hover:bg-slate-300 text-white font-semibold px-4 py-3 mr-2 rounded-md"
           v-for="(_, tab) in tabs"
           :key="tab"
           :class="['tab-button', { active: currentTab === tab.toString() }, { underline: currentTab === tab.toString() }]"
