@@ -2,7 +2,8 @@
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import Opinions from "../components/Opinion/UserOpinionsComponent.vue";
 import Posts from "../components/Post/UserPostsComponent.vue";
 // import opinions, events, saved
 
@@ -15,13 +16,21 @@ async function goToSettings() {
   void router.push({ name: "Settings" });
 }
 
+const currentProperties = computed(() => {
+  if (currentTab.value === "Opinions") {
+    return { rootId: currentUsername.value, profile: true };
+  } else {
+    return {};
+  }
+});
+
 const currentTab = ref("Posts");
 
 const tabs: any = {
   Posts: Posts,
-  Opinions: Posts,
+  Opinions: Opinions,
   Events: Posts,
-  Favorites: Posts
+  Saved: Posts,
 };
 </script>
 
@@ -37,7 +46,7 @@ const tabs: any = {
         @click="currentTab = tab.toString()">
         {{ tab }}
       </button>
-      <component :is="tabs[currentTab]" class="tab"></component>
+      <component :is="tabs[currentTab]" v-bind="currentProperties" class="tab"></component>
     </div>
   </main>
 </template>

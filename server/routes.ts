@@ -28,10 +28,10 @@ class Routes {
     return await User.getUserByUsername(username);
   }
 
-  @Router.get("/users/:userId")
-  async getUserById(userId: ObjectId) {
-    return await User.getUserById(userId);
-  }
+  // @Router.get("/users/:userId")
+  // async getUserById(userId: ObjectId) {
+  //   return await User.getUserById(userId);
+  // }
 
   @Router.post("/users")
   async createUser(session: WebSessionDoc, username: string, password: string) {
@@ -341,7 +341,7 @@ class Routes {
     return polls;
   }
 
-  @Router.get("/polls/:root")
+  @Router.get("/polls/project/:root")
   async getPollsByRoot(root: ObjectId) {
     const polls = await Poll.getPolls({ project: root });
     return polls;
