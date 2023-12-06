@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia';
 import { defineProps, onMounted, ref } from 'vue';
 import { useUserStore } from '../../stores/user';
 import { fetchy } from '../../utils/fetchy';
+import SmallMap from "../Map/SmallMap.vue";
 import Poll from "../Poll/Poll.vue";
 
 const props = defineProps(["id"]);
@@ -15,6 +16,7 @@ const projectDescription = ref("Default Description");
 const posts = ref(["Default Post Content"]);
 const events = ref([]);
 const polls = ref([]);
+const projectCoords = ref({lng: 0, lat: 0});
 const items = ref(Array.from({ length: 100000 }).map((_, i) => `Item #${i}`));
 
 
@@ -25,6 +27,8 @@ async function getProject() {
         title.value = project.name;
         projectDescription.value = project.description;
         updated.value = new Date(project.start);        
+        projectCoords.value.lng = project.location.coordinates[0];
+        projectCoords.value.lat = project.location.coordinates[1];
     } catch {
 
     }
@@ -69,14 +73,7 @@ onMounted(async () => {
             </Card>
         </div>
         <div class="col-flex-right">
-            <Card>
-                <template #title> Map</template>
-                <template #content>
-                    <GMapMap style="height: 35vh;" :center="userCoords.position" :zoom="14">
-                        
-                    </GMapMap>
-                </template>
-            </Card>
+            <SmallMap :project-coords="projectCoords"/>
             <Poll :id="$props.id" />
         </div>
     </div>
