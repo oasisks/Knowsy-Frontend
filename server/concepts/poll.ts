@@ -37,9 +37,9 @@ export default class PollConcept {
     const poll = await this.polls.readOne({ _id });
     if (poll !== null) {
       if (poll.options.includes(option)) {
-        if (poll.votes.filter((vote) => vote.user === user).length !== 0 ) {
-          this.removeVote(_id, user);
-        } 
+        if (poll.votes.filter((vote) => vote.user === user).length !== 0) {
+          await this.removeVote(_id, user);
+        }
         poll.votes.push({ user, option });
         await this.polls.updateOne({ _id }, poll);
         return { msg: "Vote successfully added!" };
