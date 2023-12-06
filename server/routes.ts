@@ -28,7 +28,7 @@ class Routes {
     return await User.getUserByUsername(username);
   }
 
-  @Router.get("/users/:userId")
+  @Router.get("/users/id/:userId")
   async getUserById(userId: ObjectId) {
     return await User.getUserById(userId);
   }

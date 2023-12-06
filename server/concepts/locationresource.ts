@@ -41,7 +41,7 @@ export default class LocationResourceConcept {
   }
 
   async getById(_id: ObjectId) {
-    return await this.getLocationResources({ _id });
+    return await this.locationResources.readOne({ _id });
   }
 
   async getByCoordinate(coordinate: [number, number]) {

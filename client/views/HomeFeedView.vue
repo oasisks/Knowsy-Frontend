@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import FeedComponent from "@/components/FeedComponent.vue";
+import PostsFeedComponent from "@/components/Post/PostsFeedComponent.vue";
+import AnnouncementsFeedComponent from "@/components/RadiusResource/AnnouncementsFeedComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -9,8 +10,8 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 const currentTab = ref("Posts");
 
 const tabs: any = {
-  Posts: FeedComponent,
-  Announcements: FeedComponent,
+  Posts: PostsFeedComponent,
+  Announcements: AnnouncementsFeedComponent,
 };
 </script>
 
@@ -23,15 +24,17 @@ const tabs: any = {
     </section> -->
     <div class="sm:mx-16 sm:my-10 mx-4 my-3">
       <!-- <FeedComponent /> -->
-      <button
-        class="pure-button pure-button-primary"
-        v-for="(_, tab) in tabs"
-        :key="tab"
-        :class="['tab-button', { active: currentTab === tab.toString() }, { underline: currentTab === tab.toString() }]"
-        @click="currentTab = tab.toString()"
-      >
-        {{ tab }}
-      </button>
+      <div class="mb-10">
+        <button
+          class="pure-button pure-button-primary"
+          v-for="(_, tab) in tabs"
+          :key="tab"
+          :class="['tab-button', { active: currentTab === tab.toString() }, { underline: currentTab === tab.toString() }]"
+          @click="currentTab = tab.toString()"
+        >
+          {{ tab }}
+        </button>
+      </div>
       <component :is="tabs[currentTab]" class="tab"></component>
     </div>
   </main>
