@@ -240,8 +240,8 @@ class Routes {
     let opinions;
     let feelings;
     if (author) {
-      opinions = (await Opinion.getOpinions({ author: author })).opinions;
-      feelings = (await Opinion.getOpinions({ author: author })).feelings;
+      opinions = (await Opinion.getOpinions({ author: new ObjectId(author) })).opinions;
+      feelings = (await Opinion.getOpinions({ author: new ObjectId(author) })).feelings;
     } else if (root) {
       opinions = (await Opinion.getOpinions({ root: root })).opinions;
       feelings = (await Opinion.getOpinions({ root: root })).feelings;
