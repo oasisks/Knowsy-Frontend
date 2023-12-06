@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import RadiusResourceComponent from "@/components/RadiusResource/RadiusResourceComponent.vue";
+import PostComponent2 from "@/components/Post/PostComponent2.vue";
 import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
@@ -10,7 +11,7 @@ const { isLoggedIn, radius } = storeToRefs(useUserStore());
 const center = ref({ lat: 0, lng: 0 });
 
 const loaded = ref(false);
-let updatePosts = ref<Array<Record<string, string>>>([]);
+let posts = ref<Array<Record<string, string>>>([]);
 let announcements = ref<Array<Record<string, string>>>([]);
 let editing = ref("");
 let searchAuthor = ref("");
@@ -26,7 +27,7 @@ async function getPosts(latitude: string, longitude: string) {
     projects = await fetchy("/api/locationResources", "GET", { query: locationResourceQuery });
     for (let project of projects) {
       let projectPosts = await fetchy(`/api/projects/${project._id}/posts`, "GET", {});
-      updatePosts.value = updatePosts.value.concat(projectPosts);
+      posts.value = posts.value.concat(projectPosts);
     }
     radiusResourceResults = await fetchy("/api/radiusResources", "GET", { query: radiusResourcequery });
     announcements.value = announcements.value.concat(radiusResourceResults);
@@ -56,10 +57,15 @@ onBeforeMount(async () => {
       <h2 v-else>Posts by {{ searchAuthor }}:</h2>
       <SearchPostForm @getPostsByAuthor="getPosts" />
     </div>
-    <section class="posts" v-if="loaded && announcements.length !== 0">
+    <section class="posts" v-if="loaded && announcements.length !== 0 && posts.length !== 0">
       <div class="space-y-6">
         <article v-for="announcement in announcements" :key="announcement._id">
           <RadiusResourceComponent v-if="editing !== announcement._id" :post="announcement" @refreshPosts="getPosts" @editPost="updateEditing" />
+        </article>
+      </div>
+      <div class="space-y-6">
+        <article v-for="post in posts" :key="post._id">
+          <PostComponent2 v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
         </article>
       </div>
     </section>
