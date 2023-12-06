@@ -347,16 +347,16 @@ class Routes {
     return polls;
   }
 
-  @Router.patch("polls/add/:_id")
+  @Router.patch("/polls/add/:_id")
   async addVote(session: WebSessionDoc, _id: ObjectId, choice: string) {
     const user = WebSession.getUser(session);
-    await Poll.addVote(_id, user, choice);
+    return await Poll.addVote(_id, user, choice);
   }
 
-  @Router.patch("polls/remove/:_id")
+  @Router.patch("/polls/remove/:_id")
   async removeVote(session: WebSessionDoc, _id: ObjectId) {
     const user = WebSession.getUser(session);
-    await Poll.removeVote(_id, user);
+    return await Poll.removeVote(_id, user);
   }
 
   @Router.post("/favorites/:_id")
