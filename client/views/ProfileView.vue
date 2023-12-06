@@ -30,7 +30,7 @@ const tabs: any = {
   Posts: Posts,
   Opinions: Opinions,
   Events: Posts,
-  Saved: Posts,
+  Favorited: Posts,
 };
 </script>
 
