@@ -17,13 +17,12 @@ const posts = ref(["Default Post Content"]);
 const events = ref([]);
 const polls = ref([]);
 const projectCoords = ref({lng: 0, lat: 0});
-const items = ref(Array.from({ length: 100000 }).map((_, i) => `Item #${i}`));
 
 
 async function getProject() {
     try {
         // we are going to assume that there is only one element within the output
-        const project = (await fetchy(`/api/locationResources/${props.id}`, "GET"))[0];
+        const project = (await fetchy(`/api/locationResources/${props.id}`, "GET"));
         title.value = project.name;
         projectDescription.value = project.description;
         updated.value = new Date(project.start);        

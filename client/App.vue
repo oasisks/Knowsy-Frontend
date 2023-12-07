@@ -41,9 +41,9 @@ onBeforeMount(async () => {
           <RouterLink :to="{ name: 'Profile' }" :class="{ underline: currentRouteName == 'Profile' }"> Profile
           </RouterLink>
         </li>
-        <li v-else>
+        <!-- <li v-else>
           <RouterLink :to="{ name: 'Login' }" :class="{ underline: currentRouteName == 'Login' }"> Login </RouterLink>
-        </li>
+        </li> -->
       </ul>
     </nav>
     <article v-if="toast !== null" class="toast" :class="toast.style">

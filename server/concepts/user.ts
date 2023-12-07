@@ -14,7 +14,9 @@ export default class UserConcept {
 
   async create(username: string, password: string) {
     await this.canCreate(username, password);
-    const _id = await this.users.createOne({ username, password });
+    const location = [42.3601, -71.0942];
+    const radius = 2;
+    const _id = await this.users.createOne({ username, password, location, radius });
     return { msg: "User created successfully!", user: await this.users.readOne({ _id }) };
   }
 

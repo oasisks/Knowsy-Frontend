@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
 import LocationResource from "../components/LocationResource/LocationResource.vue";
+import LoginOrRegister from "../components/Login/LoginOrRegister.vue";
 
-const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());const isDebugMode = ref(true);
+const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 </script>
 
 <template>
   <main>
-    <LocationResource v-if="isLoggedIn || isDebugMode" />
-    <p v-else>Not logged in</p>
+    <LocationResource v-if="isLoggedIn" />
+    <LoginOrRegister v-else />
 
   </main>
 </template>
