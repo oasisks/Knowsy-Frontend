@@ -30,6 +30,11 @@ export default class PostConcept {
     return posts;
   }
 
+  async getPostById(_id: ObjectId) {
+    const post = await this.posts.readOne({_id})
+    return post;
+  }
+
   async getByProject(project: ObjectId) {
     return await this.getPosts({ project });
   }
