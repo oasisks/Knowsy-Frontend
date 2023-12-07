@@ -5,7 +5,6 @@ import { storeToRefs } from "pinia";
 import { defineProps, onBeforeMount, ref } from "vue";
 import { fetchy } from '../../utils/fetchy';
 
-
 const props = defineProps(["postid"]);
 const author = ref("default author");
 const project = ref("default project")
@@ -50,13 +49,10 @@ onBeforeMount(async () => {
 </script>
 <template>
     <section v-if="loaded">
-        <Card>
+        <h2 class="text-lg font-semibold text-sky-500">Post</h2>
+        <p class="text-sm">by @{{ author }}. updated {{ formatDate(updated) }}</p>
 
-            <template #title>Post</template>
-            <template #subtitle>updated {{ formatDate(updated) }} by @{{ author }}</template>
-            <template #content>
-                {{ content }}
-            </template>
-        </Card>
+        <p class="mb-6">{{ content }}</p>
+
     </section>
 </template>

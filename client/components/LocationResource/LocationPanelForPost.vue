@@ -4,7 +4,8 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { defineEmits, defineProps, onMounted, ref } from 'vue';
 import { fetchy } from "../../utils/fetchy";
-
+// import PostComponentShort from "../Post/PostComponentShort.vue";
+import PostsTimeline from "../Post/PostsTimeline.vue";
 const props = defineProps(["postid"]);
 const emit = defineEmits(["setMarker"])
 const userId = ref<Record<string, string>>({});
@@ -19,7 +20,6 @@ const posts = ref([]);
 
 async function getProject() {
     try {
-        console.log("PROJECT ATTEMP");
         const post = await fetchy(`/api/posts/${props.postid}`, "GET");
         const project = await fetchy(`/api/locationResources/${post.project}`, "GET");
         projectId.value = project._id;
@@ -36,11 +36,12 @@ function goToProjectPage() {
     void router.push({ path: `/projects/${projectId.value}` });
 }
 
-async function findAllPosts() {
+async function getPosts() {
     try {
-        const post = await fetchy(`/api/projects/${projectId.value}/posts`, "GET");
-    } catch (e) {
-        console.error(e);
+        let projectPosts = await fetchy(`/api/projects/${projectId.value}/posts`, "GET", {});
+        posts.value = posts.value.concat(projectPosts);
+    } catch (_) {
+        return;
     }
 }
 async function addFavorite() {
@@ -78,7 +79,7 @@ async function isFavorited() {
 
 onMounted(async () => {
     await getProject();
-    // await findAllPosts();
+    await getPosts();
     await getUserID();
     await isFavorited();
 })
@@ -86,8 +87,8 @@ onMounted(async () => {
 
 <template>
     <div class="cursor-pointer" @click="goToProjectPage()">
-        <h1>{{ name }}</h1>
         <div class="flex flex-row justify-between">
+            <h1>{{ name }}</h1>
             <div class="flex py-6 px-2">
                 <Button v-if="!isFavorite" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
                     icon="pi pi-bookmark" @click="addFavorite">
@@ -98,6 +99,13 @@ onMounted(async () => {
         </div>
         <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Description: </p>
         <p class="text-gray-500 dark:text-gray-400 font-medium text-sm">{{ description }}</p>
+        <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Posts: </p>
+        <ScrollPanel style="width: 100%; height: 10em;">
+            <!-- <p v-for="post in posts">
+                <PostComponentShort v-bind:post="post" />
+            </p> -->
+            <PostsTimeline v-bind:posts="posts" />
+        </ScrollPanel>
         <p class="text-gray-500 dark:text-gray-400 font-normal text-sm">Click to see more...</p>
     </div>
 </template>
