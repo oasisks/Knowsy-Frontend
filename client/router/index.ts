@@ -7,6 +7,7 @@ import HomeFeedView from "../views/HomeFeedView.vue";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
+import PostView from "../views/PostView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import ProjectView from "../views/ProjectView.vue";
 import SettingView from "../views/SettingView.vue";
@@ -34,6 +35,12 @@ const router = createRouter({
       path: "/projects/:_id",
       name: "Projects",
       component: ProjectView,
+      meta: { requireAuth: true },
+    },
+    {
+      path: "/posts/:_id",
+      name: "Posts",
+      component: PostView,
       meta: { requireAuth: true },
     },
     {
