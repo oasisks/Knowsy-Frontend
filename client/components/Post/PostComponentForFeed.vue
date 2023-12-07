@@ -10,7 +10,6 @@ const emit = defineEmits(["editPost", "refreshPosts"]);
 const { currentUsername } = storeToRefs(useUserStore());
 let authorUsername = ref("");
 let projectName = ref("");
-const clickable = ref(false);
 
 const deletePost = async () => {
   try {
@@ -40,14 +39,6 @@ const getProjectName = async () => {
     return;
   }
 };
-
-function setClickable() {
-  clickable.value = props.clickable;
-}
-
-function setUnClickable() {
-  clickable.value = false;
-}
 
 onBeforeMount(async () => {
   await getProjectName();
