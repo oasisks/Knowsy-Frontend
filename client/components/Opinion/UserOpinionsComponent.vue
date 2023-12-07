@@ -49,13 +49,15 @@ onBeforeMount(async () => {
 
 <template>
   <!-- <h2>All Comments</h2> -->
-  <div class="opinions py-10">
+  <div class="opinions py-10" v-if="loaded && opinions.length !== 0">
     <article v-for="opinion in opinions" :key="opinion._id" class="opinion shadow-sm">
       <div class="bg-white">
         <OpinionComponent v-bind:opinion="opinion" @refreshOpinions="getOpinions" />
       </div>
     </article>
   </div>
+  <p v-else-if="loaded" class="mt-6">No opinions found</p>
+  <p v-else class="mt-6">Loading...</p>
 </template>
 
 <style scoped>

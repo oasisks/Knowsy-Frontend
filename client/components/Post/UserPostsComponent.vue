@@ -43,8 +43,8 @@ onBeforeMount(async () => {
       </div>
     </article>
   </section>
-  <p v-else-if="loaded">No posts found</p>
-  <p v-else>Loading...</p>
+  <p v-else-if="loaded" class="mt-6">No posts found</p>
+  <p v-else class="mt-6">Loading...</p>
 </template>
 
 <style scoped>
