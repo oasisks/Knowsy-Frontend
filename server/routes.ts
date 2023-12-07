@@ -98,7 +98,7 @@ class Routes {
   @Router.post("/posts")
   async createPost(session: WebSessionDoc, project: ObjectId, content: string, options?: PostOptions) {
     const user = WebSession.getUser(session);
-    const created = await Post.create(user, project, content, options);
+    const created = await Post.create(user, new ObjectId(project), content, options);
     return { msg: created.msg, post: await Responses.post(created.post) };
   }
 
@@ -347,6 +347,7 @@ class Routes {
     return polls;
   }
 
+  // TODO: change "project" to be more general
   @Router.get("/polls/project/:root")
   async getPollsByRoot(root: ObjectId) {
     const polls = await Poll.getPolls({ project: root });

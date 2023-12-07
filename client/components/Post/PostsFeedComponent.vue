@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import PostComponent2 from "@/components/Post/PostComponent2.vue";
 import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
+import PostComponentForFeed from "./PostComponentForFeed.vue";
 // import SearchPostForm from "./SearchPostForm.vue";
 
 const { isLoggedIn, radius } = storeToRefs(useUserStore());
@@ -54,7 +54,8 @@ onBeforeMount(async () => {
     <section class="posts" v-if="loaded && posts.length !== 0">
       <div class="space-y-6">
         <article v-for="post in posts" :key="post._id">
-          <PostComponent2 v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
+          <PostComponentForFeed v-if="editing !== post._id" :post="post" @refreshPosts="getPosts"
+            @editPost="updateEditing" />
         </article>
       </div>
     </section>
