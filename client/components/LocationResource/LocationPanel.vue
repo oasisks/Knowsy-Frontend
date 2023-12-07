@@ -86,7 +86,7 @@ onMounted(async () => {
               maxHeight: 320,
     }"
     >
-    <div>
+    <div class="cursor-pointer">
         <div class="flex flex-row justify-between">
             <h1 @mouseover="setClickable" @mouseleave="setUnClickable">{{ props.title }}</h1>
             <div class="flex py-6 px-2" v-if="props.clickable">
