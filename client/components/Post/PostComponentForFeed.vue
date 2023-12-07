@@ -11,9 +11,10 @@ const { currentUsername } = storeToRefs(useUserStore());
 let authorUsername = ref("");
 let projectName = ref("");
 
-const deletePost = async () => {
+const deletePost = async (e) => {
   try {
     await fetchy(`/api/posts/${props.post._id}`, "DELETE");
+    e.preventDefault();
   } catch {
     return;
   }
@@ -57,7 +58,9 @@ onBeforeMount(async () => {
           <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }}
             by {{ authorUsername }}</p>
           <p v-else>Created on: {{ formatDate(props.post.dateCreated) }} by {{ authorUsername }}</p>
-          <button class="button-error btn-small pure-button" @click="deletePost">Delete</button>
+          <div v-if="authorUsername == currentUsername">
+            <button class="button-error btn-small pure-button" @click="deletePost">Delete</button>
+          </div>
         </article>
       </div>
     </a>
