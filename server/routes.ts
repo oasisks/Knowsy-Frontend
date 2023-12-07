@@ -65,10 +65,16 @@ class Routes {
     return { msg: "Logged out!" };
   }
 
-  @Router.get("/posts")
-  async getPosts() {
-    const posts = await Post.getPosts({});
-    return Responses.posts(posts);
+  @Router.get("/posts/:id")
+  async getPosts(id?: ObjectId) {
+    let posts;
+    if (id) {
+      posts = await Post.getPostById(id);
+    } else {
+      posts = await Post.getPosts({});
+      posts = Responses.posts(posts);
+    }
+    return posts;
   }
 
   @Router.get("/users/:author/posts")
