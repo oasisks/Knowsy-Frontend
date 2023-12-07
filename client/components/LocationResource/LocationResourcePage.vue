@@ -14,7 +14,6 @@ const posts = ref<Array<Record<string, string>>>([]);
 
 // fix this later, updated will change base on if its been updated x minutes ago, x hours ago, x days ago, x weeks ago, and x years ago 
 const updated = ref(new Date());
-const projectId = ref("");
 const projectDescription = ref("Default Description");
 const events = ref([]);
 const projectCoords = ref({lng: 0, lat: 0});
@@ -27,7 +26,6 @@ async function getProject() {
         const project = (await fetchy(`/api/locationResources/${props.id}`, "GET"));
         title.value = project.name;
         projectDescription.value = project.description;
-        projectId.value = project._id;
         updated.value = new Date(project.start);
         projectCoords.value.lng = project.location.coordinates[0];
         projectCoords.value.lat = project.location.coordinates[1];
@@ -54,6 +52,7 @@ async function createPost() {
     } catch {
 
     }
+    await getPosts();
 }
 const {userCoords} = storeToRefs(useUserStore());
 
@@ -108,7 +107,7 @@ onMounted(async () => {
                                         </Button>
                                     </div>
                                 </Dialog>
-                                <div class="flex flex-col w-full h-full">
+                                <div class="w-full h-full">
                                     <PostsTimeline :posts="posts" />
                                 </div>
 

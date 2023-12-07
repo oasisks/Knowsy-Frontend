@@ -16,7 +16,7 @@ async function goToPost(postid: string) {
 </script>
 
 <template>
-    <Timeline :value="props.posts" class="w-full md:w-20rem overflow-x-auto" layout="horizontal">
+    <Timeline :value="props.posts" class="w-full overflow-y-auto" layout="horizontal">
         <template #marker="slotProps">
             <span class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1"
                 :style="{ backgroundColor: '#9C27B0' }">
@@ -24,11 +24,13 @@ async function goToPost(postid: string) {
             </span>
         </template>
         <template #content="slotProps">
-            <Card class="cursor-pointer mx-3" @click="goToPost(slotProps.item._id)">
+            <Card class="cursor-pointer mx-3 shadow hover:shadow-lg w-full h-full" @click="goToPost(slotProps.item._id)">
                 <template #content>
-                    <p>Post {{ slotProps.index + 1 }}</p>
-                    <p>{{ slotProps.item.content }}</p>
-                    <p>{{ formatDate(slotProps.item.dateCreated) }}</p>
+                    <div class="flex flex-col gap-2">
+                        <h5 class="text-xl font-bold dark:text-white">Post {{ slotProps.index + 1}}</h5>
+                        <p>{{ slotProps.item.content }}</p>
+                        <p>{{ formatDate(slotProps.item.dateCreated) }}</p>
+                    </div>
                 </template>
             </Card>
         </template>
