@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
+import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { defineProps, onBeforeMount, ref } from "vue";
 import { fetchy } from '../../utils/fetchy';
@@ -22,8 +23,9 @@ async function getPostFromId() {
     try {
         post = await fetchy(`/api/posts/${props.postid}`, "GET");
         await getAuthorUsername(post.author);
-        project.value = post.project
-        content.value = post.content
+        project.value = post.project;
+        content.value = post.content;
+        updated.value = post.dateUpdated;
         console.log("post values were found and set", post)
     } catch (_) {
         console.log("catching", _);
@@ -48,20 +50,13 @@ onBeforeMount(async () => {
 </script>
 <template>
     <section v-if="loaded">
-        <div class="mb-10">
-            <div class="mb-5 justify-items-start">
-                <h1 class="text-xl font-semibold text-sky-500">Post</h1>
-                <!-- <h2 class="text-3xl font-bold">{{ post?.name }}</h2> -->
-            </div>
-            <div class="mb-3">
-                <p class="text-lg font-semibold">by @{{ author }}</p>
-            </div>
-            <div>
-                <p class="text-lg font-semibold">Content:</p>
-                <p class="text-lg">{{ content }}</p>
-            </div>
-        </div>
+        <Card>
 
-        <p>Insert Project Blurb here</p>
+            <template #title>Post</template>
+            <template #subtitle>updated {{ formatDate(updated) }} by @{{ author }}</template>
+            <template #content>
+                {{ content }}
+            </template>
+        </Card>
     </section>
 </template>
