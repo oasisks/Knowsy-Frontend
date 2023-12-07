@@ -3,14 +3,17 @@ import router from "@/router";
 import { defineEmits, defineProps, onMounted, ref } from 'vue';
 import { fetchy } from "../../utils/fetchy";
 
-const props = defineProps(["title", "description", "timeline", "status", "home", "opened", "clickable", "id"])
+const props = defineProps(["title", "description", "timeline", "status", "home", "opened", "clickable", "id", "currentUsername"]);
 const emit = defineEmits(["setMarker"])
+const clickable = ref(false);
+const userId = ref<Record<string, string>>({});
+const isFavorite = ref(false);
 
 const posts = ref([]);
 function goToProjectPage() {
     // this is the make shift solution
     // will work on making a large popup window on the same page for better experience
-    if (props.clickable) {
+    if (clickable.value) {
         void router.push({path: `/projects/${props.id}`})
     }
 }
@@ -18,17 +21,55 @@ function goToProjectPage() {
 async function findAllPosts() {
     try {
         if (props.clickable) {
-            console.log(`/api/projects/${props.id}/posts`);
             const post = await fetchy(`/api/projects/${props.id}/posts`, "GET");
-            console.log(post);
         }
 } catch(e) {
         console.error(e);
     }
 }
+async function addFavorite() {
+    try {
+        const msg = await fetchy(`/api/favorites/${props.id}`, "POST");
+    } catch {
+
+    }
+    await isFavorited();
+}
+
+async function getUserID() {
+    try {
+        userId.value = await fetchy(`/api/users/${props.currentUsername}`, "GET");
+    } catch {
+
+    }
+}
+
+async function isFavorited() {
+    const query = {author: userId.value._id};
+    try {
+        const favorites = await fetchy(`/api/favorites`, "GET")
+        // console.log(favorites, props.id);
+        const relatedFavorites = favorites.filter((favorite: Record<string, string>) => {
+            return favorite.target === props.id;
+        })
+        isFavorite.value = relatedFavorites.length > 0;
+    } catch {
+
+    }
+}
+
+function setClickable() {
+    clickable.value = props.clickable;
+}
+
+function setUnClickable() {
+    clickable.value = false;
+}
 
 onMounted(async () => {
     await findAllPosts();
+    await getUserID();
+    await isFavorited();
 })
 </script>
 
@@ -46,23 +87,33 @@ onMounted(async () => {
     }"
     >
     <div>
-        <h1>{{ props.title }}</h1>
-        <div v-if="props.clickable" class="description">
-            <p>Description: {{ props.description }} </p>
-            <ol>
-                <li>Post 1</li>
-                <li>Post 2</li>
-                <li>Post 3</li>
-                <li>Post 4</li>
-                <li>Post 5</li>
-            </ol>
-
-            <p>Click to see more</p>
+        <div class="flex flex-row justify-between">
+            <h1 @mouseover="setClickable" @mouseleave="setUnClickable">{{ props.title }}</h1>
+            <div class="flex py-6 px-2" v-if="props.clickable">
+                <Button 
+                    v-if="!isFavorite"
+                    class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                    icon="pi pi-bookmark"
+                    @click="addFavorite"
+                    >
+                </Button>
+                <Button 
+                    v-else
+                    class="bg-blue-700 text-white py-2 px-4 rounded"
+                    icon="pi pi-bookmark-fill"
+                    >
+                </Button>
+            </div>
         </div>
-        <p v-else>This is your home location</p>
-
+        <div @mouseover="setClickable" @mouseleave="setUnClickable" v-if="props.clickable" class="description">
+            <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Description: </p>
+            <p class="text-gray-500 dark:text-gray-400 font-medium text-sm">{{ props.description }}</p>
+        </div>
+        <div @mouseover="setClickable" @mouseleave="setUnClickable">
+            <p v-if="props.clickable" class="text-gray-500 dark:text-gray-400 font-normal text-sm">Click to see more...</p>
+            <p v-else class="text-gray-500 dark:text-gray-400 font-bold text-sm">This is your home location</p>
+        </div>
     </div>
-    <p>{{ props.id }}</p>
 </GMapInfoWindow>
 
 </template>
@@ -70,5 +121,8 @@ onMounted(async () => {
 <style scoped>
 .description {
     overflow-wrap: break-word;
+    display: flex;
+    flex-direction: row;
+    gap: 1.5em;
 }
 </style>

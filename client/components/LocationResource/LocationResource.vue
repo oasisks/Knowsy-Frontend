@@ -19,7 +19,6 @@ const options = ref({
 });
 // first thing we need is to define the center location
 // we either get it from the user or we set the default location to be MIT
-console.log(userCoords.value);
 
 const projects = ref([{id: -1, position: userCoords.value.position, title: "Home Location", status: "NAN", description: "It is my home :)", home: true}]);
 
@@ -32,10 +31,8 @@ async function populateMarkers() {
   // add in the markers
   try {
     const locationResources = await fetchy('/api/locationResources', "GET", {query});
-    console.log(locationResources);
     let id;
     locationResources.forEach((locationResource: any) => {
-      console.log(locationResource);
       id = locationResource._id;
       // for each project, add in the project title, content, and critical dates
       const position = locationResource.location.coordinates;
@@ -63,7 +60,7 @@ onMounted(async () => {
       :center="userCoords.position"
       :zoom="14"
       :options="options"
-      style="height: 89vh; width: 100%; display: flex;"
+      style="height: 91.9vh; width: 100%; display: flex;"
       >
       <GMapMarker
       :key="index"
@@ -74,6 +71,7 @@ onMounted(async () => {
       @closeclick="openMarker(-1)"
       >
       <LocationPanel 
+        :current-username="currentUsername"
         :id="project.id"
         :title="project.title" 
         :description="project.description" 

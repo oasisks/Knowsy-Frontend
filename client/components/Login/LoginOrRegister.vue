@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm.vue";
 import MoreInfoForm from "./MoreInfoForm.vue";
 import RegisterForm from "./RegisterForm.vue";
 
-let creatingAccount = ref(true);
+let creatingAccount = ref(false);
 let newlyRegistered = ref(false);
 
 function changeToRegister() {
@@ -31,11 +31,11 @@ function changeToMoreInfo() {
         <div class="container">
             <div class="options" v-if="!newlyRegistered">
                 <div class="option">
-                    <button @click="changeToRegister" :class="{ underline: creatingAccount }">Create an Account
-                    </button>
+                    <button @click="changeToLogin" :class="{ underline: !creatingAccount }">I Have an Account </button>
                 </div>
                 <div class="option">
-                    <button @click="changeToLogin" :class="{ underline: !creatingAccount }">I Have an Account </button>
+                    <button @click="changeToRegister" :class="{ underline: creatingAccount }">Create an Account
+                    </button>
                 </div>
             </div>
             <div v-if="creatingAccount">
