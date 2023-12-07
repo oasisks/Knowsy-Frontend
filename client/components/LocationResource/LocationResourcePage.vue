@@ -5,7 +5,7 @@ import { useUserStore } from '../../stores/user';
 import { fetchy } from '../../utils/fetchy';
 import SmallMap from "../Map/SmallMap.vue";
 import Poll from "../Poll/Poll.vue";
-import ProjectPostsList from './ProjectPostsList.vue';
+import PostsTimeline from "../Post/PostsTimeline.vue";
 
 const props = defineProps(["id"]);
 const postContent = ref("");
@@ -108,8 +108,8 @@ onMounted(async () => {
                                         </Button>
                                     </div>
                                 </Dialog>
-                                <div class="flex flex-col w-full h-32">
-                                    <ProjectPostsList :posts="posts"/>
+                                <div class="flex flex-col w-full h-full">
+                                    <PostsTimeline :posts="posts" />
                                 </div>
 
                             </template>
@@ -122,6 +122,7 @@ onMounted(async () => {
                                 <ScrollPanel style="width: 100%; height:10em;">
                                     <p>dsadsadsadsadas</p>
                                 </ScrollPanel>
+
                             </template>
                         </Card>
                     </div>
