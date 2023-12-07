@@ -89,7 +89,7 @@ onMounted(async () => {
     <div class="cursor-pointer">
         <div class="flex flex-row justify-between">
             <h1 @mouseover="setClickable" @mouseleave="setUnClickable">{{ props.title }}</h1>
-            <div class="flex py-6 px-2" v-if="props.clickable">
+            <div class="py-6 px-2 mx-2 my-2" v-if="props.clickable">
                 <Button 
                     v-if="!isFavorite"
                     class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
