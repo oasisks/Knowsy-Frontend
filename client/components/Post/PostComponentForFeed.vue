@@ -10,6 +10,7 @@ const emit = defineEmits(["editPost", "refreshPosts"]);
 const { currentUsername } = storeToRefs(useUserStore());
 let authorUsername = ref("");
 let projectName = ref("");
+const clickable = ref(false);
 
 const deletePost = async () => {
   try {
@@ -40,6 +41,14 @@ const getProjectName = async () => {
   }
 };
 
+function setClickable() {
+  clickable.value = props.clickable;
+}
+
+function setUnClickable() {
+  clickable.value = false;
+}
+
 onBeforeMount(async () => {
   await getProjectName();
   await getAuthorUsername();
@@ -54,10 +63,11 @@ onBeforeMount(async () => {
       <p class="mb-6">{{ props.post.content }}</p>
       <div class="text-sm">
         <article class="flex space-x-6 items-center">
-          <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }}
-            by {{ authorUsername }}</p>
+          <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }} by {{ authorUsername }}</p>
           <p v-else>Created on: {{ formatDate(props.post.dateCreated) }} by {{ authorUsername }}</p>
-          <button class="button-error btn-small pure-button" @click="deletePost">Delete</button>
+          <div v-if="authorUsername == currentUsername">
+            <button class="button-error btn-small pure-button" @click="deletePost">Delete</button>
+          </div>
         </article>
       </div>
     </a>
