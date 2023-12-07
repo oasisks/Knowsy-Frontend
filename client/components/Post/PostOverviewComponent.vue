@@ -21,7 +21,7 @@ async function getPostFromId() {
     let post;
     try {
         post = await fetchy(`/api/posts/${props.postid}`, "GET");
-        author.value = post.author
+        await getAuthorUsername(post.author);
         project.value = post.project
         content.value = post.content
         console.log("post values were found and set", post)
@@ -30,6 +30,15 @@ async function getPostFromId() {
     }
     return post;
 }
+
+const getAuthorUsername = async (authorid: string) => {
+    try {
+        let user = await fetchy(`/api/users/id/${authorid}`, "GET", {});
+        author.value = user.username;
+    } catch {
+        return;
+    }
+};
 
 onBeforeMount(async () => {
     // post.value = $route.params._id;
@@ -45,7 +54,7 @@ onBeforeMount(async () => {
                 <!-- <h2 class="text-3xl font-bold">{{ post?.name }}</h2> -->
             </div>
             <div class="mb-3">
-                <p class="text-lg font-semibold">Author: {{ author }}</p>
+                <p class="text-lg font-semibold">by @{{ author }}</p>
             </div>
             <div>
                 <p class="text-lg font-semibold">Content:</p>
@@ -53,8 +62,6 @@ onBeforeMount(async () => {
             </div>
         </div>
 
-        <p>[Insert Actionables here]</p>
-        <p>[Insert Map here]</p>
-        <p>[Insert Poll here]</p>
+        <p>Insert Project Blurb here</p>
     </section>
 </template>
