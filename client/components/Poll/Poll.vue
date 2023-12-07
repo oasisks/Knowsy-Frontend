@@ -12,16 +12,17 @@ const addingOption = ref(false);
 const optionText = ref("");
 const optionCount = ref<Array<string>>([]);
 const isBlank = ref(false);
+const scopedError = ref('');
 // const optionCount = ref(0);
 
 async function getPolls() {
     // given the id, we grab all the polls that exists
     try {
         polls.value = await fetchy(`/api/polls/project/${props.id}`, "GET");
-        console.log(polls.value);
     } catch {
 
     }
+    return polls.value;
 }
 
 async function togglePoll() {
@@ -44,6 +45,7 @@ async function createPoll() {
     const query = {prompt, root};
     const body = {options};
     if (isBlank.value) {
+        scopedError.value = (blank.length !== 0) ? "Some option(s) are not filled" : ((promptRef.value.length === 0) ? 'Missing title' : 'Needs at least 1 option');
         return;
     }
     try {
@@ -96,7 +98,7 @@ onMounted(async () => {
             <div class="content-flex">
                 <div v-if="!isCreatingPoll" class="w-full">
                     <p v-if="polls.length === 0">Oopsies, no polls for this project yet.</p>
-                    <PollList v-else :polls="polls"/>
+                    <PollList v-else :polls="polls" @refresh="getPolls"/>
                 </div>
                 <div v-if="isCreatingPoll" class="poll ">
                     <InputText
@@ -104,6 +106,7 @@ onMounted(async () => {
                         v-model="promptRef" 
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Question Title"
+                        @keyup.enter="createPoll"
                     />
                     <div class="w-full flex flex-row gap-4" v-for="(input, index) in optionCount">
                         <InputText 
@@ -113,6 +116,7 @@ onMounted(async () => {
                             @input="(event) => {
                                 optionCount[index] = (event.target as HTMLInputElement).value
                             }"
+                            @keyup.enter="createPoll"
                             class="bg-blue-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Option"
                         />
@@ -138,12 +142,10 @@ onMounted(async () => {
                     </Button>
                     <div v-if="isBlank" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <strong class="font-bold">Oh Oh! </strong>
-                        <span class="block sm:inline">There are some missing entries</span>
-
+                        <span class="block sm:inline">{{ scopedError }}!</span>
                     </div>
                 </div>
             </div>
-            
         </template>
     </Card>
 </template>

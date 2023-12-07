@@ -28,7 +28,7 @@ class Routes {
     return await User.getUserByUsername(username);
   }
 
-  @Router.get("/users/:userId")
+  @Router.get("/users/id/:userId")
   async getUserById(userId: ObjectId) {
     return await User.getUserById(userId);
   }
@@ -84,8 +84,8 @@ class Routes {
   }
 
   @Router.get("/projects/:project/posts")
-  async getPostsByProject(project: ObjectId) {
-    const posts = await Post.getByProject(project);
+  async getPostsByProject(project: string) {
+    const posts = await Post.getByProject(new ObjectId(project));
     return posts;
   }
 
@@ -240,8 +240,8 @@ class Routes {
     let opinions;
     let feelings;
     if (author) {
-      opinions = (await Opinion.getOpinions({ author: author })).opinions;
-      feelings = (await Opinion.getOpinions({ author: author })).feelings;
+      opinions = (await Opinion.getOpinions({ author: new ObjectId(author) })).opinions;
+      feelings = (await Opinion.getOpinions({ author: new ObjectId(author) })).feelings;
     } else if (root) {
       opinions = (await Opinion.getOpinions({ root: root })).opinions;
       feelings = (await Opinion.getOpinions({ root: root })).feelings;
@@ -347,16 +347,16 @@ class Routes {
     return polls;
   }
 
-  @Router.patch("polls/add/:_id")
+  @Router.patch("/polls/add/:_id")
   async addVote(session: WebSessionDoc, _id: ObjectId, choice: string) {
     const user = WebSession.getUser(session);
-    await Poll.addVote(_id, user, choice);
+    return await Poll.addVote(_id, user, choice);
   }
 
-  @Router.patch("polls/remove/:_id")
+  @Router.patch("/polls/remove/:_id")
   async removeVote(session: WebSessionDoc, _id: ObjectId) {
     const user = WebSession.getUser(session);
-    await Poll.removeVote(_id, user);
+    return await Poll.removeVote(_id, user);
   }
 
   @Router.post("/favorites/:_id")

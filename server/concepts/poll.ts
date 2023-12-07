@@ -34,15 +34,16 @@ export default class PollConcept {
   }
 
   async addVote(_id: ObjectId, user: ObjectId, option: string) {
-    const poll = await this.polls.readOne({ _id });
+    let poll = await this.polls.readOne({ _id });
     if (poll !== null) {
       if (poll.options.includes(option)) {
-        if (poll.votes.filter((vote) => vote.user === user).length !== 0) {
+        if (poll.votes.filter((vote) => vote.user.equals(user)).length !== 0) {
           await this.removeVote(_id, user);
+          poll = await this.polls.readOne({ _id });
         }
-        poll.votes.push({ user, option });
-        await this.polls.updateOne({ _id }, poll);
-        return { msg: "Vote successfully added!" };
+        poll!.votes.push({ user, option });
+        await this.polls.updateOne({ _id }, poll!);
+        return poll!;
       } else {
         throw new NotFoundError("Option not found!");
       }
@@ -54,14 +55,16 @@ export default class PollConcept {
   async removeVote(_id: ObjectId, user: ObjectId) {
     const poll = await this.polls.readOne({ _id });
     if (poll !== null) {
-      if (poll.votes.filter((vote) => vote.user === user).length > 0) {
+      if (poll.votes.filter((vote) => vote.user.equals(user)).length > 0) {
         poll.votes = poll.votes.filter(function (obj) {
-          return obj.user !== user;
+          return !obj.user.equals(user);
         });
-        await this.polls.updateOne({ _id }, poll);
-        return { msg: "Vote successfully removed!" };
+        poll.votes = poll.votes.filter((vote) => {
+          return !vote.user.equals(user);
+        });
+        const newPoll = await this.polls.updateOne({ _id }, poll);
+        return { msg: "Successfully deleted" };
       } else {
-        throw new NotFoundError("Vote not found!");
       }
     } else {
       throw new NotFoundError("Poll not found!");

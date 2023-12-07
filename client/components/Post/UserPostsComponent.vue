@@ -37,7 +37,7 @@ onBeforeMount(async () => {
 <template>
   <section class="posts" v-if="loaded && posts.length !== 0">
     <article v-for="post in posts" :key="post._id">
-      <div class="px-6 py-6 rounded-lg shadow-sm bg-white">
+      <div class="px-6 py-6 rounded-lg shadow-sm bg-white justify-items-center">
         <PostComponent v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
         <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
       </div>

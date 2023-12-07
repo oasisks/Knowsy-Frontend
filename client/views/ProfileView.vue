@@ -30,7 +30,7 @@ const tabs: any = {
   Posts: Posts,
   Opinions: Opinions,
   Events: Posts,
-  Saved: Posts,
+  Favorited: Posts,
 };
 </script>
 
@@ -41,9 +41,13 @@ const tabs: any = {
         <h1 class="">{{ currentUsername }}</h1>
         <button class="pure-button pure-button-primary" @click="goToSettings">Settings</button>
       </div>
-      <button class="pure-button pure-button-primary" v-for="(_, tab) in tabs" :key="tab"
+      <button
+        class="bg-slate-400 hover:bg-slate-300 text-white font-semibold px-4 py-3 mr-2 rounded-md "
+        v-for="(_, tab) in tabs"
+        :key="tab"
         :class="['tab-button', { active: currentTab === tab.toString() }, { underline: currentTab === tab.toString() }]"
-        @click="currentTab = tab.toString()">
+        @click="currentTab = tab.toString()"
+      >
         {{ tab }}
       </button>
       <component :is="tabs[currentTab]" v-bind="currentProperties" class="tab"></component>

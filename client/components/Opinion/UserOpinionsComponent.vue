@@ -48,10 +48,12 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <h2>All Comments</h2>
-  <div class="opinions">
-    <article v-for="opinion in opinions" :key="opinion._id" class="opinion">
-      <OpinionComponent v-bind:opinion="opinion" @refreshOpinions="getOpinions" />
+  <!-- <h2>All Comments</h2> -->
+  <div class="opinions py-10">
+    <article v-for="opinion in opinions" :key="opinion._id" class="opinion shadow-sm">
+      <div class="bg-white">
+        <OpinionComponent v-bind:opinion="opinion" @refreshOpinions="getOpinions" />
+      </div>
     </article>
   </div>
 </template>
@@ -77,11 +79,12 @@ h2 {
 
 /* Styling for the opinion comment container */
 .opinion {
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 5px;
   width: 60%;
+  background-color: white;
 }
 
 /* Styling for the bar graph section */

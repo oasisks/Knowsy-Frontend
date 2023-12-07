@@ -19,9 +19,9 @@ const deletePost = async () => {
 </script>
 
 <template>
-  <div class="px-8 py-4 bg-slate-50 rounded-lg hover:shadow">
+  <div class="px-8 py-4 bg-orange-50 rounded-lg hover:shadow">
     <a :href="`/announcements/${props.post._id}`">
-      <h2 class="text-lg font-semibold text-sky-500">Announcement</h2>
+      <h2 class="text-lg font-semibold text-orange-500">Announcement</h2>
       <h1 class="text-2xl font-bold">{{ props.post.name }}</h1>
       <p class="mb-6">{{ props.post.content }}</p>
       <div class="text-sm">
