@@ -17,8 +17,9 @@ export default class EventConcept {
   public readonly events = new DocCollection<EventDoc>("events");
 
   async createEvent(name: string, type: string, author: ObjectId, date: Date, root: ObjectId, location?: Array<number>) {
-    const _id = await this.events.createOne({ name, type, author, date, root, location });
-    return { msg: "Post successfully created!", event: await this.events.readOne({ _id }) };
+    const attendees: Array<ObjectId> = [];
+    const _id = await this.events.createOne({ name, type, author, date, root, location, attendees });
+    return { msg: "Event successfully created!", event: await this.events.readOne({ _id }) };
   }
 
   async deleteEvent(_id: ObjectId) {

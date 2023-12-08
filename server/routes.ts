@@ -1,4 +1,4 @@
-import { Filter, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
@@ -278,13 +278,15 @@ class Routes {
   async createEvent(session: WebSessionDoc, name: string, type: string, date: string, root: ObjectId, location?: Array<number>) {
     const author = WebSession.getUser(session);
 
+    const rootId = new ObjectId(root);
+
     // a small check to see if the date is a valid date
     const dateObj = new Date(date);
     if (isNaN(dateObj.getDate())) {
       throw new BadValuesError("The resulting date string is not valid");
     }
 
-    return await Event.createEvent(name, type, author, dateObj, root, location);
+    return await Event.createEvent(name, type, author, dateObj, rootId, location);
   }
 
   @Router.delete("/events/:_id")
@@ -297,7 +299,7 @@ class Routes {
     return await Event.modifyEvent(_id, update);
   }
 
-  @Router.post("/event/:_id")
+  @Router.post("/event/register/:_id")
   async registerUser(session: WebSessionDoc, _id: ObjectId) {
     const user = WebSession.getUser(session);
     return await Event.registerUser(_id, user);
@@ -309,10 +311,11 @@ class Routes {
     return await Event.deregisterUser(_id, user);
   }
 
-  @Router.get("/events")
-  async getEvents(query: Filter<EventDoc>) {
-    const events = await Event.getEvents(query);
-    return await Event.getEvents(query);
+  @Router.get("/events/target/:_id")
+  async getEventsByTarget(_id: ObjectId) {
+    const events = await Event.getEvents({root:_id});
+    console.log("DID I GET EVENT?", events);
+    return events;
   }
 
   @Router.post("/polls")

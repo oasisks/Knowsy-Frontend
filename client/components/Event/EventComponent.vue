@@ -16,9 +16,11 @@ let loaded = ref(false)
 async function getEvents() {
     // this grabs all of the posts associated with this project
     try {
-        events.value = await fetchy(`/api/events`, "GET", { query: { root: props.projectId } });
+        console.log("for project w id", props.projectId)
+        events.value = await fetchy(`/api/events/target/${props.projectId}`, "GET");
+        console.log("GOT EVENTS:", events);
     } catch {
-
+        console.log("issue with events");
     }
 }
 
@@ -28,17 +30,26 @@ async function createEvent() {
     const dateStr = date.value.toString();
     const query = { name: name.value, type: type.value, date: dateStr, root: props.projectId };
     try {
-        await fetchy(`/api/events`, "POST", { query });
+        const msg = await fetchy(`/api/events`, "POST", { query });
+        console.log(msg);
     } catch {
 
     }
     await getEvents();
 }
 
+async function registerForEvent(id: string) {
+    try {
+        await fetchy(`/api/event/register/${id}`, "POST");
+    } catch {
+
+    }
+}
+
 onMounted(async () => {
     await getEvents();
     console.log("EVENTS:", events.value)
-    loaded.value = true
+    loaded.value = true;
 })
 </script>
 
@@ -82,7 +93,14 @@ onMounted(async () => {
                 <div class="space-y-6">
                     <ScrollPanel style="width: 100%; height:10em;">
                         <article v-for="event in events" :key="event._id">
-                            {{ event }}
+                            <Card>
+                                <template #content>
+                                    {{ event }}
+                                    <Button class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded"
+                                        label="Register for Event" @click="registerForEvent(event._id)"></Button>
+                                </template>
+                            </Card>
+
                             <!-- <PostComponentForFeed v-if="editing !== post._id" :post="post" @refreshPosts="getPosts"
                                 @editPost="updateEditing" /> -->
                         </article>

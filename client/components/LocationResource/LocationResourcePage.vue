@@ -16,7 +16,6 @@ const posts = ref<Array<Record<string, string>>>([]);
 // fix this later, updated will change base on if its been updated x minutes ago, x hours ago, x days ago, x weeks ago, and x years ago 
 const updated = ref(new Date());
 const projectDescription = ref("Default Description");
-const projectId = ref("");
 const events = ref([]);
 const projectCoords = ref({ lng: 0, lat: 0 });
 const visible = ref(false);
@@ -28,7 +27,6 @@ async function getProject() {
         const project = (await fetchy(`/api/locationResources/${props.id}`, "GET"));
         title.value = project.name;
         projectDescription.value = project.description;
-        projectId.value = project._id;
         updated.value = new Date(project.start);
         projectCoords.value.lng = project.location.coordinates[0];
         projectCoords.value.lat = project.location.coordinates[1];
@@ -112,7 +110,7 @@ onMounted(async () => {
                         </Card>
                     </div>
                     <div class="actionables">
-                        <EventComponent :projectId="projectId" />
+                        <EventComponent :projectId="$props.id" />
                     </div>
                 </template>
 
