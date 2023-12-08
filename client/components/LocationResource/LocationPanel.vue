@@ -35,6 +35,14 @@ async function addFavorite() {
     }
     await isFavorited();
 }
+async function removeFavorite() {
+    try {
+        const msg = await fetchy(`/api/favorites/${props.id}`, "DELETE");
+    } catch {
+
+    }
+    await isFavorited();
+}
 
 async function getUserID() {
     try {
@@ -101,6 +109,7 @@ onMounted(async () => {
                     v-else
                     class="bg-blue-700 text-white py-2 px-4 rounded"
                     icon="pi pi-bookmark-fill"
+                    @click="removeFavorite"
                     >
                 </Button>
             </div>
