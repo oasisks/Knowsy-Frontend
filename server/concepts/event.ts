@@ -35,7 +35,7 @@ export default class EventConcept {
 
   private sanitizeUpdate(update: Partial<EventDoc>) {
     // Make sure the update cannot change the author.
-    const allowedUpdates = ["name", "type", "date", "location"];
+    const allowedUpdates = ["name", "type", "date", "location", "attendees"];
     for (const key in update) {
       if (!allowedUpdates.includes(key)) {
         throw new NotAllowedError(`Cannot update '${key}' field!`);
