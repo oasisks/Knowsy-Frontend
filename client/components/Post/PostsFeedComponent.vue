@@ -6,21 +6,23 @@ import { onBeforeMount, ref } from "vue";
 import PostComponentForFeed from "./PostComponentForFeed.vue";
 // import SearchPostForm from "./SearchPostForm.vue";
 
-const { isLoggedIn, radius } = storeToRefs(useUserStore());
-const center = ref({ lat: 0, lng: 0 });
+const { isLoggedIn, rad, userCoords } = storeToRefs(useUserStore());
 
 const loaded = ref(false);
 let posts = ref<Array<Record<string, string>>>([]);
 let editing = ref("");
 let searchAuthor = ref("");
 
-async function getPosts(latitude: string, longitude: string) {
+async function getPosts() {
   // TODO: switch out once user radius is able to be set
   // let locationResourceQuery: Record<string, string> = { latitude: latitude, longitude: longitude, radius: radius.toString() };
-  let locationResourceQuery: Record<string, string> = { latitude: latitude, longitude: longitude, radius: "50" };
+  const lng = userCoords.value.position.lng.toString();
+  const lat = userCoords.value.position.lat.toString();
+  const radius = rad.value.toString();
+  const query = {longitude: lng, latitude: lat, radius};
   let projects;
   try {
-    projects = await fetchy("/api/locationResources", "GET", { query: locationResourceQuery });
+    projects = await fetchy("/api/locationResources", "GET", { query });
     for (let project of projects) {
       let projectPosts = await fetchy(`/api/projects/${project._id}/posts`, "GET", {});
       posts.value = posts.value.concat(projectPosts);
@@ -35,11 +37,7 @@ function updateEditing(id: string) {
 }
 
 onBeforeMount(async () => {
-  navigator.geolocation.getCurrentPosition((position) => {
-    center.value.lat = position.coords.latitude;
-    center.value.lng = position.coords.longitude;
-  });
-  await getPosts(center.value.lat.toString(), center.value.lng.toString());
+  await getPosts();
   loaded.value = true;
 });
 </script>

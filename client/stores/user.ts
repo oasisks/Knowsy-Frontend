@@ -13,7 +13,7 @@ export const useUserStore = defineStore(
     // default is MIT coords
     const userCoords = ref({ position: { lat: 42.3601, lng: -71.0942 } });
 
-    const radius = ref(0);
+    const rad = ref(0);
 
     const resetStore = () => {
       currentUsername.value = "";
@@ -35,6 +35,8 @@ export const useUserStore = defineStore(
       try {
         const { username, location, radius } = await fetchy("/api/session", "GET", { alert: false });
         currentUsername.value = username;
+        userCoords.value = { position: { lng: location[0], lat: location[1] } };
+        rad.value = radius;
       } catch {
         currentUsername.value = "";
       }
@@ -57,7 +59,7 @@ export const useUserStore = defineStore(
     return {
       currentUsername,
       isLoggedIn,
-      radius,
+      rad,
       userCoords,
       createUser,
       loginUser,

@@ -6,7 +6,7 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 // import SearchPostForm from "./SearchPostForm.vue";
 
-const { isLoggedIn, radius } = storeToRefs(useUserStore());
+const { isLoggedIn, rad } = storeToRefs(useUserStore());
 const center = ref({ lat: 0, lng: 0 });
 
 const loaded = ref(false);
@@ -17,7 +17,7 @@ let searchAuthor = ref("");
 async function getAnnouncements(latitude: string, longitude: string) {
   // TODO: switch out once user radius is able to be set
   // let locationResourceQuery: Record<string, string> = { latitude: latitude, longitude: longitude, radius: radius.toString() };
-  let radiusResourcequery: Record<string, string> = { latitude: latitude, longitude: longitude };
+  let radiusResourcequery: Record<string, string> = { latitude: latitude, longitude: longitude, radius: rad.value.toString() };
   let radiusResourceResults;
   try {
     radiusResourceResults = await fetchy("/api/radiusResources", "GET", { query: radiusResourcequery });

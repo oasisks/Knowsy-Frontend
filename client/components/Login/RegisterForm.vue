@@ -8,10 +8,11 @@ const { createUser, loginUser, updateSession } = useUserStore();
 const emit = defineEmits(["change-to-more-info"]);
 
 async function register() {
+  // when the user clicks register, we need to first ask for the users location
+
   await createUser(username.value, password.value);
   await loginUser(username.value, password.value);
   void updateSession();
-  emit("change-to-more-info");
   // void router.push({ name: "Home" });
 }
 </script>

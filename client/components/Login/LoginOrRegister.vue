@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import LoginForm from "./LoginForm.vue";
-import MoreInfoForm from "./MoreInfoForm.vue";
 import RegisterForm from "./RegisterForm.vue";
 
 let creatingAccount = ref(false);
@@ -39,8 +38,8 @@ function changeToMoreInfo() {
                 </div>
             </div>
             <div v-if="creatingAccount">
-                <MoreInfoForm v-if="newlyRegistered" />
-                <RegisterForm v-else @change-to-more-info="changeToMoreInfo" />
+                <!-- <MoreInfoForm v-if="newlyRegistered" /> -->
+                <RegisterForm @change-to-more-info="changeToMoreInfo" />
             </div>
             <div v-else>
                 <LoginForm />

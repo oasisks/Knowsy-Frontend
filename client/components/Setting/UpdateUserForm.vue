@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
-import { ref } from "vue";
 import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
-const { currentUsername, radius, userCoords } = storeToRefs(useUserStore());
+const { currentUsername, rad, userCoords } = storeToRefs(useUserStore());
 
 let username = ref("");
 let password = ref("");
 let r = ref();
 let loc = ref();
+const error = ref(false);
+const success = ref(false);
 
 const { updateUser, updateSession } = useUserStore();
 
@@ -31,7 +33,19 @@ async function updateRadius() {
 
 async function updateLocation() {
   //Todo
-  await updateUser({ location: loc.value })
+  // once we click the thing, we want to first ask for location
+  navigator.geolocation.getCurrentPosition(async (pos) => {
+      const coords = pos.coords;
+      console.log(coords);
+
+      // longitude, latitude
+      const location: Array<number> = [coords.longitude, coords.latitude];
+      await updateUser({location});
+      error.value = false;
+      success.value = true;
+  }, ((err) => {
+    error.value = true;
+  }))
 }
 
 </script>
@@ -57,12 +71,20 @@ async function updateLocation() {
   <form @submit.prevent="updateRadius" class="pure-form">
     <fieldset>
       <legend>Change the Radius of projects you would like to see</legend>
-      <p> Current Radius: {{ radius }}</p>
+      <p> Current Radius: {{ rad }}</p>
       <input type="number" min="1" placeholder="Update radius" v-model="r" required />
       <button type="submit" class="pure-button pure-button-primary">Update radius</button>
     </fieldset>
   </form>
-
-  <p> Current Location: {{ userCoords }}</p>
+  <p>Update Location</p>
   <button type="submit" class="pure-button pure-button-primary" @click="updateLocation"> Update location</button>
+  <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-2" role="alert">
+      <strong class="font-bold">Uh oh! </strong>
+      <span class="block sm:inline">You need to allow access to location for it to update 😠 !</span>
+  </div>
+
+  <div v-if="success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mx-2" role="alert">
+      <strong class="font-bold">Yay! </strong>
+      <span class="block sm:inline">Location successfully updated 😊</span>
+  </div>
 </template>
