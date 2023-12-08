@@ -2,7 +2,7 @@ import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
-import EventPage from "../components/Event/EventPage.vue";
+import EventComponent from "../components/Event/EventComponent.vue";
 import AnnouncementView from "../views/AnnouncementView.vue";
 import HomeFeedView from "../views/HomeFeedView.vue";
 import HomeView from "../views/HomeView.vue";
@@ -41,7 +41,7 @@ const router = createRouter({
     {
       path: "/projects/:_id/events",
       name: "Events",
-      component: EventPage,
+      component: EventComponent,
       meta: { requireAuth: true },
     },
     {

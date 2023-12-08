@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
-import { fetchy } from "../../utils/fetchy";
 import { ObjectId } from "mongodb";
+import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
+import { fetchy } from "../../utils/fetchy";
+import EventComponent from "../Event/EventComponent.vue";
 
 const props = defineProps(["resourceId"]);
 const resource = ref<Record<string, string>>();
@@ -49,6 +50,6 @@ onBeforeMount(async () => {
       </div>
     </div>
 
-    <p>[Insert Actionables here]</p>
+    <EventComponent :projectId="props.resourceId" />
   </section>
 </template>

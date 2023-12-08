@@ -22,7 +22,6 @@ async function getEvents() {
     }
 }
 
-
 async function createEvent() {
     if (name.value.length === 0) { return; }
     visible.value = false;
