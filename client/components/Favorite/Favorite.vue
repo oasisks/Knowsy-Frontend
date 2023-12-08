@@ -21,7 +21,7 @@ async function getFavorites() {
     favorites.value = response;
 };
 
-async function getProject(project: ObjectId) {
+async function getProject(project) {
     let response;
     try {
         response = await fetchy(`/api/locationResources/${project}`, "GET");
@@ -57,7 +57,7 @@ onBeforeMount(async () => {
   <!-- <h2>Favorites</h2> -->
 
   <div class="favorites">
-    <article v-for="project in projects" :key="project" class="project">
+    <article v-for="project in projects" :key="project._id" class="project">
         <Card @click="toLink(project._id)" class="card">
             <template #title>
                 {{ project.name }}
