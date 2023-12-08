@@ -18,6 +18,7 @@ async function getEvents() {
     try {
         console.log("for project w id", props.projectId);
         events.value = await fetchy(`/api/events/target/${props.projectId}`, "GET");
+
         console.log("GOT EVENTS:", events);
     } catch {
         console.log("issue with events");
@@ -45,6 +46,8 @@ async function registerForEvent(id: string) {
 
     }
 }
+
+
 
 onMounted(async () => {
     await getEvents();
@@ -94,8 +97,15 @@ onMounted(async () => {
                     <ScrollPanel style="width: 100%; height:10em;">
                         <article v-for="event in events" :key="event._id">
                             <Card>
+                                <template #header>
+                                    <p>{{ event.name }}</p>
+
+                                </template>
                                 <template #content>
-                                    {{ event }}
+                                    <p class="text-sm font-medium">Type: {{ event.type }}</p>
+                                    <p class="text-sm font-medium">Created by: {{ event.author }}</p>
+                                    <p class="text-sm font-medium">Happening on: {{ event.date }}</p>
+
                                     <Button class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded"
                                         label="Register for Event" @click="registerForEvent(event._id)"></Button>
                                 </template>
