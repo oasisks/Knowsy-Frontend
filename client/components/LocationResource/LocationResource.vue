@@ -6,7 +6,7 @@ import { onMounted, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 import LocationPanel from "./LocationPanel.vue";
 
-const { currentUsername, isLoggedIn, userCoords } = storeToRefs(useUserStore());
+const { currentUsername, isLoggedIn, userCoords, rad } = storeToRefs(useUserStore());
 const ready = ref(false);
 const currentMarkerId = ref(-1);
 const options = ref({
@@ -26,7 +26,7 @@ const projects = ref([{id: -1, position: userCoords.value.position, title: "Home
 async function populateMarkers() {
   const longitude = userCoords.value.position.lng.toString();
   const latitude = userCoords.value.position.lat.toString();
-  const radius = "2";
+  const radius = rad.value.toString();
   const query = {longitude, latitude, radius};
   // add in the markers
   try {

@@ -33,9 +33,10 @@ export default class LocationResourceConcept {
   }
 
   async getWithinRadius(longitude: number, latitude: number, radius: number) {
+    const earthRadiusInMiles = 3963.2;
     return await this.locationResources.readMany({
       location: {
-        $geoWithin: { $centerSphere: [[longitude, latitude], radius] },
+        $geoWithin: { $centerSphere: [[longitude, latitude], radius / earthRadiusInMiles] },
       },
     });
   }
