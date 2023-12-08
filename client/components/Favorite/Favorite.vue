@@ -21,7 +21,7 @@ async function getFavorites() {
     favorites.value = response;
 };
 
-async function getProject(project) {
+async function getProject(project: string) {
     let response;
     try {
         response = await fetchy(`/api/locationResources/${project}`, "GET");
@@ -29,8 +29,7 @@ async function getProject(project) {
         return;
     }
     return response;
-    // console.log("response", response);
-    // favorites.value = response;
+    
 }
 
 async function toLink(projectId: string) {
