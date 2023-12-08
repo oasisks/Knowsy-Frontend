@@ -27,7 +27,7 @@ async function goToPost(postid: string) {
             <Card class="cursor-pointer mx-3 shadow hover:shadow-lg w-full h-full" @click="goToPost(slotProps.item._id)">
                 <template #content>
                     <div class="flex flex-col gap-2">
-                        <h5 class="text-xl font-bold dark:text-white">Post {{ slotProps.index + 1}}</h5>
+                        <h5 class="text-xl font-bold dark:text-white">Post {{ slotProps.index + 1 }}</h5>
                         <p>{{ slotProps.item.content }}</p>
                         <p>{{ formatDate(slotProps.item.dateCreated) }}</p>
                     </div>
