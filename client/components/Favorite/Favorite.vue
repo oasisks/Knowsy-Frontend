@@ -57,7 +57,7 @@ onBeforeMount(async () => {
 
   <div class="favorites">
     <article v-for="project in projects" :key="project._id" class="project">
-        <Card @click="toLink(project._id)" class="card">
+        <Card @click="toLink(project._id)" class="card hover: cursor-pointer">
             <template #title>
                 {{ project.name }}
             </template>
