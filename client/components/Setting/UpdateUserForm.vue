@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
+
+const { currentUsername, radius, userCoords } = storeToRefs(useUserStore());
 
 let username = ref("");
 let password = ref("");
+let r = ref();
+let loc = ref();
 
 const { updateUser, updateSession } = useUserStore();
 
@@ -18,6 +23,17 @@ async function updatePassword() {
   await updateSession();
   password.value = "";
 }
+
+async function updateRadius() {
+  await updateUser({ radius: r.value });
+  await updateSession();
+}
+
+async function updateLocation() {
+  //Todo
+  await updateUser({ location: loc.value })
+}
+
 </script>
 
 <template>
@@ -37,4 +53,16 @@ async function updatePassword() {
       <button type="submit" class="pure-button pure-button-primary">Update password</button>
     </fieldset>
   </form>
+
+  <form @submit.prevent="updateRadius" class="pure-form">
+    <fieldset>
+      <legend>Change the Radius of projects you would like to see</legend>
+      <p> Current Radius: {{ radius }}</p>
+      <input type="number" min="1" placeholder="Update radius" v-model="r" required />
+      <button type="submit" class="pure-button pure-button-primary">Update radius</button>
+    </fieldset>
+  </form>
+
+  <p> Current Location: {{ userCoords }}</p>
+  <button type="submit" class="pure-button pure-button-primary" @click="updateLocation"> Update location</button>
 </template>

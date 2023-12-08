@@ -82,7 +82,7 @@ h2 {
   display: flex;
   flex-direction: row;
   align-items: flex-start; /* Align items at the top */
-  max-width: 60%; /* Adjust width as needed */
+  max-width: 100%; /* Adjust width as needed */
   background-color: rgba(0, 123, 255, 0.1); /* Slightly tinted blue background */
   padding: 20px; /* Add padding for better visualization */
 }
@@ -94,7 +94,7 @@ h2 {
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 5px;
-  width: 60%
+  width: 100%
 }
 
 
@@ -105,7 +105,7 @@ h2 {
   justify-content: space-around;
   align-items: flex-end;
   height: 40vh; /* Adjust as needed to fit the desired vertical space */
-  width: 60%; /* Full horizontal width of the page */
+  width: 100%; /* Full horizontal width of the page */
   background-color: #f0f0f0; /* Bar graph background color */
   padding: 20px; /* Add padding for better spacing */
   box-sizing: border-box; /* Include padding in width calculation */

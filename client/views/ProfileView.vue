@@ -5,6 +5,8 @@ import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import Opinions from "../components/Opinion/UserOpinionsComponent.vue";
 import Posts from "../components/Post/UserPostsComponent.vue";
+import Favorites from "../components/Favorite/Favorite.vue";
+
 // import opinions, events, saved
 
 const { currentUsername } = storeToRefs(useUserStore());
@@ -30,7 +32,7 @@ const tabs: any = {
   Posts: Posts,
   Opinions: Opinions,
   Events: Posts,
-  Favorited: Posts,
+  Saved: Favorites,
 };
 </script>
 

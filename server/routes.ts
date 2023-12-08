@@ -383,18 +383,12 @@ class Routes {
   }
 
   @Router.get("/favorites")
-  async getFavorites(author?: ObjectId, target?: ObjectId) {
+  async getFavorites(session: WebSessionDoc) {
     let favorites;
-    if (author && target) {
-      favorites = await Favorite.getFavorites({ author: author, target: target });
-    } else if (author) {
-      favorites = await Favorite.getFavorites({ author: author });
-    } else if (target) {
-      favorites = await Favorite.getFavorites({ target: target });
-    } else {
-      favorites = await Favorite.getFavorites({});
-    }
-
+    const user = WebSession.getUser(session);
+    console.log("here", typeof(user), user)
+    favorites = await Favorite.getFavorites({ author: user });
+    console.log("favorites", favorites);
     return favorites;
   }
 }

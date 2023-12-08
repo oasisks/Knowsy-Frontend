@@ -24,10 +24,12 @@ export default class FavoriteConcept {
   }
 
   async getFavorites(query: Filter<FavoriteDoc>) {
-    const Favorite = await this.favorites.readMany(query, {
+    console.log("now in here")
+    const favorite = await this.favorites.readMany(query, {
       sort: { dateUpdated: -1 },
     });
-    return Favorite;
+    // console.log("favorites:", favorite)
+    return favorite;
   }
 
   async getFavoriteId(user: ObjectId, target:ObjectId) {
