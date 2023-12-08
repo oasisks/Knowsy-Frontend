@@ -46,6 +46,14 @@ async function registerForEvent(id: string) {
     }
 }
 
+async function deregisterForEvent(id: string) {
+    try {
+        await fetchy(`/api/event/${id}`, "DELETE");
+    } catch {
+
+    }
+}
+
 onMounted(async () => {
     await getEvents();
     console.log("EVENTS:", events.value)
@@ -98,6 +106,8 @@ onMounted(async () => {
                                     {{ event }}
                                     <Button class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded"
                                         label="Register for Event" @click="registerForEvent(event._id)"></Button>
+                                    <!-- <Button v-else class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded" -->
+                                        <!-- label="Deregister for Event" @click="deregisterForEvent(event._id)"> </Button> -->
                                 </template>
                             </Card>
 
