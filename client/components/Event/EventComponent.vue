@@ -16,7 +16,7 @@ let loaded = ref(false)
 async function getEvents() {
     // this grabs all of the posts associated with this project
     try {
-        console.log("for project w id", props.projectId)
+        console.log("for project w id", props.projectId);
         events.value = await fetchy(`/api/events/target/${props.projectId}`, "GET");
         console.log("GOT EVENTS:", events);
     } catch {
