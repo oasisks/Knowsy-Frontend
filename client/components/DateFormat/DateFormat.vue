@@ -43,7 +43,7 @@ onMounted(() => {
         const monthString = ((month === 1) ? "month" : "months");
         timeString.value = `${month} ${monthString} ago`;
     } else {
-        const options = { month: "long" };
+        const options: Intl.DateTimeFormatOptions = { month: "long" };
         const monthName = new Intl.DateTimeFormat("en-US", options).format(props.date);
         const day = props.date.getDate();
         const year = props.date.getFullYear();
