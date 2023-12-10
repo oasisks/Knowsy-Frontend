@@ -19,7 +19,7 @@ async function getPosts() {
   const lng = userCoords.value.position.lng.toString();
   const lat = userCoords.value.position.lat.toString();
   const radius = rad.value.toString();
-  const query = {longitude: lng, latitude: lat, radius};
+  const query = { longitude: lng, latitude: lat, radius };
   let projects;
   try {
     projects = await fetchy("/api/locationResources", "GET", { query });
@@ -27,6 +27,9 @@ async function getPosts() {
       let projectPosts = await fetchy(`/api/projects/${project._id}/posts`, "GET", {});
       posts.value = posts.value.concat(projectPosts);
     }
+    posts.value.sort(function (a, b) {
+      return new Date(b.dateUpdated).getTime() - new Date(a.dateUpdated).getTime();
+    });
   } catch (_) {
     return;
   }
@@ -52,8 +55,7 @@ onBeforeMount(async () => {
     <section class="posts" v-if="loaded && posts.length !== 0">
       <div class="space-y-6">
         <article v-for="post in posts" :key="post._id">
-          <PostComponentForFeed v-if="editing !== post._id" :post="post" @refreshPosts="getPosts"
-            @editPost="updateEditing" />
+          <PostComponentForFeed v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
         </article>
       </div>
     </section>
