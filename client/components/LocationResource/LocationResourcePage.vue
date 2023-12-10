@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia';
 import { defineProps, onMounted, ref } from 'vue';
 import { useUserStore } from '../../stores/user';
 import { fetchy } from '../../utils/fetchy';
+import DateFormat from "../DateFormat/DateFormat.vue";
 import EventComponent from '../Event/EventComponent.vue';
 import SmallMap from "../Map/SmallMap.vue";
 import Poll from "../Poll/Poll.vue";
@@ -19,6 +20,7 @@ const projectDescription = ref("Default Description");
 const events = ref([]);
 const projectCoords = ref({ lng: 0, lat: 0 });
 const visible = ref(false);
+const finished = ref(false);
 
 
 async function getProject() {
@@ -60,16 +62,18 @@ const { userCoords } = storeToRefs(useUserStore());
 onMounted(async () => {
     await getProject();
     await getPosts();
-    console.log(posts.value);
+    finished.value = true;
 })
 </script>
 
 <template>
-    <div class="row-flex">
+    <div class="row-flex" v-if="finished">
         <div class="col-flex-left">
             <Card>
                 <template #title> {{ title }} </template>
-                <template #subtitle> Last Updated: {{ updated }}</template>
+                <template #subtitle>
+                    <DateFormat :date="updated"/>
+                </template>
                 <template #content>
                     <p><b>Project Description: </b>{{ projectDescription }}</p>
                     <div class="posts">
