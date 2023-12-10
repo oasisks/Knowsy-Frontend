@@ -2,7 +2,6 @@
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import Timeline from 'primevue/timeline';
 import DateFormat from "../DateFormat/DateFormat.vue";
 
 const props = defineProps(["posts"]);
@@ -16,7 +15,18 @@ async function goToPost(postid: string) {
 </script>
 
 <template>
-    <Timeline :value="props.posts" class="w-full overflow-y-auto" layout="horizontal">
+    <div class="overflow-auto h-60 w-full flex flex-col mx-auto gap-2 p-2">
+        <Card v-for="post, index in props.posts" class="shadow-md hover:shadow-xl hover:cursor-pointer" @click="goToPost(post._id)">
+            <template #content>
+                    <div class="flex flex-col gap-2">
+                        <h5 class="text-xl font-bold dark:text-white">Post {{ index + 1 }}</h5>
+                        <p>{{ post.content }}</p>
+                        <DateFormat :date="new Date(post.dateCreated)"/>
+                </div>
+            </template>
+        </Card>
+    </div>
+    <!-- <Timeline :value="props.posts" class="w-full overflow-y-auto" layout="horizontal">
         <template #marker="slotProps">
             <span class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1"
                 :style="{ backgroundColor: '#9C27B0' }">
@@ -30,10 +40,10 @@ async function goToPost(postid: string) {
                         <h5 class="text-xl font-bold dark:text-white">Post {{ slotProps.index + 1 }}</h5>
                         <p>{{ slotProps.item.content }}</p>
                         <DateFormat :date="new Date(slotProps.item.dateCreated)"/>
-                        <!-- <p>{{ formatDate(slotProps.item.dateCreated) }}</p> -->
+                        <p>{{ formatDate(slotProps.item.dateCreated) }}</p>
                     </div>
                 </template>
             </Card>
         </template>
-    </Timeline>
+    </Timeline> -->
 </template>

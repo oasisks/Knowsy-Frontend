@@ -7,7 +7,7 @@ import DateFormat from "../DateFormat/DateFormat.vue";
 import EventList from '../Event/EventList.vue';
 import SmallMap from "../Map/SmallMap.vue";
 import Poll from "../Poll/Poll.vue";
-import PostsTimeline from "../Post/PostsTimeline.vue";
+import PostsScroll from '../Post/PostsScroll.vue';
 
 const props = defineProps(["id"]);
 const postContent = ref("");
@@ -107,7 +107,7 @@ onMounted(async () => {
                                     </div>
                                 </Dialog>
                                 <div class="w-full h-full">
-                                    <PostsTimeline :posts="posts" />
+                                    <PostsScroll :posts="posts" />
                                 </div>
 
                             </template>
