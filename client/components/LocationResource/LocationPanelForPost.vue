@@ -4,8 +4,7 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { defineEmits, defineProps, onMounted, ref } from 'vue';
 import { fetchy } from "../../utils/fetchy";
-// import PostComponentShort from "../Post/PostComponentShort.vue";
-import PostsTimeline from "../Post/PostsTimeline.vue";
+import PostsScroll from "../Post/PostsScroll.vue";
 const props = defineProps(["postid"]);
 const emit = defineEmits(["setMarker"])
 const userId = ref<Record<string, string>>({});
@@ -31,8 +30,6 @@ async function getProject() {
 }
 
 function goToProjectPage() {
-    // this is the make shift solution
-    // will work on making a large popup window on the same page for better experience
     void router.push({ path: `/projects/${projectId.value}` });
 }
 
@@ -101,10 +98,7 @@ onMounted(async () => {
         <p class="text-gray-500 dark:text-gray-400 font-medium text-sm">{{ description }}</p>
         <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Posts: </p>
         <ScrollPanel style="width: 100%; height: 10em;">
-            <!-- <p v-for="post in posts">
-                <PostComponentShort v-bind:post="post" />
-            </p> -->
-            <PostsTimeline v-bind:posts="posts" />
+            <PostsScroll v-bind:posts="posts" />
         </ScrollPanel>
         <p class="text-gray-500 dark:text-gray-400 font-normal text-sm">Click to see more...</p>
     </div>
