@@ -28,7 +28,7 @@ function changeToMoreInfo() {
             <img src="@/assets/images/knowsy_logo.png">
         </div>
         <div class="container">
-            <div class="options" v-if="!newlyRegistered">
+            <div class="options mb-6" v-if="!newlyRegistered">
                 <div class="option">
                     <button @click="changeToLogin" :class="{ underline: !creatingAccount }">I Have an Account </button>
                 </div>

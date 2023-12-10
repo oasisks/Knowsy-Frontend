@@ -96,18 +96,18 @@ onMounted(async () => {
     >
     <div class="cursor-pointer">
         <div class="flex flex-row justify-between">
-            <h1 @mouseover="setClickable" @mouseleave="setUnClickable">{{ props.title }}</h1>
+            <h1 @mouseover="setClickable" @mouseleave="setUnClickable" class="font-semibold">{{ props.title }}</h1>
             <div class="py-6 px-2 mx-2 my-2" v-if="props.clickable">
                 <Button 
                     v-if="!isFavorite"
-                    class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                    class="bg-sky-500 hover:bg-sky-600 text-white py-2 px-4 rounded"
                     icon="pi pi-bookmark"
                     @click="addFavorite"
                     >
                 </Button>
                 <Button 
                     v-else
-                    class="bg-blue-700 text-white py-2 px-4 rounded"
+                    class="bg-sky-600 text-white py-2 px-4 rounded"
                     icon="pi pi-bookmark-fill"
                     @click="removeFavorite"
                     >
@@ -119,7 +119,7 @@ onMounted(async () => {
             <p class="text-gray-500 dark:text-gray-400 font-medium text-sm">{{ props.description }}</p>
         </div>
         <div @mouseover="setClickable" @mouseleave="setUnClickable">
-            <p v-if="props.clickable" class="text-gray-500 dark:text-gray-400 font-normal text-sm">Click to see more...</p>
+            <p v-if="props.clickable" class="text-sky-500 dark:text-sky-400 font-semibold text-sm">Click to see more...</p>
             <p v-else class="text-gray-500 dark:text-gray-400 font-bold text-sm">This is your home location</p>
         </div>
     </div>

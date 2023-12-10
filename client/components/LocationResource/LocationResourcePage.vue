@@ -77,7 +77,7 @@ onMounted(async () => {
                             <template #title>
                                 <div class="flex flex-row justify-between">
                                     <p>Posts</p>
-                                    <Button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                                    <Button class="bg-sky-500 hover:bg-sky-600 text-white py-2 px-4 rounded"
                                         icon="pi pi-plus" @click="visible = true">
                                     </Button>
                                 </div>
@@ -97,7 +97,7 @@ onMounted(async () => {
                                             <strong class="font-bold">NOTE: </strong>
                                             <span class="block sm:inline">Needs some content to create post</span>
                                         </div>
-                                        <Button class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded"
+                                        <Button class="bg-sky-500 hover:bg-sky-600 text-white py-3 w-full rounded"
                                             label="Create Post" @click="createPost">
                                         </Button>
                                     </div>

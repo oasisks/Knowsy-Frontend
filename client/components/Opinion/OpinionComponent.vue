@@ -51,7 +51,7 @@ async function deleteOpinion() {
 
 /* Styling for the feeling box */
 .feeling-box {
-  background-color: #007bff;
+  background-color: #0ea5e9;
   color: #fff;
   padding: 5px 10px;
   border-radius: 3px;
@@ -75,7 +75,7 @@ async function deleteOpinion() {
   /* Your button styles */
   background-color: transparent;
   border: none;
-  color: #007bff; /* Change this to your desired button color */
+  color: #0ea5e9; /* Change this to your desired button color */
   cursor: pointer;
 }
 

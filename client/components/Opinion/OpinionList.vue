@@ -134,7 +134,7 @@ h2 {
 .bar {
   width: 30px; /* Width of each bar */
   height: 0; /* Initial height of the bars */
-  background-color: #007bff; /* Bar color */
+  background-color: #0ea5e9; /* Bar color */
   border-radius: 3px;
   transition: height 0.5s ease; /* Smooth transition for height changes */
 }

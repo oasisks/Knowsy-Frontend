@@ -41,10 +41,10 @@ const tabs: any = {
     <div class="mx-10 my-8 py-6 rounded-lg text-center bg-slate-100">
       <div class="mb-10">
         <h1 class="">{{ currentUsername }}</h1>
-        <button class="pure-button pure-button-primary" @click="goToSettings">Settings</button>
+        <button class="bg-slate-400 hover:bg-slate-300 text-white font-semibold px-5 py-3 mr-2 rounded-md" @click="goToSettings">Settings</button>
       </div>
       <button
-        class="bg-slate-400 hover:bg-slate-300 text-white font-semibold px-4 py-3 mr-2 rounded-md "
+        class="bg-sky-500 hover:bg-sky-400 text-white font-semibold px-5 py-3 mr-2 rounded-md"
         v-for="(_, tab) in tabs"
         :key="tab"
         :class="['tab-button', { active: currentTab === tab.toString() }, { underline: currentTab === tab.toString() }]"

@@ -78,13 +78,13 @@ onMounted(async () => {
                 <Button 
                     v-if="!isCreatingPoll"
                     icon="pi pi-plus" 
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded"
                     @click="togglePoll"
                 >
                 </Button>
                 <Button 
                     v-if="isCreatingPoll"
-                    class="bg-red-500 hover:bg-red-700	 text-white py-2 px-4 rounded"
+                    class="bg-red-500 hover:bg-red-700 text-lg text-white py-2 px-4 rounded"
                     label="cancel"
                     @click="togglePoll"
                 >
@@ -129,7 +129,7 @@ onMounted(async () => {
                     </div>
 
                     <Button 
-                        class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded"
+                        class="bg-sky-500 hover:bg-sky-600 text-white py-3 w-full rounded"
                         label="Add an Option"
                         @click="addingOption = true; optionCount.push(``);"
                     >
@@ -141,7 +141,7 @@ onMounted(async () => {
                     >
                     </Button>
                     <div v-if="isBlank" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                        <strong class="font-bold">Oh Oh! </strong>
+                        <strong class="font-bold">Uh Oh! </strong>
                         <span class="block sm:inline">{{ scopedError }}!</span>
                     </div>
                 </div>

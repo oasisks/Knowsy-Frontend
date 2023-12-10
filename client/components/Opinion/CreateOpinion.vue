@@ -78,7 +78,7 @@ async function createOpinion(content: string, feeling: number) {
 /* Styling for the submit button */
 .pure-button-primary {
   border-radius: 8px;
-  background-color: #007bff;
+  background-color: #0ea5e9;
   color: #fff;
   padding: 10px 20px;
   border: none;

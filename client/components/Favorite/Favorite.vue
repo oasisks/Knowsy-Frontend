@@ -9,75 +9,67 @@ const loaded = ref(false);
 let favorites = ref<Array<Record<string, string>>>([]);
 let projects = ref<Array<Record<string, string>>>([]);
 
-
 async function getFavorites() {
-    let response;
-    try {
-        response = await fetchy(`/api/favorites`, "GET");
-    } catch {
-        return;
-    }
-    console.log("response", response);
-    favorites.value = response;
-};
+  let response;
+  try {
+    response = await fetchy(`/api/favorites`, "GET");
+  } catch {
+    return;
+  }
+  console.log("response", response);
+  favorites.value = response;
+}
 
 async function getProject(project: string) {
-    let response;
-    try {
-        response = await fetchy(`/api/locationResources/${project}`, "GET");
-    } catch {
-        return;
-    }
-    return response;
-    
+  let response;
+  try {
+    response = await fetchy(`/api/locationResources/${project}`, "GET");
+  } catch {
+    return;
+  }
+  return response;
 }
 
 async function toLink(projectId: string) {
-    void router.push({path: `/projects/${projectId}`})
+  void router.push({ path: `/projects/${projectId}` });
 }
 
 onBeforeMount(async () => {
   await getFavorites();
   const pros = [];
   for (const favorite of favorites.value) {
-    pros.push(await getProject(favorite.target))
+    pros.push(await getProject(favorite.target));
   }
-  console.log("here", pros)
+  console.log("here", pros);
   projects.value = pros;
   loaded.value = true;
   console.log("frontned", projects);
 });
-
 </script>
 
-
 <template>
-
   <!-- <h2>Favorites</h2> -->
 
   <div class="favorites">
-    <article v-for="project in projects" :key="project._id" class="project">
+    <div class="py-10" v-if="loaded && projects.length !== 0">
+      <article v-for="project in projects" :key="project._id" class="project">
         <Card @click="toLink(project._id)" class="card hover: cursor-pointer">
-            <template #title>
-                {{ project.name }}
-            </template>
-            <template #content>
-                {{ project.description }}
-            </template>
+          <template #title>
+            {{ project.name }}
+          </template>
+          <template #content>
+            {{ project.description }}
+          </template>
         </Card>
-    </article>
+      </article>
+    </div>
+    <p v-else-if="loaded" class="py-8">No saved projects found</p>
+    <p v-else class="mt-6">Loading...</p>
   </div>
-
 </template>
 
-
 <style scoped>
-
 .card {
-    margin: 20px;
+  margin: 20px;
 }
-
 </style>
-
-
-

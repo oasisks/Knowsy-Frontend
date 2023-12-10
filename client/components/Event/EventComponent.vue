@@ -67,7 +67,7 @@ onMounted(async () => {
         <template #title>
             <div class="flex flex-row justify-between">
                 <p>Current Actionables</p>
-                <Button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded" icon="pi pi-plus"
+                <Button class="bg-sky-500 hover:bg-sky-600 text-white py-2 px-4 rounded" icon="pi pi-plus"
                     @click="visible = true">
                 </Button>
             </div>
@@ -93,7 +93,7 @@ onMounted(async () => {
                     <p class="text-sm font-medium">Date:</p>
                     <Calendar v-model="date" showIcon />
 
-                    <Button class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded" label="Create Event"
+                    <Button class="bg-sky-500 hover:bg-sky-700 text-white py-3 w-full rounded" label="Create Event"
                         @click="createEvent">
                     </Button>
                 </div>
@@ -112,7 +112,7 @@ onMounted(async () => {
                                     <p class="text-sm font-medium">Created by: {{ event.author }}</p>
                                     <p class="text-sm font-medium">Happening on: {{ event.date }}</p>
 
-                                    <Button class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded"
+                                    <Button class="bg-sky-500 hover:bg-sky-600 text-white py-3 w-full rounded"
                                         label="Register for Event" @click="registerForEvent(event._id)"></Button>
                                     <!-- <Button v-else class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded" -->
                                     <!-- label="Deregister for Event" @click="deregisterForEvent(event._id)"> </Button> -->
