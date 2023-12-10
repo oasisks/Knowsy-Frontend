@@ -27,6 +27,7 @@ let post = ref<Record<string, string>>({})
                 </div>
 
                 <div class="col-flex-right">
+                    <h1 class="text-3xl font-semibold">Project:</h1>
                     <Card>
                         <template #content>
                             <LocationPanelForPost v-bind:postid="$route.params._id" />

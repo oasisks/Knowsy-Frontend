@@ -49,10 +49,10 @@ onBeforeMount(async () => {
 </script>
 <template>
     <section v-if="loaded">
-        <h2 class="text-lg font-semibold text-sky-500">Post</h2>
-        <p class="text-sm">by @{{ author }}. updated {{ formatDate(updated) }}</p>
+        <h2 class="text-3xl font-semibold text-sky-500 mb-3">Post</h2>
+        <p class="text-sm mb-6">by @{{ author }}. Updated {{ formatDate(updated) }}</p>
 
-        <p class="mb-6">{{ content }}</p>
+        <p class="text-lg text-black mb-6">{{ content }}</p>
 
     </section>
 </template>
