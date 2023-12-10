@@ -4,7 +4,7 @@ import { defineProps, onMounted, ref } from 'vue';
 import { useUserStore } from '../../stores/user';
 import { fetchy } from '../../utils/fetchy';
 import DateFormat from "../DateFormat/DateFormat.vue";
-import EventComponent from '../Event/EventComponent.vue';
+import EventList from '../Event/EventList.vue';
 import SmallMap from "../Map/SmallMap.vue";
 import Poll from "../Poll/Poll.vue";
 import PostsScroll from '../Post/PostsScroll.vue';
@@ -72,7 +72,7 @@ onMounted(async () => {
             <Card>
                 <template #title> {{ title }} </template>
                 <template #subtitle>
-                    <DateFormat :date="updated"/>
+                    <DateFormat :date="updated" />
                 </template>
                 <template #content>
                     <p><b>Project Description: </b>{{ projectDescription }}</p>
@@ -114,7 +114,7 @@ onMounted(async () => {
                         </Card>
                     </div>
                     <div class="actionables">
-                        <EventComponent :projectId="$props.id" />
+                        <EventList :projectId="$props.id" />
                     </div>
                 </template>
 
