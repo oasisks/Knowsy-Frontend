@@ -43,7 +43,6 @@ async function deregisterForEvent(id: string) {
 onMounted(async () => {
     checkIsRegistered();
     loaded.value = true;
-    console.log("loaded properly");
 })
 </script>
 

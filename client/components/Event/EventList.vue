@@ -19,14 +19,9 @@ let loaded = ref(false)
 
 async function getEvents() {
     // this grabs all of the events associated with this project
-    console.log("GETEVENTS CALLED")
     try {
-        console.log("for project w id", props.projectId);
         events.value = await fetchy(`/api/events/target/${props.projectId}`, "GET");
-
-        console.log("GOT EVENTS:", events);
     } catch {
-        console.log("issue with events");
     }
 }
 
@@ -37,7 +32,6 @@ async function createEvent() {
     const query = { name: name.value, type: type.value, date: dateStr, root: props.projectId };
     try {
         const msg = await fetchy(`/api/events`, "POST", { query });
-        console.log(msg);
     } catch {
 
     }
@@ -46,7 +40,6 @@ async function createEvent() {
 
 onMounted(async () => {
     await getEvents();
-    console.log("EVENTS:", events.value)
     loaded.value = true;
 })
 </script>
@@ -87,19 +80,18 @@ onMounted(async () => {
                     </Button>
                 </div>
             </Dialog>
-            <section class="posts" v-if="loaded && events.length !== 0">
-                <div class="space-y-6">
-                    <ScrollPanel style="width: 100%; height:10em;">
+
+            <div class="space-y-6">
+                <ScrollPanel style="width: 100%; height:10em;">
+                    <section class="posts" v-if="loaded && events.length !== 0">
                         <article v-for="event in events" :key="event._id">
                             <EventComponent :event="event" @refreshEvents="getEvents" />
                         </article>
-                    </ScrollPanel>
-                </div>
-            </section>
-            <p v-else-if="loaded">No events found</p>
-            <p v-else>Loading...</p>
-
-
+                    </section>
+                    <p v-else-if="loaded">No events found</p>
+                    <p v-else>Loading...</p>
+                </ScrollPanel>
+            </div>
         </template>
     </Card>
 </template>

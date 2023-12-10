@@ -252,15 +252,13 @@ class Routes {
       opinions = (await Opinion.getOpinions({ root: root })).opinions;
       feelings = (await Opinion.getOpinions({ root: root })).feelings;
     }
-    console.log("opinions", opinions);
-    console.log("feelings", feelings);
+
     if (opinions) {
       const namedOpinions: any = [];
       for (const opinion of opinions) {
         const newOpinion = { ...opinion, author: (await User.getUserById(opinion.author)).username };
         namedOpinions.push(newOpinion);
       }
-      console.log("namedOpinions", namedOpinions);
       return { opinions: namedOpinions, feelings: feelings };
     } else {
       throw new Error("no opinions");
@@ -327,9 +325,7 @@ class Routes {
   @Router.get("/events/target/:_id")
   async getEventsByTarget(_id: ObjectId) {
     const idObj = new ObjectId(_id)
-    console.log("ID is",_id, typeof(_id));
     const events = await Event.getEvents({root:idObj});
-    console.log("DID I GET EVENT?", events);
     return events;
   }
 
@@ -404,9 +400,7 @@ class Routes {
   async getFavorites(session: WebSessionDoc) {
     let favorites;
     const user = WebSession.getUser(session);
-    console.log("here", typeof(user), user)
     favorites = await Favorite.getFavorites({ author: user });
-    console.log("favorites", favorites);
     return favorites;
   }
 }
