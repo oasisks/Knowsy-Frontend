@@ -5,7 +5,7 @@ import { fetchy } from '../../utils/fetchy';
 const props = defineProps(["event"]);
 let loaded = ref(false);
 let author = ref("");
-let attendees = ref([]);
+let attendees = ref<Array<string>>([]);
 
 const getUsernames = async () => {
     try {
@@ -41,7 +41,7 @@ onBeforeMount(async () => {
     <div class="flex flex-col gap-3">
         <p class="text-sm font-medium">Name: {{ props.event.name }}</p>
         <p class="text-sm font-medium">Type: {{ props.event.type }}</p>
-        <p class="text-sm font-medium">Created By: {{ author }}</p>
+        <p class="text-sm font-medium">Created By: @{{ author }}</p>
         <p class="text-sm font-medium">Happening on: {{ props.event.date }}</p>
         <p class="text-sm font-medium">Registered Attendees ({{ attendees.length }}):</p>
         <ul>
