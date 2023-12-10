@@ -49,12 +49,13 @@ export default class EventConcept {
 
     if (members) {
       for (let memberId of members) {
-      console.log(memberId.toString(), user.toString(),memberId.toString() === user.toString());
-      if (memberId.toString() === user.toString()) {
-        console.log("DOESNT REACH");
-        return true;
+        console.log(memberId.toString(), user.toString(), memberId.toString() === user.toString());
+        if (memberId.toString() === user.toString()) {
+          console.log("DOESNT REACH");
+          return true;
+        }
       }
-    }};
+    }
     return false;
   }
 
@@ -82,10 +83,10 @@ export default class EventConcept {
       const newMembers = members.filter((member) => member.toString() !== user.toString());
       // newMembers is a list of people without user
       const update: Partial<EventDoc> = { attendees: newMembers };
-      console.log("before",await this.events.readOne({ _id }))?.attendees);
+      // console.log("before",await this.events.readOne({ _id }))?.attendees);
 
       await this.modifyEvent(_id, update);
-      console.log("after",await this.events.readOne({ _id }))?.attendees);
+      // console.log("after",await this.events.readOne({ _id }))?.attendees);
       return { msg: "User successfully deregistered!" };
     } else {
       throw new NotFoundError(`Event ${_id} not found!`);
@@ -100,12 +101,15 @@ export default class EventConcept {
   }
 
   async getEventsByAttendee(user: ObjectId) {
-    const events = await this.events.readMany({}, {
-      sort: { dateUpdated: -1 },
-    });
+    const events = await this.events.readMany(
+      {},
+      {
+        sort: { dateUpdated: -1 },
+      },
+    );
     const filtered = [];
     for (let event of events) {
-      if (await this.userInRoster(event._id,user)) {
+      if (await this.userInRoster(event._id, user)) {
         filtered.push(event);
       }
     }
@@ -120,5 +124,4 @@ export class AlreadyRegisteredError extends NotAllowedError {
   ) {
     super("{0} is already registered for Event {1}!", user, _id);
   }
-  
 }
