@@ -20,27 +20,28 @@ onMounted(() => {
         timeString.value = `${Math.floor(seconds)} second(s) ago`
     } else if (minutes < 60) {
         const minute = Math.floor(minutes);
-        const remainingSeconds = Math.floor(seconds - minutes * 60);
-        const weekString = ((minute === 1) ? "minute" : "minutes");
-        timeString.value = `${minute} minute(s) and ${remainingSeconds} seconds ago`;
+        const remainingSeconds = Math.floor(seconds - minute * 60);
+        const minuteString = ((minute === 1) ? "minute" : "minutes");
+        timeString.value = `${minute} ${minuteString} and ${remainingSeconds} seconds ago`;
     } else if (hours < 24) {
         const hour = Math.floor(hours);
-        const remainingMinutes = Math.floor(minutes - hours * 60);
-        const weekString = ((hour === 1) ? "hour" : "hours");
-        timeString.value = `${hour} hour(s) and ${remainingMinutes} minutes ago`
+        const remainingMinutes = Math.floor(minutes - hour * 60);
+        const hourString = ((hour === 1) ? "hour" : "hours");
+        timeString.value = `${hour} ${hourString} and ${remainingMinutes} minutes ago`
     } else if (days < 7) {
         const day = Math.floor(days);
-        const remainingHour = Math.floor(hours - days * 24);
-        const weekString = ((day === 1) ? "day" : "days");
-        timeString.value = `${day} day(s) and ${remainingHour} hours ago`;
+        const remainingHour = Math.floor(hours - day * 24);
+        const dayString = ((day === 1) ? "day" : "days");
+        timeString.value = `${day} ${dayString} and ${remainingHour} hours ago`;
     } else if (weeks < 4.345) {
         const week = Math.floor(weeks);
-        const remainingDays = Math.floor(days - weeks * 4.345);
+        const remainingDays = Math.floor(days - week * 7);
         const weekString = ((week === 1) ? "week" : "weeks");
         timeString.value = `${week} ${weekString} and ${remainingDays} days ago`;
     } else if (months < 12) {
         const month = Math.floor(months);
-        timeString.value = `${month} ago`;
+        const monthString = ((month === 1) ? "month" : "months");
+        timeString.value = `${month} ${monthString} ago`;
     } else {
         const options = { month: "long" };
         const monthName = new Intl.DateTimeFormat("en-US", options).format(props.date);

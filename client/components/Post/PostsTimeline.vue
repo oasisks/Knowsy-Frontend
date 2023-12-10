@@ -3,7 +3,7 @@ import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import Timeline from 'primevue/timeline';
-import { formatDate } from "../../utils/formatDate";
+import DateFormat from "../DateFormat/DateFormat.vue";
 
 const props = defineProps(["posts"]);
 const emit = defineEmits(["editPost", "refreshPosts"]);
@@ -29,7 +29,8 @@ async function goToPost(postid: string) {
                     <div class="flex flex-col gap-2">
                         <h5 class="text-xl font-bold dark:text-white">Post {{ slotProps.index + 1 }}</h5>
                         <p>{{ slotProps.item.content }}</p>
-                        <p>{{ formatDate(slotProps.item.dateCreated) }}</p>
+                        <DateFormat :date="new Date(slotProps.item.dateCreated)"/>
+                        <!-- <p>{{ formatDate(slotProps.item.dateCreated) }}</p> -->
                     </div>
                 </template>
             </Card>
