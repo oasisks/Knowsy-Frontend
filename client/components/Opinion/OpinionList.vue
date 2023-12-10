@@ -44,8 +44,8 @@ onBeforeMount(async () => {
 
 <template>
 
-  <h2>Opinions Summary</h2>
-  <div class="bar-graph">
+  <h2 class="mt-10">Opinions Summary</h2>
+  <div class="bar-graph mb-10">
     <div v-for="(amount, index) in feelings.slice(1,)" :key="index" class="bar-container">
       <div class="bar" :style="{ height: amount * 30 + 'px' }">
         <div class="amount">{{ amount }}</div>
@@ -54,8 +54,10 @@ onBeforeMount(async () => {
     </div>
   </div>
 
-  <h2>Add Opinion</h2>
-  <CreateOpinion v-bind:rootId="props.rootId" @refreshOpinions="getOpinions"/>
+  <div class="mb-10">
+    <h2>Add Opinion</h2>
+    <CreateOpinion v-bind:rootId="props.rootId" @refreshOpinions="getOpinions"/>
+  </div>
 
   <h2>All Comments</h2>
   <div class="opinions">
