@@ -15,8 +15,6 @@ const loaded = ref(false);
 const emit = defineEmits(["editPost", "refreshPosts"]);
 const { currentUsername } = storeToRefs(useUserStore());
 
-console.log("hella tings, but its been accessed")
-
 async function getPostFromId() {
     let post;
     try {
@@ -25,9 +23,7 @@ async function getPostFromId() {
         project.value = post.project;
         content.value = post.content;
         updated.value = post.dateUpdated;
-        console.log("post values were found and set", post)
     } catch (_) {
-        console.log("catching", _);
     }
     return post;
 }
