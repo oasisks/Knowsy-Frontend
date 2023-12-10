@@ -43,8 +43,30 @@ export default class EventConcept {
     }
   }
 
-  async registerUser(_id: ObjectId, user: ObjectId) {
+  async userInRoster(_id: ObjectId, user: ObjectId) {
+    // return true if user in roster
     const members = (await this.events.readOne({ _id }))?.attendees;
+
+    console.log("ROSTER CHECK");
+    if (members) {
+      for (let memberId of members) {
+      console.log(memberId.toString(), user.toString(),memberId.toString() === user.toString());
+      if (memberId.toString() === user.toString()) {
+        console.log("DOESNT REACH");
+        return true;
+      }
+    }});
+    return false;
+  }
+
+  async registerUser(_id: ObjectId, user: ObjectId) {
+    const registered = await this.userInRoster(_id, user);
+    if (registered) {
+      console.log("ERROR DETECTED");
+      throw new AlreadyRegisteredError(user, _id);
+    }
+    const members = (await this.events.readOne({ _id }))?.attendees;
+
     if (members) {
       members.push(user);
       const update: Partial<EventDoc> = { attendees: members };
@@ -76,11 +98,12 @@ export default class EventConcept {
   }
 }
 
-// export class OpinionAuthorNotMatchError extends NotAllowedError {
-//   constructor(
-//     public readonly author: ObjectId,
-//     public readonly _id: ObjectId,
-//   ) {
-//     super("{0} is not the author of Opinion {1}!", author, _id);
-//   }
-// }
+export class AlreadyRegisteredError extends NotAllowedError {
+  constructor(
+    public readonly user: ObjectId,
+    public readonly _id: ObjectId,
+  ) {
+    super("{0} is already registered for Event {1}!", user, _id);
+  }
+  
+}
