@@ -311,6 +311,19 @@ class Routes {
     return await Event.deregisterUser(_id, user);
   }
 
+  @Router.get("/events/registered")
+  async getEventsByAttendee(session: WebSessionDoc) {
+    const user = WebSession.getUser(session);
+    return await Event.getEventsByAttendee(user);
+  }
+
+  @Router.get("/events/isregistered/:id")
+  async getIsRegistered(session: WebSessionDoc, id: string) {
+    const user = WebSession.getUser(session);
+    let idObj = new ObjectId(id);
+    return await Event.userInRoster(idObj, user);
+  }
+
   @Router.get("/events/target/:_id")
   async getEventsByTarget(_id: ObjectId) {
     const idObj = new ObjectId(_id)

@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
-import EventComponent from "../Event/EventComponent.vue";
+import EventList from "../Event/EventList.vue";
 
 const props = defineProps(["resourceId"]);
 const resource = ref<Record<string, any>>({});
@@ -51,6 +51,6 @@ onBeforeMount(async () => {
       </div>
     </div>
 
-    <EventComponent :projectId="props.resourceId" />
+    <EventList :projectId="props.resourceId" />
   </section>
 </template>

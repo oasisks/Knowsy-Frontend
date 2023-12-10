@@ -47,7 +47,6 @@ export default class EventConcept {
     // return true if user in roster
     const members = (await this.events.readOne({ _id }))?.attendees;
 
-    console.log("ROSTER CHECK");
     if (members) {
       for (let memberId of members) {
       console.log(memberId.toString(), user.toString(),memberId.toString() === user.toString());
@@ -55,7 +54,7 @@ export default class EventConcept {
         console.log("DOESNT REACH");
         return true;
       }
-    }});
+    }};
     return false;
   }
 
@@ -80,10 +79,13 @@ export default class EventConcept {
   async deregisterUser(_id: ObjectId, user: ObjectId) {
     const members = (await this.events.readOne({ _id }))?.attendees;
     if (members) {
-      const newMembers = members.filter((member) => member !== user);
+      const newMembers = members.filter((member) => member.toString() !== user.toString());
       // newMembers is a list of people without user
       const update: Partial<EventDoc> = { attendees: newMembers };
+      console.log("before",await this.events.readOne({ _id }))?.attendees);
+
       await this.modifyEvent(_id, update);
+      console.log("after",await this.events.readOne({ _id }))?.attendees);
       return { msg: "User successfully deregistered!" };
     } else {
       throw new NotFoundError(`Event ${_id} not found!`);
@@ -95,6 +97,19 @@ export default class EventConcept {
       sort: { dateUpdated: -1 },
     });
     return events;
+  }
+
+  async getEventsByAttendee(user: ObjectId) {
+    const events = await this.events.readMany({}, {
+      sort: { dateUpdated: -1 },
+    });
+    const filtered = [];
+    for (let event of events) {
+      if (await this.userInRoster(event._id,user)) {
+        filtered.push(event);
+      }
+    }
+    return filtered;
   }
 }
 
