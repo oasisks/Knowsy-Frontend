@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import 'primeicons/primeicons.css';
 import Calendar from 'primevue/calendar';
+
 import { defineProps, onMounted, ref } from 'vue';
 import { fetchy } from '../../utils/fetchy';
+import EventDetails from "./EventDetails.vue";
 
 const props = defineProps(["projectId"]);
 
 let visible = ref(false);
+let detailsVisible = ref(false);
 let name = ref("Default Event Name");
 let type = ref("Rally");
 let date = ref(Date());
@@ -55,6 +59,15 @@ async function deregisterForEvent(id: string) {
     }
 }
 
+const getAuthorUsername = async (authorid: string) => {
+    try {
+        let user = await fetchy(`/api/users/id/${authorid}`, "GET", {});
+        return user.username;
+    } catch {
+        return;
+    }
+};
+
 onMounted(async () => {
     await getEvents();
     console.log("EVENTS:", events.value)
@@ -103,13 +116,20 @@ onMounted(async () => {
                     <ScrollPanel style="width: 100%; height:10em;">
                         <article v-for="event in events" :key="event._id">
                             <Card>
-                                <template #header>
-                                    <p>{{ event.name }}</p>
-
+                                <template #title>
+                                    <div class="flex flex-row justify-between">
+                                        <p>{{ event.name }}</p>
+                                        <Button icon="pi pi-ellipsis-v" @click="detailsVisible = true">
+                                        </Button>
+                                    </div>
                                 </template>
                                 <template #content>
+                                    <Dialog v-model:visible="detailsVisible" modal header="Event Details"
+                                        :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+                                        :dismissable-mask="true" v-on:after-hide="name = ''">
+                                        <EventDetails :event="event" />
+                                    </Dialog>
                                     <p class="text-sm font-medium">Type: {{ event.type }}</p>
-                                    <p class="text-sm font-medium">Created by: {{ event.author }}</p>
                                     <p class="text-sm font-medium">Happening on: {{ event.date }}</p>
 
                                     <Button class="bg-sky-500 hover:bg-sky-600 text-white py-3 w-full rounded"
