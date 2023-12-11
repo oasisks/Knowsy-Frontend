@@ -11,7 +11,9 @@ function openMarker(state: boolean) {
 
 <template>
     <Card>
-        <template #title> Map</template>
+        <template #title>
+            <div class="text-black">Map</div>
+        </template>
         <template #content>
             {{  }}
             <GMapMap style="height: 35vh;" :center="props.projectCoords" :zoom="14">

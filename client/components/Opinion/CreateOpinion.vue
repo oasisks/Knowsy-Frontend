@@ -37,7 +37,7 @@ async function createOpinion(content: string, feeling: number) {
     <fieldset>
       <input class="addComment" type="text" v-model="contentInput" placeholder="comment" required/>
       <button type="submit" class="pure-button-primary pure-button">Send</button>
-      <div class="card flex justify-content-center">
+      <div class="card flex justify-content-center mt-2">
         <SelectButton v-model="selectedOption" :options="options" aria-labelledby="basic" 
         @click="feelingInput = options.indexOf(selectedOption) + 1"/>
       </div>

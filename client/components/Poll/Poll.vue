@@ -69,7 +69,7 @@ onMounted(async () => {
   <Card>
     <template #title>
       <div class="row-flex">
-        <p>Polls</p>
+        <p class="text-black">Polls</p>
         <Button v-if="!isCreatingPoll" icon="pi pi-plus" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded" @click="togglePoll"> </Button>
         <Button v-if="isCreatingPoll" class="bg-red-500 hover:bg-red-700 text-lg text-white py-2 px-4 rounded" label="cancel" @click="togglePoll"> </Button>
       </div>
