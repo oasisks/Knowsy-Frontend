@@ -11,7 +11,7 @@ const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 <template>
   <main class="sm:mx-12 sm:my-10 mx-4 my-3">
     <section v-if="isLoggedIn">
-      <div class="grid grid-cols-3">
+      <div class="grid grid-cols-3 gap-x-10">
         <div class="col-span-2">
           <RadiusResourceOverviewComponent v-bind:resourceId="$route.params._id" />
           <OpinionList v-bind:rootId="$route.params._id" :profile="false" />
