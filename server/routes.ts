@@ -324,8 +324,8 @@ class Routes {
 
   @Router.get("/events/target/:_id")
   async getEventsByTarget(_id: ObjectId) {
-    const idObj = new ObjectId(_id)
-    const events = await Event.getEvents({root:idObj});
+    const idObj = new ObjectId(_id);
+    const events = await Event.getEvents({ root: idObj });
     return events;
   }
 
