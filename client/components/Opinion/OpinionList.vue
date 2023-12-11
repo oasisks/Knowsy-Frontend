@@ -13,40 +13,36 @@ let opinions = ref<Array<Record<string, string>>>([]);
 let feelings = ref([0, 0, 0, 0, 0, 0]);
 const options = ref(["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]);
 
-
 async function getOpinions() {
-    let query;
-    let response;
+  let query;
+  let response;
 
-    if (props.profile) {
-      query = { author: props.rootId };
-    } else {
-      query = { root: props.rootId }
-    }
-    console.log("hello here", props.rootId, typeof props.profile, query);
-    try {
-        response = await fetchy(`/api/opinions`, "GET", { query });
-    } catch {
-        return;
-    }
-    console.log(response)
-    opinions.value = response.opinions;
-    feelings.value = response.feelings;
-};
+  if (props.profile) {
+    query = { author: props.rootId };
+  } else {
+    query = { root: props.rootId };
+  }
+  console.log("hello here", props.rootId, typeof props.profile, query);
+  try {
+    response = await fetchy(`/api/opinions`, "GET", { query });
+  } catch {
+    return;
+  }
+  console.log(response);
+  opinions.value = response.opinions;
+  feelings.value = response.feelings;
+}
 
 onBeforeMount(async () => {
   await getOpinions();
   loaded.value = true;
 });
-
 </script>
 
-
 <template>
-
-  <h2 class="mt-10">Opinions Summary</h2>
+  <h2 class="mt-10 text-2xl text-black font-bold mb-5">Opinions Summary</h2>
   <div class="bar-graph mb-10">
-    <div v-for="(amount, index) in feelings.slice(1,)" :key="index" class="bar-container">
+    <div v-for="(amount, index) in feelings.slice(1)" :key="index" class="bar-container">
       <div class="bar" :style="{ height: amount * 30 + 'px' }">
         <div class="amount">{{ amount }}</div>
       </div>
@@ -55,31 +51,19 @@ onBeforeMount(async () => {
   </div>
 
   <div class="mb-10">
-    <h2>Add Opinion</h2>
-    <CreateOpinion v-bind:rootId="props.rootId" @refreshOpinions="getOpinions"/>
+    <h2 class="mt-10 text-xl text-black font-bold mb-5">Add Opinion</h2>
+    <CreateOpinion v-bind:rootId="props.rootId" @refreshOpinions="getOpinions" />
   </div>
 
-  <h2>All Comments</h2>
+  <h2 class="mt-10 text-xl text-black font-bold mb-5">All Opinions</h2>
   <div class="opinions">
     <article v-for="opinion in opinions" :key="opinion._id" class="opinion">
-      <OpinionComponent v-bind:opinion="opinion" @refreshOpinions="getOpinions"/>
+      <OpinionComponent v-bind:opinion="opinion" @refreshOpinions="getOpinions" />
     </article>
   </div>
-
 </template>
 
-
 <style scoped>
-
-/* Styling for the h2 element */
-h2 {
-  font-size: 20px; /* Font size */
-  font-weight: bold; /* Font weight */
-  color: #333; /* Text color */
-  margin-bottom: 10px; /* Bottom margin */
-  /* Other styling properties as needed */
-}
-
 .newOpinion {
   display: flex;
   flex-direction: row;
@@ -89,17 +73,14 @@ h2 {
   padding: 20px; /* Add padding for better visualization */
 }
 
-
 /* Styling for the opinion comment container */
 .opinion {
   border: 1px solid #ccc;
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 5px;
-  width: 100%
+  width: 100%;
 }
-
-
 
 /* Styling for the bar graph section */
 .bar-graph {
@@ -159,8 +140,4 @@ h2 {
 .bar:hover .amount {
   opacity: 1;
 }
-
 </style>
-
-
-

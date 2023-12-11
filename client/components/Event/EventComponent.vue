@@ -26,6 +26,7 @@ async function registerForEvent(id: string) {
     try {
         await fetchy(`/api/event/register/${id}`, "POST");
         emit("refreshEvents");
+        isRegistered.value = true;
     } catch {
 
     }
@@ -35,6 +36,7 @@ async function deregisterForEvent(id: string) {
     try {
         await fetchy(`/api/event/${id}`, "DELETE");
         emit("refreshEvents");
+        isRegistered.value = false;
     } catch {
 
     }

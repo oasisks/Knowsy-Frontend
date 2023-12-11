@@ -7,10 +7,10 @@ import { computed, ref } from "vue";
 
 const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 
-const currentTab = ref("Posts");
+const currentTab = ref("Project Updates");
 
 const tabs: any = {
-  Posts: PostsFeedComponent,
+  "Project Updates": PostsFeedComponent,
   Announcements: AnnouncementsFeedComponent,
 };
 </script>

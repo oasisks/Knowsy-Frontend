@@ -34,7 +34,7 @@ onBeforeMount(async () => {
 
 <template>
   <section v-if="loaded && resource !== null">
-    <SmallMap :project-coords="resourceCoords" />
+    <SmallMap :project-coords="resourceCoords" class="mb-8" />
     <Poll :id="$props.resourceId" />
   </section>
 </template>

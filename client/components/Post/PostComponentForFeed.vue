@@ -49,7 +49,7 @@ onBeforeMount(async () => {
 <template>
   <div class="px-8 py-4 bg-sky-50 rounded-lg hover:shadow">
     <a :href="`/posts/${props.post._id}`">
-      <h2 class="text-lg font-semibold text-sky-500">Post</h2>
+      <h2 class="text-lg font-semibold text-sky-500">Project Update</h2>
       <h1 class="text-2xl font-bold">Update to "{{ projectName }}"</h1>
       <p class="mb-6">{{ props.post.content }}</p>
       <div class="text-sm">
