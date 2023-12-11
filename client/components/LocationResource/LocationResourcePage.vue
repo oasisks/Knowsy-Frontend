@@ -120,7 +120,7 @@ onMounted(async () => {
       </Card>
     </div>
     <div class="col-flex-right">
-      <SmallMap :project-coords="projectCoords" />
+      <SmallMap :project-coords="projectCoords" class="mb-8" />
       <Poll :id="$props.id" />
     </div>
   </div>
