@@ -15,7 +15,6 @@ const frequency = ref<Map<string, number>>(new Map());
 const percents = ref<Map<string, number>>(new Map());
 const isOwner = ref(false);
 
-
 // we need the ability for the user to delete the poll if the author of the poll
 // is the current user
 
@@ -77,8 +76,12 @@ onMounted(async () => {
 })
 
 onBeforeUpdate(async() => {
-    frequency.value = new Map();
-    percents.value = new Map();
+    const map = new Map();
+    props.poll.options.forEach((option: any) => {   
+        map.set(option, 0);
+    })
+    frequency.value = new Map(map);
+    percents.value = new Map(map);
     await changefrequency();
 })
 </script>
@@ -87,33 +90,38 @@ onBeforeUpdate(async() => {
 <div v-if="finished" class="w-full flex flex-col gap-4 p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700">
     <div class="flex flex-row justify-between">
         <h5 class="text-xl font-bold dark:text-white">{{ props.poll.prompt }}</h5>
-        <Button
-            v-if="isOwner"
-            class="hover:bg-red-100 text-red-700 rounded"
-            icon="pi pi-trash"
-            @click="deletePoll"
-        >
-        </Button>
     </div>
     <div class="flex flex-col gap-3">
         <div v-for="option in props.poll.options">
-            <Button
-                v-if="userOption === option"
-                class="outline outline-2 outline-offset-2 outline-gray-300 bg-cyan-500 text-white font-bold py-2 w-full rounded"
-            >
-                <div class="flex flex-row justify-between w-full">
-                    <p class="text-black pl-2.5 py-2 ml-0.5">{{ option }}</p>
-                    <p class="text-gray-200 pl-2.5 py-2 mr-2">{{ percents.get(option)! * 100 }}%</p>
-                </div>
-            </Button>
-            <Button
-                v-else
-                class="outline outline-2 outline-offset-2 outline-gray-300 bg-cyan-50 hover:bg-cyan-500 text-white font-bold py-2 w-full rounded"
-                @click="vote(option);"
-            >
-            <p class="text-black pl-2.5 py-2 ml-0.5">{{ option }}</p>
-            </Button>
-
+            <div v-if="userOption === ''">
+                <Button
+                    class="outline outline-2 outline-offset-2 outline-gray-300 bg-cyan-50 hover:bg-cyan-500 text-white font-bold py-2 w-full rounded"
+                    @click="vote(option);"
+                >
+                <p class="text-black pl-2.5 py-2 ml-0.5">{{ option }}</p>
+                </Button>
+            </div>
+            <div v-else>
+                <Button
+                    v-if="userOption === option"
+                    class="outline outline-2 outline-offset-2 outline-gray-300 bg-cyan-500 text-white font-bold py-2 w-full rounded"
+                >
+                    <div class="flex flex-row justify-between w-full">
+                        <p class="text-black pl-2.5 py-2 ml-0.5">{{ option }}</p>
+                        <p class="text-gray-200 pl-2.5 py-2 mr-2">{{ percents.get(option)! * 100 }}%</p>
+                    </div>
+                </Button>
+                <Button
+                    v-else
+                    class="outline outline-2 outline-offset-2 outline-gray-300 bg-cyan-50 hover:bg-cyan-500 text-white font-bold py-2 w-full rounded"
+                    @click="vote(option);"
+                >
+                    <div class="flex flex-row justify-between w-full">
+                        <p class="text-black pl-2.5 py-2 ml-0.5">{{ option }}</p>
+                        <p class="text-black pl-2.5 py-2 mr-2">{{ percents.get(option)! * 100 }}%</p>
+                    </div>
+                </Button>
+            </div>
         </div>
     </div>
 </div>
