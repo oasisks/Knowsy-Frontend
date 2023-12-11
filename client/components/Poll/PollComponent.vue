@@ -108,7 +108,7 @@ onBeforeUpdate(async() => {
                 >
                     <div class="flex flex-row justify-between w-full">
                         <p class="text-black pl-2.5 py-2 ml-0.5">{{ option }}</p>
-                        <p class="text-gray-200 pl-2.5 py-2 mr-2">{{ percents.get(option)! * 100 }}%</p>
+                        <p class="text-gray-200 pl-2.5 py-2 mr-2">{{ (percents.get(option)! * 100).toFixed(2) }}%</p>
                     </div>
                 </Button>
                 <Button
@@ -118,7 +118,7 @@ onBeforeUpdate(async() => {
                 >
                     <div class="flex flex-row justify-between w-full">
                         <p class="text-black pl-2.5 py-2 ml-0.5">{{ option }}</p>
-                        <p class="text-black pl-2.5 py-2 mr-2">{{ percents.get(option)! * 100 }}%</p>
+                        <p class="text-black pl-2.5 py-2 mr-2">{{ (percents.get(option)! * 100).toFixed(2) }}%</p>
                     </div>
                 </Button>
             </div>
