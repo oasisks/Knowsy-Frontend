@@ -55,7 +55,7 @@ onBeforeMount(async () => {
     <CreateOpinion v-bind:rootId="props.rootId" @refreshOpinions="getOpinions" />
   </div>
 
-  <h2 class="mt-10 text-2xl text-black font-bold mb-5">All Opinions</h2>
+  <h2 class="mt-10 text-xl text-black font-bold mb-5">All Opinions</h2>
   <div class="opinions">
     <article v-for="opinion in opinions" :key="opinion._id" class="opinion">
       <OpinionComponent v-bind:opinion="opinion" @refreshOpinions="getOpinions" />

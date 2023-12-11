@@ -48,7 +48,7 @@ onBeforeMount(async () => {
 <template>
   <div>
     <div class="row">
-      <h2 class="text-2xl font-bold mb-8" v-if="!searchAuthor">Posts:</h2>
+      <h2 class="text-2xl font-bold mb-8" v-if="!searchAuthor">Project Updates:</h2>
       <h2 v-else>Posts by {{ searchAuthor }}:</h2>
       <SearchPostForm @getPostsByAuthor="getPosts" />
     </div>
