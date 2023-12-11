@@ -319,8 +319,8 @@ class Routes {
   async getIsRegistered(session: WebSessionDoc, id: string) {
     const user = WebSession.getUser(session);
     let idObj = new ObjectId(id);
-    return await Event.userInRoster(user, idObj);
-  }
+    return await Event.userInRoster(idObj, user);
+  } 
 
   @Router.get("/events/target/:_id")
   async getEventsByTarget(_id: ObjectId) {
