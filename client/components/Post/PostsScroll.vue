@@ -19,7 +19,7 @@ async function goToPost(postid: string) {
         <Card v-for="post, index in props.posts" class="shadow-md hover:shadow-xl hover:cursor-pointer" @click="goToPost(post._id)">
             <template #content>
                     <div class="flex flex-col gap-2">
-                        <h5 class="text-xl font-bold dark:text-white">Post {{ index + 1 }}</h5>
+                        <h5 class="text-xl font-bold dark:text-white">Update {{ index + 1 }}</h5>
                         <p>{{ post.content }}</p>
                         <DateFormat :date="new Date(post.dateCreated)"/>
                 </div>
