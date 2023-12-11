@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
+import DateFormat from "../DateFormat/DateFormat.vue";
 import EventList from "../Event/EventList.vue";
 
 const props = defineProps(["resourceId"]);
@@ -42,7 +43,8 @@ onBeforeMount(async () => {
           <!-- <p class="text-lg">{{ JSON.parse(date).info }} on {{ JSON.parse(date).time }}</p> -->
           <!-- <p class="text-lg">{{ JSON.parse(date.toString()) }}</p> -->
           <!-- TODO: reformat this -->
-          <p class="text-lg">{{ date.time }}</p>
+          <!-- <p class="text-lg">{{ date.time }}</p> -->
+          <DateFormat :date="new Date(date.time)" />
         </article>
       </div>
       <div>
