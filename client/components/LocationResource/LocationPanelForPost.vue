@@ -11,6 +11,7 @@ const userId = ref<Record<string, string>>({});
 const projectId = ref("");
 const name = ref("");
 const description = ref("default description");
+const clickable = ref(false);
 
 const isFavorite = ref(false);
 const { currentUsername } = storeToRefs(useUserStore());
@@ -30,7 +31,9 @@ async function getProject() {
 }
 
 function goToProjectPage() {
-    void router.push({ path: `/projects/${projectId.value}` });
+    if (clickable.value) {
+        void router.push({ path: `/projects/${projectId.value}` });
+    }
 }
 
 async function getPosts() {
@@ -73,6 +76,13 @@ async function isFavorited() {
     }
 }
 
+function setClickablle() {
+    clickable.value = true;
+}
+
+function setUnClickable() {
+    clickable.value = false;
+}
 
 onMounted(async () => {
     await getProject();
@@ -83,9 +93,9 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="cursor-pointer" @click="goToProjectPage()">
+    <div @click="goToProjectPage()">
         <div class="flex flex-row justify-between">
-            <h1 class="font-semibold">{{ name }}</h1>
+            <h1 @mouseover="setClickablle" @mouseleave="setUnClickable" class="font-semibold cursor-pointer">{{ name }}</h1>
             <div class="flex py-6 px-2">
                 <Button v-if="!isFavorite" class="bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded"
                     icon="pi pi-bookmark" @click="addFavorite">
@@ -94,13 +104,13 @@ onMounted(async () => {
                 </Button>
             </div>
         </div>
-        <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Description: </p>
-        <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mb-6">{{ description }}</p>
-        <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Project Updates: </p>
+        <p @mouseover="setClickablle" @mouseleave="setUnClickable" class="text-gray-500 dark:text-gray-400 font-bold text-lg cursor-pointer">Description: </p>
+        <p @mouseover="setClickablle" @mouseleave="setUnClickable" class="text-gray-500 dark:text-gray-400 font-medium text-sm mb-6 cursor-pointer">{{ description }}</p>
+        <p @mouseover="setClickablle" @mouseleave="setUnClickable" class="text-gray-500 dark:text-gray-400 font-bold text-lg cursor-pointer">Project Updates: </p>
         <ScrollPanel style="width: 100%; height: 20em;">
             <PostsScroll v-bind:posts="posts" />
         </ScrollPanel>
-        <p class="mt-10 text-sky-500 dark:text-gray-400 font-normal text-sm">Click to see more...</p>
+        <p @mouseover="setClickablle" @mouseleave="setUnClickable" class="mt-10 text-sky-500 dark:text-gray-400 font-normal text-sm cursor-pointer">Click to see more...</p>
     </div>
 </template>
 
