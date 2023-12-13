@@ -53,6 +53,15 @@ async function addFavorite() {
     await isFavorited();
 }
 
+async function removeFavorite() {
+    try {
+        const msg = await fetchy(`/api/favorites/${projectId.value}`, "DELETE");
+    } catch {
+
+    }
+    await isFavorited();
+}
+
 async function getUserID() {
     try {
         userId.value = await fetchy(`/api/users/${currentUsername.value}`, "GET");
@@ -100,7 +109,8 @@ onMounted(async () => {
                 <Button v-if="!isFavorite" class="bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded"
                     icon="pi pi-bookmark" @click="addFavorite">
                 </Button>
-                <Button v-else class="bg-sky-700 text-white py-2 px-4 rounded" icon="pi pi-bookmark-fill">
+                <Button v-else class="bg-sky-700 text-white py-2 px-4 rounded" icon="pi pi-bookmark-fill"
+                    @click="removeFavorite">
                 </Button>
             </div>
         </div>

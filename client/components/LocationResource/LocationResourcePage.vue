@@ -9,6 +9,8 @@ import SmallMap from "../Map/SmallMap.vue";
 import Poll from "../Poll/Poll.vue";
 import PostsScroll from "../Post/PostsScroll.vue";
 
+const { currentUsername } = storeToRefs(useUserStore());
+
 const props = defineProps(["id"]);
 const postContent = ref("");
 const title = ref("Default Title");
@@ -17,10 +19,12 @@ const posts = ref<Array<Record<string, string>>>([]);
 // fix this later, updated will change base on if its been updated x minutes ago, x hours ago, x days ago, x weeks ago, and x years ago
 const updated = ref(new Date());
 const projectDescription = ref("Default Description");
-const events = ref([]);
 const projectCoords = ref({ lng: 0, lat: 0 });
 const visible = ref(false);
 const finished = ref(false);
+
+const userId = ref<Record<string, string>>({});
+const isFavorite = ref(false);
 
 async function getProject() {
   try {
@@ -52,11 +56,48 @@ async function createPost() {
   } catch {}
   await getPosts();
 }
-const { userCoords } = storeToRefs(useUserStore());
+
+
+
+async function isFavorited() {
+    try {
+        const favorites = await fetchy(`/api/favorites`, "GET")
+        // console.log(favorites, props.id);
+        const relatedFavorites = favorites.filter((favorite: Record<string, string>) => {
+            return favorite.target === props.id;
+        })
+        isFavorite.value = relatedFavorites.length > 0;
+    } catch {
+
+    }
+}
+
+async function addFavorite() {
+    try {
+        const msg = await fetchy(`/api/favorites/${props.id}`, "POST");
+    } catch {
+
+    }
+    await isFavorited();
+    // emit("refreshFavorites");
+    // emit("updateMarkers", props.index, true)
+}
+async function removeFavorite() {
+    try {
+        const msg = await fetchy(`/api/favorites/${props.id}`, "DELETE");
+    } catch {
+
+    }
+    await isFavorited();
+    // emit("refreshFavorites");
+    // emit("updateMarkers", props.index, false)
+}
 
 onMounted(async () => {
   await getProject();
   await getPosts();
+  // await getUserID();
+  await isFavorited();
   finished.value = true;
 });
 </script>
@@ -67,8 +108,17 @@ onMounted(async () => {
       <Card class="bg-zinc-50">
         <template #title>
           <div class="text-xl text-sky-500 mb-4">Development Project</div>
-          <div class="text-3xl text-black">{{ title }}</div>
+          <div class="flex items-center justify-between">
+            <div class="text-3xl text-black">{{ title }}</div>
+            <div class="bookmark-button">
+              <Button v-if="!isFavorite" class="bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded" icon="pi pi-bookmark" @click="addFavorite">
+              </Button>
+              <Button v-else class="bg-sky-700 text-white py-2 px-4 rounded" icon="pi pi-bookmark-fill" @click="removeFavorite">
+              </Button>
+            </div>
+          </div>
         </template>
+
         <template #subtitle>
           <DateFormat :date="updated" />
         </template>
@@ -128,6 +178,10 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+
+.bookmark-button {
+  text-align: right;
+}
 .row-flex {
   display: flex;
   flex-direction: row;
