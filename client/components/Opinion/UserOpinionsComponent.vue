@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
-import CreateOpinion from "./CreateOpinion.vue";
 import OpinionComponent from "./OpinionComponent.vue";
-import LoginFormVue from "../Login/LoginForm.vue";
 
 const loaded = ref(false);
 const props = defineProps(["rootId", "profile"]);
@@ -48,12 +44,12 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <!-- <h2>All Comments</h2> -->
-  <div class="opinions" v-if="loaded && opinions.length !== 0">
+  <div class="flex flex-col mx-64 mt-8" v-if="loaded && opinions.length !== 0">
     <article v-for="opinion in opinions" :key="opinion._id" class="opinion">
       <div class="bg-white">
         <OpinionComponent v-bind:opinion="opinion" @refreshOpinions="getOpinions" />
       </div>
+
     </article>
   </div>
   <p v-else-if="loaded" class="py-8">No opinions found</p>
@@ -70,7 +66,6 @@ onBeforeMount(async () => {
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 5px;
-  width: 60%;
   background-color: white;
 }
 
