@@ -3,8 +3,8 @@ import router from "@/router";
 import { defineEmits, defineProps, onMounted, ref } from 'vue';
 import { fetchy } from "../../utils/fetchy";
 
-const props = defineProps(["title", "description", "timeline", "status", "home", "opened", "clickable", "id", "currentUsername"]);
-const emit = defineEmits(["setMarker"])
+const props = defineProps(["title", "description", "timeline", "status", "home", "opened", "clickable", "id", "currentUsername", "index"]);
+const emit = defineEmits(["setMarker", "refreshFavorites", "updateMarkers"])
 const clickable = ref(false);
 const userId = ref<Record<string, string>>({});
 const isFavorite = ref(false);
@@ -34,6 +34,8 @@ async function addFavorite() {
 
     }
     await isFavorited();
+    emit("refreshFavorites");
+    emit("updateMarkers", props.index, true)
 }
 async function removeFavorite() {
     try {
@@ -42,6 +44,8 @@ async function removeFavorite() {
 
     }
     await isFavorited();
+    emit("refreshFavorites");
+    emit("updateMarkers", props.index, false)
 }
 
 async function getUserID() {

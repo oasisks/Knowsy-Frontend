@@ -9,6 +9,29 @@ import LocationPanel from "./LocationPanel.vue";
 const { currentUsername, isLoggedIn, userCoords, rad } = storeToRefs(useUserStore());
 const ready = ref(false);
 const currentMarkerId = ref(-1);
+const homeIcon = ref<Record<string, any>>({});
+const regularIcon = ref<Record<string, any>>({});
+const favoriteIcon = ref<Record<string, any>>({});
+const favorites = ref<Set<string>>(new Set());
+
+homeIcon.value = {
+    url: "https://maps.google.com/mapfiles/kml/paddle/wht-stars.png",
+    scaledSize: {width: 40, height: 40},
+    labelOrigin: {x: 16, y: -10}
+}
+
+regularIcon.value = {
+  url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+  scaledSize: {width: 40, height: 40},
+  labelOrigin: {x: 16, y: -10}
+}
+
+favoriteIcon.value = {
+  url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+  scaledSize: {width: 40, height: 40},
+  labelOrigin: {x: 16, y: -10},
+}
+
 const options = ref({
   mapId: 'eeb313ac772d983a'
   // styles: [
@@ -20,10 +43,23 @@ const options = ref({
 // first thing we need is to define the center location
 // we either get it from the user or we set the default location to be MIT
 
-const projects = ref([{id: -1, position: userCoords.value.position, title: "Home Location", status: "NAN", description: "It is my home :)", home: true}]);
+const projects = ref([{id: -1, position: userCoords.value.position, title: "Home Location", status: "NAN", description: "It is my home :)", home: true, favorite: false}]);
+
+async function getFavorites() {
+  try {
+    favorites.value = new Set();
+    const _favorites = await fetchy("api/favorites", "GET");
+    _favorites.forEach((favorite: any) => {
+        favorites.value.add(favorite.target);
+    })
+  } catch {
+
+  }
+}
 
 // populate the map with markers
 async function populateMarkers() {
+  await getFavorites();
   const longitude = userCoords.value.position.lng.toString();
   const latitude = userCoords.value.position.lat.toString();
   const radius = rad.value.toString();
@@ -39,7 +75,7 @@ async function populateMarkers() {
       const description = locationResource.description;
       const title = locationResource.name;
       const status = locationResource.status;
-      projects.value.push({id, position: {lng: position[0], lat: position[1]}, title, status, description, home: false});
+      projects.value.push({id, position: {lng: position[0], lat: position[1]}, title, status, description, home: false, favorite: favorites.value.has(id)});
     })
   } catch {
 
@@ -48,6 +84,10 @@ async function populateMarkers() {
 
 function openMarker(id: number) {
   currentMarkerId.value = id;
+}
+
+function updateMarker(index: number, isFavorite: boolean) {
+  projects.value[index].favorite = isFavorite;
 }
 
 onMounted(async () => {
@@ -63,23 +103,27 @@ onMounted(async () => {
       style="height: 91.9vh; width: 100%; display: flex;"
       >
       <GMapMarker
-      :key="index"
+      :key="project.favorite"
       v-for="(project, index) in projects"
       :position="project.position"
       :clickable="true"
+      :icon='(project.home) ? homeIcon : ((project.favorite) ? favoriteIcon : regularIcon)'
       @click="openMarker(project.id)"
       @closeclick="openMarker(-1)"
       >
       <LocationPanel 
         :current-username="currentUsername"
         :id="project.id"
+        :index="index"
         :title="project.title" 
         :description="project.description" 
         :status="project.status"
         :home="project.home" 
         :opened="currentMarkerId === project.id"
         :clickable="project.id !== -1"
-        @set-marker="openMarker"/>
+        @set-marker="openMarker"  
+        @refresh-favorites="getFavorites"
+        @update-markers="updateMarker"/>
     </GMapMarker>
   </GMapMap>
 </template>
