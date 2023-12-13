@@ -120,7 +120,7 @@ onMounted(async () => {
         </div>
         <div @mouseover="setClickable" @mouseleave="setUnClickable">
             <p v-if="props.clickable" class="text-sky-500 dark:text-sky-400 font-semibold text-sm">Click to see more...</p>
-            <p v-else class="text-gray-500 dark:text-gray-400 font-semibold text-sm">This is your home location. Click around to see development projects in your area!</p>
+            <p v-else class="text-gray-500 dark:text-gray-400 font-semibold text-sm">This is your home location. Click around this map to see development projects in your area! To view updates from your neighbors, visit the feed page.</p>
         </div>
     </div>
 </GMapInfoWindow>
