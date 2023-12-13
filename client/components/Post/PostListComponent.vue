@@ -53,7 +53,7 @@ onBeforeMount(async () => {
       <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
     </article>
   </section>
-  <p v-else-if="loaded">No posts found</p>
+  <p v-else-if="loaded">No project updates found</p>
   <p v-else>Loading...</p>
 </template>
 
