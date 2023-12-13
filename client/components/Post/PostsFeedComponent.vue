@@ -59,7 +59,7 @@ onBeforeMount(async () => {
         </article>
       </div>
     </section>
-    <p v-else-if="loaded">No posts found</p>
+    <p v-else-if="loaded">No project updates found</p>
     <p v-else>Loading...</p>
   </div>
 </template>
