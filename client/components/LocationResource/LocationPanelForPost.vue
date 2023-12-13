@@ -85,22 +85,22 @@ onMounted(async () => {
 <template>
     <div class="cursor-pointer" @click="goToProjectPage()">
         <div class="flex flex-row justify-between">
-            <h1>{{ name }}</h1>
+            <h1 class="font-semibold">{{ name }}</h1>
             <div class="flex py-6 px-2">
-                <Button v-if="!isFavorite" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                <Button v-if="!isFavorite" class="bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded"
                     icon="pi pi-bookmark" @click="addFavorite">
                 </Button>
-                <Button v-else class="bg-blue-700 text-white py-2 px-4 rounded" icon="pi pi-bookmark-fill">
+                <Button v-else class="bg-sky-700 text-white py-2 px-4 rounded" icon="pi pi-bookmark-fill">
                 </Button>
             </div>
         </div>
         <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Description: </p>
-        <p class="text-gray-500 dark:text-gray-400 font-medium text-sm">{{ description }}</p>
-        <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Posts: </p>
-        <ScrollPanel style="width: 100%; height: 10em;">
+        <p class="text-gray-500 dark:text-gray-400 font-medium text-sm mb-6">{{ description }}</p>
+        <p class="text-gray-500 dark:text-gray-400 font-bold text-lg">Project Updates: </p>
+        <ScrollPanel style="width: 100%; height: 20em;">
             <PostsScroll v-bind:posts="posts" />
         </ScrollPanel>
-        <p class="text-gray-500 dark:text-gray-400 font-normal text-sm">Click to see more...</p>
+        <p class="mt-10 text-sky-500 dark:text-gray-400 font-normal text-sm">Click to see more...</p>
     </div>
 </template>
 
