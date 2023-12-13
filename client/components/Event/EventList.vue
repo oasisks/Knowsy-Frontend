@@ -48,7 +48,7 @@ onMounted(async () => {
     <Card>
         <template #title>
             <div class="flex flex-row justify-between">
-                <p class="text-black">Current Actionables</p>
+                <p class="text-black">Events for this project</p>
                 <Button class="bg-sky-500 hover:bg-sky-600 text-white py-2 px-4 rounded" icon="pi pi-plus"
                     @click="visible = true">
                 </Button>
