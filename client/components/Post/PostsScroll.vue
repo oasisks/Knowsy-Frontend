@@ -15,7 +15,7 @@ async function goToPost(postid: string) {
 </script>
 
 <template>
-    <div class="overflow-auto h-60 w-full flex flex-col mx-auto gap-2 p-2">
+    <div class="overflow-auto h-96 w-full flex flex-col mx-auto gap-2 p-2">
         <Card v-for="post, index in props.posts" class="shadow-md hover:shadow-xl hover:cursor-pointer" @click="goToPost(post._id)">
             <template #content>
                     <div class="flex flex-col gap-2">

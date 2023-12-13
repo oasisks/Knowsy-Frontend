@@ -10,7 +10,7 @@ function openMarker(state: boolean) {
 </script>
 
 <template>
-    <Card>
+    <Card class="bg-zinc-50">
         <template #title>
             <div class="text-black">Map</div>
         </template>

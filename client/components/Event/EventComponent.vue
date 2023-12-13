@@ -65,12 +65,12 @@ onMounted(async () => {
                     <EventDetails :event="event" />
                 </Dialog>
                 <p class="text-sm font-medium">Type: {{ props.event.type }}</p>
-                <p class="text-sm font-medium">Happening on: {{ props.event.date }}</p>
+                <p class="text-sm font-medium mb-4">Happening on: {{ props.event.date }}</p>
 
                 <Button v-if="!isRegistered" class="bg-sky-500 hover:bg-sky-600 text-white py-3 w-full rounded"
                     label="Register for Event" @click="registerForEvent(props.event._id)"></Button>
-                <Button v-else class="bg-blue-500 hover:bg-blue-700 text-white py-3 w-full rounded"
-                    label="Deregister for Event" @click="deregisterForEvent(props.event._id)"> </Button>
+                <Button v-else class="bg-orange-500 hover:bg-orange-700 text-white py-3 w-full rounded"
+                    label="Unregister for Event" @click="deregisterForEvent(props.event._id)"> </Button>
             </template>
         </Card>
     </section>

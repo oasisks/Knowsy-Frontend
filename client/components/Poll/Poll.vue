@@ -66,7 +66,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Card>
+  <Card class="bg-zinc-50">
     <template #title>
       <div class="row-flex">
         <p class="text-black">Polls</p>

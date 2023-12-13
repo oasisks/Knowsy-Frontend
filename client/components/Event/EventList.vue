@@ -82,10 +82,10 @@ onMounted(async () => {
             </Dialog>
 
             <div class="space-y-6">
-                <ScrollPanel style="width: 100%; height:10em;">
+                <ScrollPanel style="width: 100%; height:20em;">
                     <section class="posts" v-if="loaded && events.length !== 0">
                         <article v-for="event in events" :key="event._id">
-                            <EventComponent :event="event" @refreshEvents="getEvents" />
+                            <EventComponent class="mt-6" :event="event" @refreshEvents="getEvents" />
                         </article>
                     </section>
                     <p v-else-if="loaded">No events found</p>

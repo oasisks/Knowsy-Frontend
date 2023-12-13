@@ -51,39 +51,40 @@ async function updateLocation() {
 </script>
 
 <template>
-  <h2>Update user details</h2>
+  <h2 class="text-2xl font-bold mt-10 mb-4">Update your user details:</h2>
   <form @submit.prevent="updateUsername" class="pure-form">
     <fieldset>
-      <legend>Change your username</legend>
-      <input type="text" placeholder="New username" v-model="username" required />
-      <button type="submit" class="pure-button pure-button-primary">Update username</button>
+      <legend class="text-lg font-semibold">Change your username</legend>
+      <input type="text" placeholder="New username" v-model="username" class="mr-4" required />
+      <button type="submit" class="bg-sky-500 hover:bg-sky-400 text-white font-semibold px-5 py-3 mr-2 rounded-md">Update username</button>
     </fieldset>
   </form>
 
   <form @submit.prevent="updatePassword" class="pure-form">
     <fieldset>
-      <legend>Change your password</legend>
-      <input type="password" placeholder="New password" v-model="password" required />
-      <button type="submit" class="pure-button pure-button-primary">Update password</button>
+      <legend class="text-lg font-semibold">Change your password</legend>
+      <input type="password" placeholder="New password" v-model="password" class="mr-4" required />
+      <button type="submit" class="bg-sky-500 hover:bg-sky-400 text-white font-semibold px-5 py-3 mr-2 rounded-md">Update password</button>
     </fieldset>
   </form>
 
   <form @submit.prevent="updateRadius" class="pure-form">
     <fieldset>
-      <legend>Change the Radius of projects you would like to see</legend>
-      <p> Current Radius: {{ rad }}</p>
-      <input type="number" min="1" placeholder="Update radius" v-model="r" required />
-      <button type="submit" class="pure-button pure-button-primary">Update radius</button>
+      <legend class="text-lg font-semibold">Change the radius of projects you would like to see</legend>
+      <p class="my-2">Your current radius: {{ rad }}km</p>
+      <input type="number" min="1" placeholder="Update radius" v-model="r" class="mr-4" required />
+      <button type="submit" class="bg-sky-500 hover:bg-sky-400 text-white font-semibold px-5 py-3 mr-2 rounded-md">Update radius</button>
     </fieldset>
   </form>
-  <p>Update Location</p>
-  <button type="submit" class="pure-button pure-button-primary" @click="updateLocation"> Update location</button>
+
+  <p class="text-lg font-semibold">Update your location</p>
+  <button type="submit" class="bg-sky-500 hover:bg-sky-400 text-white font-semibold px-5 py-3 mr-2 rounded-md" @click="updateLocation"> Update location</button>
   <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-2" role="alert">
       <strong class="font-bold">Uh oh! </strong>
       <span class="block sm:inline">You need to allow access to location for it to update 😠 !</span>
   </div>
 
-  <div v-if="success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mx-2" role="alert">
+  <div v-if="success" class="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mx-2" role="alert">
       <strong class="font-bold">Yay! </strong>
       <span class="block sm:inline">Location successfully updated 😊</span>
   </div>

@@ -64,9 +64,10 @@ onMounted(async () => {
 <template>
   <div class="row-flex" v-if="finished">
     <div class="col-flex-left">
-      <Card>
+      <Card class="bg-zinc-50">
         <template #title>
-          <div class="text-black">{{ title }}</div>
+          <div class="text-xl text-sky-500 mb-4">Development Project</div>
+          <div class="text-3xl text-black">{{ title }}</div>
         </template>
         <template #subtitle>
           <DateFormat :date="updated" />
@@ -96,7 +97,7 @@ onMounted(async () => {
                     <InputText
                       type="text"
                       v-model="postContent"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      class="bg-zinc-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Post Content"
                       @keyup.enter="createPost"
                     />
