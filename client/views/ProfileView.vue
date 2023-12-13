@@ -13,7 +13,7 @@ import Posts from "../components/Post/UserPostsComponent.vue";
 const { currentUsername } = storeToRefs(useUserStore());
 const { logoutUser, deleteUser } = useUserStore();
 
-let view = ref("posts");
+// let view = ref("posts");
 
 async function goToSettings() {
   void router.push({ name: "Settings" });
@@ -27,13 +27,13 @@ const currentProperties = computed(() => {
   }
 });
 
-const currentTab = ref("Posts");
+const currentTab = ref("Project Updates");
 
 const tabs: any = {
-  Posts: Posts,
+  "Project Updates": Posts,
   Opinions: Opinions,
   Events: Events,
-  Saved: Favorites,
+  "Saved Projects": Favorites,
 };
 </script>
 
@@ -42,13 +42,15 @@ const tabs: any = {
     <div class="mx-10 my-8 py-6 rounded-lg text-center bg-slate-100">
       <div class="mb-10">
         <h1 class="font-bold">{{ currentUsername }}</h1>
-        <button class="bg-slate-400 hover:bg-slate-300 text-white font-semibold px-5 py-3 mr-2 rounded-md"
-          @click="goToSettings">Settings</button>
+        <button class="bg-slate-400 hover:bg-slate-300 text-white font-semibold px-5 py-3 mr-2 rounded-md" @click="goToSettings">Settings</button>
       </div>
-      <button class="bg-sky-500 hover:bg-sky-400 text-white font-semibold px-5 py-3 mr-2 rounded-md"
-        v-for="(_, tab) in tabs" :key="tab"
+      <button
+        class="bg-sky-500 hover:bg-sky-400 text-white font-semibold px-5 py-3 mr-2 rounded-md"
+        v-for="(_, tab) in tabs"
+        :key="tab"
         :class="['tab-button', { active: currentTab === tab.toString() }, { underline: currentTab === tab.toString() }]"
-        @click="currentTab = tab.toString()">
+        @click="currentTab = tab.toString()"
+      >
         {{ tab }}
       </button>
       <component :is="tabs[currentTab]" v-bind="currentProperties" class="tab"></component>

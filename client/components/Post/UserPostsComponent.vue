@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import CreatePostForm from "@/components/Post/CreatePostForm.vue";
 import EditPostForm from "@/components/Post/EditPostForm.vue";
 import PostComponent from "@/components/Post/PostComponent.vue";
 import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
-import SearchPostForm from "./SearchPostForm.vue";
 
 const { currentUsername } = storeToRefs(useUserStore());
 
@@ -43,7 +41,7 @@ onBeforeMount(async () => {
       </div>
     </article>
   </section>
-  <p v-else-if="loaded" class="py-10">No posts found</p>
+  <p v-else-if="loaded" class="py-10">No project updates found</p>
   <p v-else class="mt-6">Loading...</p>
 </template>
 
