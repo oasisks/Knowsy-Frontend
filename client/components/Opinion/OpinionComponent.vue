@@ -19,7 +19,31 @@ async function deleteOpinion() {
 }
 </script>
 
+
 <template>
+
+      
+  <!-- <Card>
+    <template #subtitle>
+      <div class="subtitle-container">
+        <div class="custom-subtitle">
+          {{ props.opinion.author }}
+        </div>
+        <div v-if="parseInt(props.opinion.feeling) - 1 !== -1" class="feeling-box">
+          {{ options[parseInt(props.opinion.feeling) - 1] }}
+        </div>
+      </div>
+    </template>
+    <template #content>
+      <p class="m-0">{{ props.opinion.content }}</p>
+    </template>
+    <template #footer>
+      <div class="delete-button-container">
+        <Button icon="pi pi-trash" @click="deleteOpinion" />
+      </div>
+    </template>
+  </Card> -->
+
   <div class="comment-header">
     <p class="author">{{ props.opinion.author }}</p>
     <div v-if="parseInt(props.opinion.feeling) - 1 !== -1" class="feeling-box">
@@ -35,6 +59,19 @@ async function deleteOpinion() {
 </template>
 
 <style scoped>
+
+.custom-subtitle {
+  color: black;
+  font-weight: bold;
+}
+
+.subtitle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
 /* Styling for the comment header containing author and feeling */
 .comment-header {
   display: flex;
