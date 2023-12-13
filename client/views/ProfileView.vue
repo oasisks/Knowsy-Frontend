@@ -41,7 +41,7 @@ const tabs: any = {
   <main class="justify-center">
     <div class="mx-10 my-8 py-6 rounded-lg text-center bg-slate-100">
       <div class="mb-10">
-        <h1 class="">{{ currentUsername }}</h1>
+        <h1 class="font-bold">{{ currentUsername }}</h1>
         <button class="bg-slate-400 hover:bg-slate-300 text-white font-semibold px-5 py-3 mr-2 rounded-md"
           @click="goToSettings">Settings</button>
       </div>
